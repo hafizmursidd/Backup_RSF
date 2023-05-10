@@ -22,13 +22,12 @@ namespace GSM06500Service
             {
                 loDbParameter = new GSM06500DBParameter();
 
-                //loDbParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID; ;
-                //loDbParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
+                loDbParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID; ;
+                loDbParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
 
-                loDbParameter.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.)
-
-                loDbParameter.CCOMPANY_ID = "ABCDE";
-                loDbParameter.CUSER_ID = "aa";
+                loDbParameter.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
+                //loDbParameter.CCOMPANY_ID = "ABCDE";
+                //loDbParameter.CUSER_ID = "aa";
 
 
                 var loCls = new GSM06500Cls();

@@ -11,6 +11,8 @@ using GSM06500Common;
 using BlazorClientHelper;
 using R_BlazorFrontEnd.Exceptions;
 using R_BlazorFrontEnd.Controls.Events;
+using R_BlazorFrontEnd;
+using R_BlazorFrontEnd.Controls.MessageBox;
 
 namespace GSM06500Front
 {
@@ -22,8 +24,6 @@ namespace GSM06500Front
 
         [Inject] private IClientHelper _clientHelper { get; set; }
 
-        private string lcPropertyId = "ABC";
-        private string lcCompany = "ABC";
         protected override async Task R_Init_From_Master(object poParameter)
         {
             var loEx = new R_Exception();
@@ -57,6 +57,36 @@ namespace GSM06500Front
         private void Grid_ServiceGetRecord(R_ServiceGetRecordEventArgs eventArgs)
         {
 
+        }
+        public async Task Grid_ServiceDelete(R_ServiceDeleteEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                var loParam = (GSM06500DTO)eventArgs.Data;
+                await PaymentTermViewModel.DeleteTermOfPayment(loParam);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
+        //public async Task Conductor_BeforeDelete(R_BeforeDeleteEventArgs eventArgs)
+        //{
+        //    var loData = (GSM06500DTO)eventArgs.Data;
+
+        //    if (loData.CPROPERTY_ID == 1)
+        //    {
+        //        eventArgs.Cancel = true;
+        //        await R_MessageBox.Show("", "Cannot delete Product ID 1", R_eMessageBoxButtonType.OK);
+        //    }
+        //}
+        public async Task Conductor_AfterDelete()
+        {
+            await R_MessageBox.Show("", "Delete Success", R_eMessageBoxButtonType.OK);
         }
 
     }

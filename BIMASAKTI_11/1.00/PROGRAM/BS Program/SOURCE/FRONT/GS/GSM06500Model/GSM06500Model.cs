@@ -15,9 +15,8 @@ namespace GSM06500Model
         private const string DEFAULT_HTTP = "R_DefaultServiceUrl";
         private const string DEFAULT_ENDPOINT = "api/GSM06500";
 
-        private string lcPropertyId;
-        private string lcCompany;
-        private string lcuserLoginId;
+        public string lcPropertyId {  get; set; }
+
         public GSM06500Model(
             string pcHttpClientName = DEFAULT_HTTP,
             string pcRequestServiceEndPoint = DEFAULT_ENDPOINT,
@@ -28,6 +27,10 @@ namespace GSM06500Model
         }
 
         public IAsyncEnumerable<GSM06500DTO> TermOfPayment()
+        {
+            throw new NotImplementedException();
+        }
+        public GSM06500ListDTO GetallTermOfpaymentOriginal()
         {
             throw new NotImplementedException();
         }
@@ -60,13 +63,15 @@ namespace GSM06500Model
         {
             var loEx = new R_Exception();
             GSM06500ListDTO loResult = null;
-            lcPropertyId = "ABC";
+            lcPropertyId = "ABCDEF";
+            //lcCompany = "ABCDE";
+            //lcuserLoginId = "Admin";
             try
             {
                 //R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(R_GlobalVar.CCOMPANY_ID, lcCompany);
+                //R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(R_GlobalVar.CUSER_LOGIN_ID, lcuserLoginId);
                 R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, lcPropertyId);
-              //  R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CUSER_LOGIN_ID, lcuserLoginId);
-                
+
                 R_HTTPClientWrapper.httpClientName = _HttpClientName;
                 loResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM06500ListDTO>(
                     _RequestServiceEndPoint,
@@ -83,9 +88,7 @@ namespace GSM06500Model
 
         }
 
-        public GSM06500ListDTO GetallTermOfpaymentOriginal()
-        {
-            throw new NotImplementedException();
-        }
+
+
     }
 }

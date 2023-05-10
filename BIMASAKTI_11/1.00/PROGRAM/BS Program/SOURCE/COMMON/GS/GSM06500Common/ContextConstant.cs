@@ -6,7 +6,7 @@ namespace GSM06500Common
 {
     public class ContextConstant
     {
-        public string CPROPERTY_ID;
+        public const string CPROPERTY_ID = "CPROPERTY_ID";
 
     }
 }

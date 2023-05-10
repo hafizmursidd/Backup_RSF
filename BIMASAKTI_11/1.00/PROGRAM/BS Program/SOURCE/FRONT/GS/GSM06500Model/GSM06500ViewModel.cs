@@ -48,5 +48,27 @@ namespace GSM06500Model
             loException.ThrowExceptionIfErrors();
         }
 
+        public async Task DeleteTermOfPayment(GSM06500DTO poProperty)
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                var loParam = new GSM06500DTO 
+                { 
+                    CCOMPANY_ID = poProperty.CCOMPANY_ID,
+                    CPROPERTY_ID = poProperty.CPROPERTY_ID,
+                    CUSER_ID = poProperty.CUSER_ID
+                };
+                await _model.R_ServiceDeleteAsync(loParam);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
+
     }
 }
