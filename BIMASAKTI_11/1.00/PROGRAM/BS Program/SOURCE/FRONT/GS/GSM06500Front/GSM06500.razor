@@ -5,7 +5,9 @@
     <R_Grid @ref="@_gridRef"
             DataSource="PaymentTermViewModel.TermofPaymentList"
             Pageable="true"
-            R_ServiceGetListRecord="@Grid_R_ServiceGetListRecord">
+            R_ConductorGridSource="@_conGridPaymentRef"
+            R_GridType="@R_eGridType.Original"
+            R_ServiceGetListRecord="@Grid_R_ServiceGetListRecord"   >
 
         <R_GridColumns>
 
@@ -19,5 +21,7 @@
         </R_GridColumns>
     </R_Grid>
 
-    <R_ConductorGrid />
 </R_StackLayout>
+<R_ConductorGrid @ref="@_conGridPaymentRef"
+                 R_ViewModel="@PaymentTermViewModel" 
+                 R_ServiceGetRecord="@Grid_ServiceGetRecord" />

@@ -44,7 +44,7 @@ namespace GSM06500Front
 
             try
             {
-                await PaymentTermViewModel.GetAllTermOfPayment(lcCompany, lcPropertyId, _clientHelper.UserId);
+                await PaymentTermViewModel.GetAllTermOfPaymentAsync();
             }
             catch (Exception ex)
             {
@@ -52,6 +52,11 @@ namespace GSM06500Front
             }
 
             loEx.ThrowExceptionIfErrors();
+        }
+
+        private void Grid_ServiceGetRecord(R_ServiceGetRecordEventArgs eventArgs)
+        {
+
         }
 
     }

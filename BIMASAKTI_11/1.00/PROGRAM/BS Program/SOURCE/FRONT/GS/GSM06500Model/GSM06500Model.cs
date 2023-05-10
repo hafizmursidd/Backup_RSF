@@ -1,6 +1,7 @@
 ﻿using GSM06500Common;
 using R_APIClient;
 using R_BlazorFrontEnd.Exceptions;
+using R_BlazorFrontEnd.Helpers;
 using R_BusinessObjectFront;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,14 @@ namespace GSM06500Model
         private const string DEFAULT_HTTP = "R_DefaultServiceUrl";
         private const string DEFAULT_ENDPOINT = "api/GSM06500";
 
+        private string lcPropertyId;
+        private string lcCompany;
+        private string lcuserLoginId;
         public GSM06500Model(
             string pcHttpClientName = DEFAULT_HTTP,
             string pcRequestServiceEndPoint = DEFAULT_ENDPOINT,
-            bool plSendWithContext = false,
-            bool plSendWithToken = false)
+            bool plSendWithContext = true,
+            bool plSendWithToken = true)
             : base(pcHttpClientName, pcRequestServiceEndPoint, plSendWithContext, plSendWithToken)
         {
         }
@@ -27,20 +31,46 @@ namespace GSM06500Model
         {
             throw new NotImplementedException();
         }
-        public async Task<GSM06500ListDTO> GetTermOfPaymentListAsyncModel(string pcCompanyId, string pcPropertyId, string pcUserLoginId)
+        //public async Task<GSM06500ListDTO> GetTermOfPaymentListAsyncModel()
+        //{
+        //    var loEx = new R_Exception();
+        //    GSM06500ListDTO loResult = null;
+
+        //    try
+        //    {
+        //        R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CCOMPANY_ID, lcPropertyId);
+        //        R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, lcCompany);
+        //        R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CUSER_LOGIN_ID, lcuserLoginId);
+        //        R_HTTPClientWrapper.httpClientName = _HttpClientName;
+        //        loResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM06500ListDTO>(
+        //            _RequestServiceEndPoint,
+        //            nameof(IGSM06500.TermOfPayment),
+        //            _SendWithContext,
+        //            _SendWithToken);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        loEx.Add(ex);
+        //    }
+        //    loEx.ThrowExceptionIfErrors();
+        //    return loResult;
+
+        //}
+        public async Task<GSM06500ListDTO> GetTermOfPaymentListAsyncModel()
         {
             var loEx = new R_Exception();
             GSM06500ListDTO loResult = null;
-
+            lcPropertyId = "ABC";
             try
             {
-                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CCOMPANY_ID, pcCompanyId);
-                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, pcPropertyId);
-                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CUSER_LOGIN_ID, pcUserLoginId);
+                //R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(R_GlobalVar.CCOMPANY_ID, lcCompany);
+                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, lcPropertyId);
+              //  R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CUSER_LOGIN_ID, lcuserLoginId);
+                
                 R_HTTPClientWrapper.httpClientName = _HttpClientName;
                 loResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM06500ListDTO>(
                     _RequestServiceEndPoint,
-                    nameof(IGSM06500.TermOfPayment),
+                    nameof(IGSM06500.GetallTermOfpaymentOriginal),
                     _SendWithContext,
                     _SendWithToken);
             }
@@ -51,6 +81,11 @@ namespace GSM06500Model
             loEx.ThrowExceptionIfErrors();
             return loResult;
 
+        }
+
+        public GSM06500ListDTO GetallTermOfpaymentOriginal()
+        {
+            throw new NotImplementedException();
         }
     }
 }

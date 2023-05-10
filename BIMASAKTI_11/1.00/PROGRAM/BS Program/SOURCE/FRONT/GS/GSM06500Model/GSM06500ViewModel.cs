@@ -14,13 +14,30 @@ namespace GSM06500Model
         private GSM06500Model _model = new GSM06500Model();
         public ObservableCollection<GSM06500DTO> TermofPaymentList = new ObservableCollection<GSM06500DTO>();
 
-        public async Task GetAllTermOfPayment(string pcCompanyId, string pcPropertyId, string pcUserLoginId)
+        //public async Task GetAllTermOfPayment()
+        //{
+        //    R_Exception loException = new R_Exception();
+        //    try
+        //    {
+        //        var loResult = await _model.GetTermOfPaymentListAsyncModel();
+        //        TermofPaymentList =new ObservableCollection<GSM06500DTO>(loResult.ListData);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        loException.Add(ex);
+        //    }
+
+        //EndBlock:
+        //    loException.ThrowExceptionIfErrors();
+        //}
+
+        public async Task GetAllTermOfPaymentAsync()
         {
             R_Exception loException = new R_Exception();
             try
             {
-                var loResult = await _model.GetTermOfPaymentListAsyncModel(pcCompanyId, pcPropertyId, pcUserLoginId);
-                TermofPaymentList =new ObservableCollection<GSM06500DTO>(loResult.ListData);
+                var loResult = await _model.GetTermOfPaymentListAsyncModel();
+                TermofPaymentList = new ObservableCollection<GSM06500DTO>(loResult.ListData);
             }
             catch (Exception ex)
             {

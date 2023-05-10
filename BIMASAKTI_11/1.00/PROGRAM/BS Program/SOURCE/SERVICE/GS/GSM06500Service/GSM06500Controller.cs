@@ -1,6 +1,7 @@
 ﻿using GSM06500Back;
 using GSM06500Common;
 using Microsoft.AspNetCore.Mvc;
+using R_BackEnd;
 using R_Common;
 using R_CommonFrontBackAPI;
 
@@ -10,6 +11,41 @@ namespace GSM06500Service
     [Route("api/[controller]/[action]")]
     public class GSM06500Controller : ControllerBase, IGSM06500
     {
+        [HttpPost]
+        public GSM06500ListDTO GetallTermOfpaymentOriginal()
+        {
+            var loEx = new R_Exception();
+            GSM06500DBParameter loDbParameter;
+            GSM06500ListDTO loRtn = null;
+
+            try
+            {
+                loDbParameter = new GSM06500DBParameter();
+
+                //loDbParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID; ;
+                //loDbParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
+
+                loDbParameter.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.)
+
+                loDbParameter.CCOMPANY_ID = "ABCDE";
+                loDbParameter.CUSER_ID = "aa";
+
+
+                var loCls = new GSM06500Cls();
+
+                var loResult = loCls.TERM_OF_LIST(loDbParameter);
+                loRtn = new GSM06500ListDTO { ListData = loResult };
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loRtn;
+        }
+
         [HttpPost]
         public R_ServiceDeleteResultDTO R_ServiceDelete(R_ServiceDeleteParameterDTO<GSM06500DTO> poParameter)
         {
