@@ -4,6 +4,7 @@ using R_Common;
 using R_CommonFrontBackAPI;
 using System.Data.Common;
 using System.Data;
+using System.Windows.Input;
 
 namespace GSM06500Back
 {
@@ -50,16 +51,18 @@ namespace GSM06500Back
             R_Db loDb;
             try
             {
-                var lcQuery = @"EXEC RSP_GS_GET_PAYMENT_TERM_LIST @CCOMPANY_ID, @CPROPERTY_ID, @CUSER_ID";
+                var lcQuery = @"RSP_GS_GET_PAYMENT_TERM_DETAIL";
 
                 loDb = new R_Db();
                 var loCmd = loDb.GetCommand();
                 var loConn = loDb.GetConnection();
                 loCmd.CommandText = lcQuery;
+                loCmd.CommandType = CommandType.StoredProcedure;
 
-                loDb.R_AddCommandParameter(loCmd, "CCOMPANY_ID", DbType.String, 10, poEntity.CCOMPANY_ID);
-                loDb.R_AddCommandParameter(loCmd, "CPROPERTY_ID", DbType.String, 10, poEntity.CPROPERTY_ID);
-                loDb.R_AddCommandParameter(loCmd, "CUSER_ID", DbType.String, 10, poEntity.CUSER_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 10, poEntity.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CPROPERTY_ID", DbType.String, 10, poEntity.CPROPERTY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CUSER_ID", DbType.String, 10, poEntity.CUSER_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CPAY_TERM_CODE", DbType.String, 10, poEntity.CPAY_TERM_CODE);
 
                 var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
 

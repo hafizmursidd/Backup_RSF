@@ -7,7 +7,10 @@
             Pageable="true"
             R_ConductorGridSource="@_conGridPaymentRef"
             R_GridType="@R_eGridType.Original"
-            R_ServiceGetListRecord="@Grid_R_ServiceGetListRecord"   >
+            R_ServiceGetListRecord="@Grid_R_ServiceGetListRecord"
+            AllowDeleteRow="true"
+            AllowAddNewRow="true"
+            AllowEditRow="true">
 
         <R_GridColumns>
 
@@ -24,5 +27,5 @@
 </R_StackLayout>
 <R_ConductorGrid @ref="@_conGridPaymentRef"
                  R_ViewModel="@PaymentTermViewModel" 
-                 R_ServiceGetRecord="@Grid_ServiceGetRecord"
+                 R_ServiceGetRecord="@Grid_ServiceGetRecordAsync"
                  R_ServiceDelete="@Grid_ServiceDelete" />

@@ -15,5 +15,7 @@ namespace GSM06500Common
         public string CUPDATE_BY { get; set; }
         public DateTime DUPDATE_DATE { get; set; }
 
+        public string CACTION { get; set; }
+
     }
 }

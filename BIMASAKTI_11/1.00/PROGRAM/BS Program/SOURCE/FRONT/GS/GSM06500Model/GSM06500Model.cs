@@ -34,31 +34,6 @@ namespace GSM06500Model
         {
             throw new NotImplementedException();
         }
-        //public async Task<GSM06500ListDTO> GetTermOfPaymentListAsyncModel()
-        //{
-        //    var loEx = new R_Exception();
-        //    GSM06500ListDTO loResult = null;
-
-        //    try
-        //    {
-        //        R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CCOMPANY_ID, lcPropertyId);
-        //        R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, lcCompany);
-        //        R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CUSER_LOGIN_ID, lcuserLoginId);
-        //        R_HTTPClientWrapper.httpClientName = _HttpClientName;
-        //        loResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM06500ListDTO>(
-        //            _RequestServiceEndPoint,
-        //            nameof(IGSM06500.TermOfPayment),
-        //            _SendWithContext,
-        //            _SendWithToken);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        loEx.Add(ex);
-        //    }
-        //    loEx.ThrowExceptionIfErrors();
-        //    return loResult;
-
-        //}
         public async Task<GSM06500ListDTO> GetTermOfPaymentListAsyncModel()
         {
             var loEx = new R_Exception();
@@ -87,6 +62,32 @@ namespace GSM06500Model
             return loResult;
 
         }
+
+        //public async Task<GSM06500DTO> GetTermOfPaymentOneRecordAsyncModel()
+        //{
+        //    var loEx = new R_Exception();
+        //    GSM06500DTO loResult = null;
+        //    //lcCompany = "ABCDE";
+        //    //lcuserLoginId = "Admin";
+        //    try
+        //    {
+        //        R_HTTPClientWrapper.httpClientName = _HttpClientName;
+        //        loResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM06500DTO>(
+        //            _RequestServiceEndPoint,
+        //            nameof(IGSM06500.R_ServiceGetRecord),
+        //            _SendWithContext,
+        //            _SendWithToken);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        loEx.Add(ex);
+        //    }
+        //    loEx.ThrowExceptionIfErrors();
+        //    return loResult;
+
+        //}
+
+
 
 
 

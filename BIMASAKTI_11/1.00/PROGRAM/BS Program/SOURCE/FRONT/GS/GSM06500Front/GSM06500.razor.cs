@@ -13,6 +13,7 @@ using R_BlazorFrontEnd.Exceptions;
 using R_BlazorFrontEnd.Controls.Events;
 using R_BlazorFrontEnd;
 using R_BlazorFrontEnd.Controls.MessageBox;
+using R_BlazorFrontEnd.Enums;
 
 namespace GSM06500Front
 {
@@ -54,9 +55,21 @@ namespace GSM06500Front
             loEx.ThrowExceptionIfErrors();
         }
 
-        private void Grid_ServiceGetRecord(R_ServiceGetRecordEventArgs eventArgs)
+        private async Task Grid_ServiceGetRecordAsync(R_ServiceGetRecordEventArgs eventArgs)
         {
+            var loEx = new R_Exception();
 
+            try
+            {
+                var loParam = (GSM06500DTO)eventArgs.Data;
+                eventArgs.Result = await PaymentTermViewModel.GetTermOftermOneRecord(loParam);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
         }
         public async Task Grid_ServiceDelete(R_ServiceDeleteEventArgs eventArgs)
         {
@@ -74,6 +87,7 @@ namespace GSM06500Front
 
             loEx.ThrowExceptionIfErrors();
         }
+       
         //public async Task Conductor_BeforeDelete(R_BeforeDeleteEventArgs eventArgs)
         //{
         //    var loData = (GSM06500DTO)eventArgs.Data;

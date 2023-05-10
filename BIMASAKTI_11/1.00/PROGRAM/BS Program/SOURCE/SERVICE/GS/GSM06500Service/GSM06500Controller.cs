@@ -72,7 +72,25 @@ namespace GSM06500Service
         [HttpPost]
         public R_ServiceGetRecordResultDTO<GSM06500DTO> R_ServiceGetRecord(R_ServiceGetRecordParameterDTO<GSM06500DTO> poParameter)
         {
-            throw new NotImplementedException();
+            var loEx = new R_Exception();
+            var loRtn = new R_ServiceGetRecordResultDTO<GSM06500DTO>();
+
+            try
+            {
+                var loCls = new GSM06500Cls();
+                var anc = loCls.R_GetRecord(poParameter.Entity);
+
+
+                loRtn.data = loCls.R_GetRecord(poParameter.Entity);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loRtn;
         }
 
         [HttpPost]
