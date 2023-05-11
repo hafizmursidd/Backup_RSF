@@ -111,6 +111,8 @@ namespace GSM06500Service
             {
                 loCls = new GSM06500Cls();
                 loRtn = new R_ServiceSaveResultDTO<GSM06500DTO>();
+                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
                 loRtn.data = loCls.R_Save(poParameter.Entity, poParameter.CRUDMode);
             }
             catch (Exception ex)

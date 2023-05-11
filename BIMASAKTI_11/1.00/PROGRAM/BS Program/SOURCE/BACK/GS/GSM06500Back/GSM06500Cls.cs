@@ -87,6 +87,7 @@ namespace GSM06500Back
             R_Db loDb;
             DbCommand loCommand;
             DbConnection loConn = null;
+            string lcAction=null;
             try
             {
                 loDb = new R_Db();
@@ -96,31 +97,25 @@ namespace GSM06500Back
                 switch (poCRUDMode)
                 {
                     case eCRUDMode.AddMode:
-                        string lcAction = "ADD";
-
-                        lcQuery = "RSP_GS_MAINTAIN_PAYMENT_TERM";
-                        loDb.R_AddCommandParameter(loCommand, "CACTION", DbType.String, 10, lcAction);
+                        lcAction = "ADD";
                         break;
 
                     case eCRUDMode.EditMode:
                         lcAction = "EDIT";
-
-                        lcQuery = "RSP_GS_MAINTAIN_PAYMENT_TERM";
-                        loDb.R_AddCommandParameter(loCommand, "CACTION", DbType.String, 10, lcAction);
-
                         break;
                     default:
 
                         break;
 
                 }
+                lcQuery = "RSP_GS_MAINTAIN_PAYMENT_TERM";
                 loCommand.CommandText = lcQuery;
                 loCommand.CommandType = CommandType.StoredProcedure;
 
                 loDb.R_AddCommandParameter(loCommand, "CCOMPANY_ID", DbType.String, 10, poNewEntity.CCOMPANY_ID);
                 loDb.R_AddCommandParameter(loCommand, "CPROPERTY_ID", DbType.String, 10, poNewEntity.CPROPERTY_ID);
                 loDb.R_AddCommandParameter(loCommand, "CPAY_TERM_CODE", DbType.String, 10, poNewEntity.CPAY_TERM_CODE);
-
+                loDb.R_AddCommandParameter(loCommand, "CACTION", DbType.String, 10, lcAction);
                 loDb.R_AddCommandParameter(loCommand, "CPAY_TERM_NAME", DbType.String, 10, poNewEntity.CPAY_TERM_NAME);
                 loDb.R_AddCommandParameter(loCommand, "IPAY_TERM_DAYS", DbType.Int32, 10, poNewEntity.IPAY_TERM_DAYS);
                 loDb.R_AddCommandParameter(loCommand, "CUSER_ID", DbType.String, 10, poNewEntity.CUSER_ID);

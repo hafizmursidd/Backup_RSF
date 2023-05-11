@@ -15,6 +15,7 @@ namespace GSM06500Model
     {
         private GSM06500Model _model = new GSM06500Model();
         public ObservableCollection<GSM06500DTO> TermofPaymentList = new ObservableCollection<GSM06500DTO>();
+        public GSM06500DTO PaymentOfTerm { get; set; } = new GSM06500DTO();
 
         public string lcPropertyId { get; set; }
 
@@ -60,7 +61,7 @@ namespace GSM06500Model
             loEx.ThrowExceptionIfErrors();
         }
 
-        public async Task<GSM06500DTO> GetTermOftermOneRecord(GSM06500DTO poProperty)
+        public async Task<GSM06500DTO> GetTermOfPaymentOneRecord(GSM06500DTO poProperty)
         {
             var loEx = new R_Exception();
             GSM06500DTO loResult = null;
@@ -84,15 +85,15 @@ namespace GSM06500Model
             return loResult;
         }
 
-        public async Task<GSM06500DTO> SaveProduct(GSM06500DTO poNewEntity, R_eConductorMode peConductorMode)
+        public async Task<GSM06500DTO> SaveTermOfPayment(GSM06500DTO poNewEntity, R_eConductorMode peConductorMode)
         {
             var loEx = new R_Exception();
             GSM06500DTO loResult = null;
 
             try
             {
-
                 loResult = await _model.R_ServiceSaveAsync(poNewEntity, (eCRUDMode)peConductorMode);
+                PaymentOfTerm = loResult;
             }
             catch (Exception ex)
             {

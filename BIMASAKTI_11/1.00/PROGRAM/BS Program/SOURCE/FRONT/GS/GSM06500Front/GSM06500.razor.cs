@@ -62,7 +62,7 @@ namespace GSM06500Front
             try
             {
                 var loParam = (GSM06500DTO)eventArgs.Data;
-                eventArgs.Result = await PaymentTermViewModel.GetTermOftermOneRecord(loParam);
+                eventArgs.Result = await PaymentTermViewModel.GetTermOfPaymentOneRecord(loParam);
             }
             catch (Exception ex)
             {
@@ -102,6 +102,29 @@ namespace GSM06500Front
         {
             await R_MessageBox.Show("", "Delete Success", R_eMessageBoxButtonType.OK);
         }
+
+        private async Task ServiceSave(R_ServiceSaveEventArgs eventArgs)
+        {
+
+            var loEx = new R_Exception();
+
+            try
+            {
+                var lcPropertyId = "ABCDEF";
+                var loParam = (GSM06500DTO)eventArgs.Data;
+                loParam.CPROPERTY_ID = lcPropertyId;
+                await PaymentTermViewModel.SaveTermOfPayment(loParam, eventArgs.ConductorMode);
+
+                eventArgs.Result = PaymentTermViewModel.PaymentOfTerm;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
+
 
     }
 }
