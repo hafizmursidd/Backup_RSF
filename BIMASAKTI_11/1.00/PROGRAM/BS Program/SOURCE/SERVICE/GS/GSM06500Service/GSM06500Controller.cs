@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using R_BackEnd;
 using R_Common;
 using R_CommonFrontBackAPI;
+using System.Data.Common;
 
 namespace GSM06500Service
 {
@@ -57,6 +58,7 @@ namespace GSM06500Service
             {
                 loCls = new GSM06500Cls();
                 loRtn = new R_ServiceDeleteResultDTO();
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
                 loCls.R_Delete(poParameter.Entity);
             }
             catch (Exception ex)
@@ -78,6 +80,11 @@ namespace GSM06500Service
             try
             {
                 var loCls = new GSM06500Cls();
+                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+
+                var x = poParameter.Entity;
+
                 var anc = loCls.R_GetRecord(poParameter.Entity);
 
 

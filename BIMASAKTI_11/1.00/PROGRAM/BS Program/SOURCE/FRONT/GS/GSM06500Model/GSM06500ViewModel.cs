@@ -41,12 +41,14 @@ namespace GSM06500Model
 
             try
             {
-                var loParam = new GSM06500DTO 
-                { 
+                var loParam = new GSM06500DTO
+                {
                     CCOMPANY_ID = poProperty.CCOMPANY_ID,
                     CPROPERTY_ID = poProperty.CPROPERTY_ID,
                     CUSER_ID = poProperty.CUSER_ID,
-                    CPAY_TERM_CODE = poProperty.CPAY_TERM_CODE
+                    CPAY_TERM_CODE = poProperty.CPAY_TERM_CODE,
+                    CPAY_TERM_NAME = poProperty.CPAY_TERM_NAME,
+                    IPAY_TERM_DAYS = poProperty.IPAY_TERM_DAYS
                 };
                 await _model.R_ServiceDeleteAsync(loParam);
             }
@@ -65,12 +67,9 @@ namespace GSM06500Model
 
             try
             {
-                lcPropertyId = "ABCDEF";
-                var loParam = new GSM06500DTO 
+                var loParam = new GSM06500DTO
                 {
-                    CCOMPANY_ID = poProperty.CCOMPANY_ID,
-                    CPROPERTY_ID = lcPropertyId,
-                    CUSER_ID = poProperty.CUSER_ID,
+                    CPROPERTY_ID = poProperty.CPROPERTY_ID,
                     CPAY_TERM_CODE = poProperty.CPAY_TERM_CODE
                 };
                 loResult = await _model.R_ServiceGetRecordAsync(loParam);
@@ -92,7 +91,7 @@ namespace GSM06500Model
 
             try
             {
-                
+
                 loResult = await _model.R_ServiceSaveAsync(poNewEntity, (eCRUDMode)peConductorMode);
             }
             catch (Exception ex)

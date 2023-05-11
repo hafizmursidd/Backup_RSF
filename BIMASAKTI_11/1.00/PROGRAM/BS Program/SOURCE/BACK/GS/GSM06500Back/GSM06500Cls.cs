@@ -29,9 +29,9 @@ namespace GSM06500Back
                 loDb.R_AddCommandParameter(loCommand, "@CCOMPANY_ID", DbType.String, 10, poEntity.CCOMPANY_ID);
                 loDb.R_AddCommandParameter(loCommand, "@CPROPERTY_ID", DbType.String, 10, poEntity.CPROPERTY_ID);
                 loDb.R_AddCommandParameter(loCommand, "@CPAY_TERM_CODE", DbType.String, 10, poEntity.CPAY_TERM_CODE);
-                loDb.R_AddCommandParameter(loCommand, "@CACTION", DbType.String, 10, lcAction);
                 loDb.R_AddCommandParameter(loCommand, "@CPAY_TERM_NAME", DbType.String, 10, poEntity.CPAY_TERM_NAME);
                 loDb.R_AddCommandParameter(loCommand, "@IPAY_TERM_DAYS", DbType.Int32, 10, poEntity.IPAY_TERM_DAYS);
+                loDb.R_AddCommandParameter(loCommand, "@CACTION", DbType.String, 10, lcAction);
                 loDb.R_AddCommandParameter(loCommand, "@CUSER_ID", DbType.String, 10, poEntity.CUSER_ID);
 
                 loDb.SqlExecNonQuery(loConn, loCommand, true);
