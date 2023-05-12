@@ -20,6 +20,7 @@ namespace GSM06500Back
             {
                 var loDb = new R_Db();
                 var loConn = loDb.GetConnection();
+                R_ExternalException.R_SP_Init_Exception(loConn);
                 loCommand = loDb.GetCommand();
                 string lcAction = "DELETE";
 
@@ -35,7 +36,16 @@ namespace GSM06500Back
                 loDb.R_AddCommandParameter(loCommand, "@CACTION", DbType.String, 10, lcAction);
                 loDb.R_AddCommandParameter(loCommand, "@CUSER_ID", DbType.String, 10, poEntity.CUSER_ID);
 
-                loDb.SqlExecNonQuery(loConn, loCommand, true);
+                try
+                {
+                    loDb.SqlExecNonQuery(loConn, loCommand, true);
+                }
+                catch (Exception ex)
+                {
+                    loEx.Add(ex);
+                }
+
+                loEx.Add(R_ExternalException.R_SP_Get_Exception(loConn));
             }
             catch (Exception ex)
             {
@@ -88,11 +98,12 @@ namespace GSM06500Back
             R_Db loDb;
             DbCommand loCommand;
             DbConnection loConn = null;
-            string lcAction=null;
+            string lcAction = null;
             try
             {
                 loDb = new R_Db();
                 loConn = loDb.GetConnection();
+                R_ExternalException.R_SP_Init_Exception(loConn);
                 loCommand = loDb.GetCommand();
 
                 switch (poCRUDMode)
@@ -119,14 +130,20 @@ namespace GSM06500Back
                 loDb.R_AddCommandParameter(loCommand, "IPAY_TERM_DAYS", DbType.Int32, 999999, poNewEntity.IPAY_TERM_DAYS);
                 loDb.R_AddCommandParameter(loCommand, "CUSER_ID", DbType.String, 50, poNewEntity.CUSER_ID);
 
-                loDb.SqlExecNonQuery(loConn, loCommand, true);
-
+                try
+                {
+                    loDb.SqlExecNonQuery(loConn, loCommand, false);
+                }
+                catch (Exception ex)
+                {
+                    loException.Add(ex);
+                }
+                loException.Add(R_ExternalException.R_SP_Get_Exception(loConn));
             }
             catch (Exception ex)
             {
                 loException.Add(ex);
             }
-
             finally
             {
                 if (loConn != null)

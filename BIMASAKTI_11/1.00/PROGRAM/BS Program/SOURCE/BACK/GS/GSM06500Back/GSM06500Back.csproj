@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\COMMON\GS\GSM06500Common\GSM06500Common.csproj" />
+    <ProjectReference Include="..\GS_SPR\RSP_GS_MAINTAIN_PAYMENT_TERMResources\RSP_GS_MAINTAIN_PAYMENT_TERMResources.csproj" />
   </ItemGroup>
 
   <ItemGroup>

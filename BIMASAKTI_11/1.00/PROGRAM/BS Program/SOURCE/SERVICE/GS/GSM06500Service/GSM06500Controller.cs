@@ -144,7 +144,8 @@ namespace GSM06500Service
 
                 poParameter.Entity.CCOMPANY_ID = "RCD";
                 poParameter.Entity.CUSER_ID = "ADMIN";
-                poParameter.Entity.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
+               // poParameter.Entity.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
+                //poParameter.Entity.CPROPERTY_ID = "ABCDEF";
                 loRtn.data = loCls.R_Save(poParameter.Entity, poParameter.CRUDMode);
             }
             catch (Exception ex)
