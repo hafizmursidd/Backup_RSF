@@ -20,8 +20,9 @@ namespace GSM06500Front
     public partial class GSM06500
     {
         private GSM06500ViewModel PaymentTermViewModel = new();
-        private R_ConductorGrid _conGridPaymentRef;
+       // private R_ConductorGrid _conGridPaymentRef;
         private R_Grid<GSM06500DTO> _gridRef;
+        private R_Conductor _conductorRef;
 
         [Inject] private IClientHelper _clientHelper { get; set; }
 
@@ -30,7 +31,8 @@ namespace GSM06500Front
             var loEx = new R_Exception();
             try
             {
-                await _gridRef.R_RefreshGrid(null);
+                await PropertyDropdown_ServiceGetListRecord(null);
+                //await _gridRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {
@@ -39,7 +41,7 @@ namespace GSM06500Front
 
             loEx.ThrowExceptionIfErrors();
         }
-        private async Task Grid_R_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
+        private async Task R_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
 
@@ -55,7 +57,7 @@ namespace GSM06500Front
             loEx.ThrowExceptionIfErrors();
         }
 
-        private async Task Grid_ServiceGetRecordAsync(R_ServiceGetRecordEventArgs eventArgs)
+        private async Task R_ServiceGetRecordAsync(R_ServiceGetRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
 
@@ -71,7 +73,7 @@ namespace GSM06500Front
 
             loEx.ThrowExceptionIfErrors();
         }
-        public async Task Grid_ServiceDelete(R_ServiceDeleteEventArgs eventArgs)
+        public async Task ServiceDelete(R_ServiceDeleteEventArgs eventArgs)
         {
             var loEx = new R_Exception();
 
@@ -104,6 +106,7 @@ namespace GSM06500Front
         }
 
         private async Task ServiceSave(R_ServiceSaveEventArgs eventArgs)
+        
         {
 
             var loEx = new R_Exception();
@@ -123,6 +126,37 @@ namespace GSM06500Front
             }
 
             loEx.ThrowExceptionIfErrors();
+        }
+
+        private async Task PropertyDropdown_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                await PaymentTermViewModel.GetPropertyList();
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            R_DisplayException(loEx);
+        }
+        private async Task PropertyDropdown_OnChange(object poParam)
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                await _gridRef.R_RefreshGrid(null);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            R_DisplayException(loEx);
         }
 
 

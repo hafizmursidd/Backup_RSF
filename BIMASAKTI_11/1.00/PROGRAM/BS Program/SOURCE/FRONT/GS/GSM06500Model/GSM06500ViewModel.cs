@@ -16,7 +16,8 @@ namespace GSM06500Model
         private GSM06500Model _model = new GSM06500Model();
         public ObservableCollection<GSM06500DTO> TermofPaymentList = new ObservableCollection<GSM06500DTO>();
         public GSM06500DTO PaymentOfTerm { get; set; } = new GSM06500DTO();
-
+        public List<GSM06500PropertyDTO> PropertyList { get; set; } = new List<GSM06500PropertyDTO>();
+        public string PropertyValueContext = "";
         public string lcPropertyId { get; set; }
 
         public async Task GetAllTermOfPaymentAsync()
@@ -34,6 +35,23 @@ namespace GSM06500Model
 
         EndBlock:
             loException.ThrowExceptionIfErrors();
+        }
+
+        public async Task GetPropertyList()
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                var loResult = await _model.GetPropertyAsyncModel();
+                PropertyList = loResult.Data;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
         }
 
         public async Task DeleteTermOfPayment(GSM06500DTO poProperty)

@@ -1,10 +1,11 @@
-﻿namespace GSM06500Back
+﻿namespace GSM06500Common
 {
-    public class GSM06500DBParameter
+    public class GSM06500PropertyDTO
     {
         public string CCOMPANY_ID { get; set; }
         public string CUSER_ID { get; set; }
         public string CPROPERTY_ID { get; set; }
-        public string CCPAY_TERM_CODE { get; set; }
+
     }
+
 }

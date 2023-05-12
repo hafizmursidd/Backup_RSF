@@ -29,12 +29,40 @@ namespace GSM06500Service
                 loDbParameter.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
                 //loDbParameter.CCOMPANY_ID = "ABCDE";
                 //loDbParameter.CUSER_ID = "aa";
-
-
                 var loCls = new GSM06500Cls();
 
                 var loResult = loCls.TERM_OF_LIST(loDbParameter);
                 loRtn = new GSM06500ListDTO { ListData = loResult };
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loRtn;
+        }
+
+        [HttpPost]
+        public GSM06500PropertyListDTO GetAllPropertyList()
+        {
+            var loEx = new R_Exception();
+            GSM06500PropertyListDTO loRtn = null;
+            var loParameter = new GSM06500DBParameter();
+
+            try
+            {
+                var loCls = new GSM06500Cls();
+                loRtn = new GSM06500PropertyListDTO();
+
+                //loParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                //loParameter.CUSER_ID = R_BackGlobalVar.CUSER_ID;
+                loParameter.CCOMPANY_ID = "RCD";
+                loParameter.CUSER_ID = "Admin";
+
+                var loResult = loCls.GetAllPropertyList(loParameter);
+                loRtn.Data = loResult;
             }
             catch (Exception ex)
             {

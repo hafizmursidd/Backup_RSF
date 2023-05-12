@@ -5,6 +5,7 @@ using R_CommonFrontBackAPI;
 using System.Data.Common;
 using System.Data;
 using System.Windows.Input;
+using System.Reflection.Metadata;
 
 namespace GSM06500Back
 {
@@ -167,6 +168,40 @@ namespace GSM06500Back
                 var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
 
                 loReturn = R_Utility.R_ConvertTo<GSM06500DTO>(loReturnTemp).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+
+            return loReturn;
+        }
+
+        public List<GSM06500PropertyDTO> GetAllPropertyList(GSM06500DBParameter poParameter)
+        {
+            R_Exception loException = new R_Exception();
+            List<GSM06500PropertyDTO> loReturn = null;
+            R_Db loDb;
+            DbCommand loCmd;
+
+            try
+            {
+                loDb = new R_Db();
+                var loConn = loDb.GetConnection();
+                loCmd = loDb.GetCommand();
+
+                var lcQuery = @"RSP_GS_GET_PROPERTY_LIST";
+                loCmd.CommandText = lcQuery;
+                loCmd.CommandType = CommandType.StoredProcedure;
+                loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 10, poParameter.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CUSER_ID", DbType.String, 10, poParameter.CUSER_ID);
+
+                var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
+
+                loReturn = R_Utility.R_ConvertTo<GSM06500PropertyDTO>(loReturnTemp).ToList();
 
             }
             catch (Exception ex)

@@ -9,5 +9,6 @@ namespace GSM06500Common
     {
         IAsyncEnumerable<GSM06500DTO> TermOfPayment();
         GSM06500ListDTO GetallTermOfpaymentOriginal();
+        GSM06500PropertyListDTO GetAllPropertyList();
     }
 }

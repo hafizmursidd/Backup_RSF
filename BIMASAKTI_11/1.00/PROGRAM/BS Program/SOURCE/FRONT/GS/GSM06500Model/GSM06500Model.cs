@@ -62,6 +62,34 @@ namespace GSM06500Model
             return loResult;
 
         }
+        public async Task <GSM06500PropertyListDTO> GetPropertyAsyncModel()
+        {
+            var loEx = new R_Exception();
+            GSM06500PropertyListDTO loResult = null;
+
+            try
+            {
+                R_HTTPClientWrapper.httpClientName = _HttpClientName;
+                loResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM06500PropertyListDTO>(
+                    _RequestServiceEndPoint,
+                    nameof(IGSM06500.GetAllPropertyList),
+                    _SendWithContext,
+                    _SendWithToken);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
+        }
+
+        public GSM06500PropertyListDTO GetAllPropertyList()
+        {
+            throw new NotImplementedException();
+        }
 
         //public async Task<GSM06500DTO> GetTermOfPaymentOneRecordAsyncModel()
         //{
