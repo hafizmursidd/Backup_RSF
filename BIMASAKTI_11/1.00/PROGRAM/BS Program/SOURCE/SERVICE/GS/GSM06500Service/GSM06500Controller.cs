@@ -23,12 +23,12 @@ namespace GSM06500Service
             {
                 loDbParameter = new GSM06500DBParameter();
 
-                loDbParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID; ;
-                loDbParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
+                //loDbParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID; ;
+                //loDbParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
 
                 loDbParameter.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
-                //loDbParameter.CCOMPANY_ID = "ABCDE";
-                //loDbParameter.CUSER_ID = "aa";
+                loDbParameter.CCOMPANY_ID = "RCD";
+                loDbParameter.CUSER_ID = "ADMIN";
                 var loCls = new GSM06500Cls();
 
                 var loResult = loCls.TERM_OF_LIST(loDbParameter);
@@ -87,6 +87,7 @@ namespace GSM06500Service
                 loCls = new GSM06500Cls();
                 loRtn = new R_ServiceDeleteResultDTO();
                 poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+                poParameter.Entity.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
                 loCls.R_Delete(poParameter.Entity);
             }
             catch (Exception ex)
@@ -108,12 +109,11 @@ namespace GSM06500Service
             try
             {
                 var loCls = new GSM06500Cls();
-                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
-                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+                //poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                //poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
 
-                var x = poParameter.Entity;
-
-                var anc = loCls.R_GetRecord(poParameter.Entity);
+                poParameter.Entity.CCOMPANY_ID = "RCD";
+                poParameter.Entity.CUSER_ID = "ADMIN";
 
 
                 loRtn.data = loCls.R_GetRecord(poParameter.Entity);
@@ -139,8 +139,12 @@ namespace GSM06500Service
             {
                 loCls = new GSM06500Cls();
                 loRtn = new R_ServiceSaveResultDTO<GSM06500DTO>();
-                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
-                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+                //poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                //poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+
+                poParameter.Entity.CCOMPANY_ID = "RCD";
+                poParameter.Entity.CUSER_ID = "ADMIN";
+                poParameter.Entity.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
                 loRtn.data = loCls.R_Save(poParameter.Entity, poParameter.CRUDMode);
             }
             catch (Exception ex)

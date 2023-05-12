@@ -34,11 +34,10 @@ namespace GSM06500Model
         {
             throw new NotImplementedException();
         }
-        public async Task<GSM06500ListDTO> GetTermOfPaymentListAsyncModel()
+        public async Task<GSM06500ListDTO> GetTermOfPaymentListAsyncModel( string lcPropertyId)
         {
             var loEx = new R_Exception();
             GSM06500ListDTO loResult = null;
-            lcPropertyId = "ABCDEF";
             //lcCompany = "ABCDE";
             //lcuserLoginId = "Admin";
             try

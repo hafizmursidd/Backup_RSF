@@ -11,8 +11,8 @@
         <R_ItemLayout xs="8">
             <R_DropDownList Data="@PaymentTermViewModel.PropertyList"
                             @bind-Value="PaymentTermViewModel.PropertyValueContext"
-                            ValueField="@nameof(GSM06500PropertyDTO.CCOMPANY_ID)"
-                            TextField="@nameof(GSM06500PropertyDTO.CUSER_ID)"
+                            ValueField="@nameof(GSM06500PropertyDTO.CPROPERTY_ID)"
+                            TextField="@nameof(GSM06500PropertyDTO.CPROPERTY_NAME)"
                             R_ConductorSource="@_conductorRef" OnChanged="@PropertyDropdown_OnChange">
             </R_DropDownList>
         </R_ItemLayout>
@@ -21,12 +21,12 @@
 </R_StackLayout>
 
 
-@*
+
 <R_StackLayout>
     <R_Grid @ref="@_gridRef"
             DataSource="PaymentTermViewModel.TermofPaymentList"
             Pageable="true"
-            R_ConductorGridSource="@PaymentTermViewModel"
+            R_ConductorGridSource="@_conGridPaymentRef"
             R_GridType="@R_eGridType.Original"
             R_ServiceGetListRecord="@R_ServiceGetListRecord"
             AllowDeleteRow="true"
@@ -46,8 +46,8 @@
     </R_Grid>
 
 </R_StackLayout>
-<R_ConductorGrid @ref="@PaymentTermViewModel"
+<R_ConductorGrid @ref="@_conGridPaymentRef"
                  R_ViewModel="@PaymentTermViewModel"
                  R_ServiceGetRecord="@R_ServiceGetRecordAsync"
                  R_ServiceDelete="@ServiceDelete"
-                 R_ServiceSave="@ServiceSave" />*@
+                 R_ServiceSave="@ServiceSave" />

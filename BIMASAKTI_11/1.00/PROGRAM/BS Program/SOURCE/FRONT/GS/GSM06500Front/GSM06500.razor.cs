@@ -20,7 +20,7 @@ namespace GSM06500Front
     public partial class GSM06500
     {
         private GSM06500ViewModel PaymentTermViewModel = new();
-       // private R_ConductorGrid _conGridPaymentRef;
+         private R_ConductorGrid _conGridPaymentRef;
         private R_Grid<GSM06500DTO> _gridRef;
         private R_Conductor _conductorRef;
 
@@ -32,7 +32,6 @@ namespace GSM06500Front
             try
             {
                 await PropertyDropdown_ServiceGetListRecord(null);
-                //await _gridRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {
@@ -41,12 +40,43 @@ namespace GSM06500Front
 
             loEx.ThrowExceptionIfErrors();
         }
-        private async Task R_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
+        private async Task PropertyDropdown_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
 
             try
             {
+                await PaymentTermViewModel.GetPropertyList();
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            R_DisplayException(loEx);
+        }
+
+        private async Task PropertyDropdown_OnChange(object poParam)
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                await _gridRef.R_RefreshGrid(null);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            R_DisplayException(loEx);
+        }
+        private async Task R_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+
                 await PaymentTermViewModel.GetAllTermOfPaymentAsync();
             }
             catch (Exception ex)
@@ -89,33 +119,23 @@ namespace GSM06500Front
 
             loEx.ThrowExceptionIfErrors();
         }
-       
-        //public async Task Conductor_BeforeDelete(R_BeforeDeleteEventArgs eventArgs)
-        //{
-        //    var loData = (GSM06500DTO)eventArgs.Data;
 
-        //    if (loData.CPROPERTY_ID == 1)
-        //    {
-        //        eventArgs.Cancel = true;
-        //        await R_MessageBox.Show("", "Cannot delete Product ID 1", R_eMessageBoxButtonType.OK);
-        //    }
-        //}
+
         public async Task Conductor_AfterDelete()
         {
             await R_MessageBox.Show("", "Delete Success", R_eMessageBoxButtonType.OK);
         }
 
         private async Task ServiceSave(R_ServiceSaveEventArgs eventArgs)
-        
+
         {
 
             var loEx = new R_Exception();
 
             try
             {
-                var lcPropertyId = "ABCDEF";
+                //var lcPropertyId = "ABCDEF";
                 var loParam = (GSM06500DTO)eventArgs.Data;
-                loParam.CPROPERTY_ID = lcPropertyId;
                 await PaymentTermViewModel.SaveTermOfPayment(loParam, eventArgs.ConductorMode);
 
                 eventArgs.Result = PaymentTermViewModel.PaymentOfTerm;
@@ -128,36 +148,19 @@ namespace GSM06500Front
             loEx.ThrowExceptionIfErrors();
         }
 
-        private async Task PropertyDropdown_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
-        {
-            var loEx = new R_Exception();
+        //public async Task Conductor_BeforeDelete(R_BeforeDeleteEventArgs eventArgs)
+        //{
+        //    var loData = (GSM06500DTO)eventArgs.Data;
 
-            try
-            {
-                await PaymentTermViewModel.GetPropertyList();
-            }
-            catch (Exception ex)
-            {
-                loEx.Add(ex);
-            }
+        //    if (loData.CPROPERTY_ID == 1)
+        //    {
+        //        eventArgs.Cancel = true;
+        //        await R_MessageBox.Show("", "Cannot delete Product ID 1", R_eMessageBoxButtonType.OK);
+        //    }
+        //}
 
-            R_DisplayException(loEx);
-        }
-        private async Task PropertyDropdown_OnChange(object poParam)
-        {
-            var loEx = new R_Exception();
 
-            try
-            {
-                await _gridRef.R_RefreshGrid(null);
-            }
-            catch (Exception ex)
-            {
-                loEx.Add(ex);
-            }
 
-            R_DisplayException(loEx);
-        }
 
 
     }

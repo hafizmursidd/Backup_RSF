@@ -18,14 +18,13 @@ namespace GSM06500Model
         public GSM06500DTO PaymentOfTerm { get; set; } = new GSM06500DTO();
         public List<GSM06500PropertyDTO> PropertyList { get; set; } = new List<GSM06500PropertyDTO>();
         public string PropertyValueContext = "";
-        public string lcPropertyId { get; set; }
 
         public async Task GetAllTermOfPaymentAsync()
         {
             R_Exception loException = new R_Exception();
             try
             {
-                var loResult = await _model.GetTermOfPaymentListAsyncModel();
+                var loResult = await _model.GetTermOfPaymentListAsyncModel(PropertyValueContext);
                 TermofPaymentList = new ObservableCollection<GSM06500DTO>(loResult.ListData);
             }
             catch (Exception ex)
@@ -110,6 +109,7 @@ namespace GSM06500Model
 
             try
             {
+                poNewEntity.CPROPERTY_ID = PropertyValueContext;
                 loResult = await _model.R_ServiceSaveAsync(poNewEntity, (eCRUDMode)peConductorMode);
                 PaymentOfTerm = loResult;
             }

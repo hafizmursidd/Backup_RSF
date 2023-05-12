@@ -27,11 +27,11 @@ namespace GSM06500Back
                 loCommand.CommandText = lcQuery;
                 loCommand.CommandType = CommandType.StoredProcedure;
 
-                loDb.R_AddCommandParameter(loCommand, "@CCOMPANY_ID", DbType.String, 10, poEntity.CCOMPANY_ID);
-                loDb.R_AddCommandParameter(loCommand, "@CPROPERTY_ID", DbType.String, 10, poEntity.CPROPERTY_ID);
-                loDb.R_AddCommandParameter(loCommand, "@CPAY_TERM_CODE", DbType.String, 10, poEntity.CPAY_TERM_CODE);
-                loDb.R_AddCommandParameter(loCommand, "@CPAY_TERM_NAME", DbType.String, 10, poEntity.CPAY_TERM_NAME);
-                loDb.R_AddCommandParameter(loCommand, "@IPAY_TERM_DAYS", DbType.Int32, 10, poEntity.IPAY_TERM_DAYS);
+                loDb.R_AddCommandParameter(loCommand, "@CCOMPANY_ID", DbType.String, 50, poEntity.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCommand, "@CPROPERTY_ID", DbType.String, 50, poEntity.CPROPERTY_ID);
+                loDb.R_AddCommandParameter(loCommand, "@CPAY_TERM_CODE", DbType.String, 50, poEntity.CPAY_TERM_CODE);
+                loDb.R_AddCommandParameter(loCommand, "@CPAY_TERM_NAME", DbType.String, 100, poEntity.CPAY_TERM_NAME);
+                loDb.R_AddCommandParameter(loCommand, "@IPAY_TERM_DAYS", DbType.Int32, 999999, poEntity.IPAY_TERM_DAYS);
                 loDb.R_AddCommandParameter(loCommand, "@CACTION", DbType.String, 10, lcAction);
                 loDb.R_AddCommandParameter(loCommand, "@CUSER_ID", DbType.String, 10, poEntity.CUSER_ID);
 
@@ -60,9 +60,9 @@ namespace GSM06500Back
                 loCmd.CommandText = lcQuery;
                 loCmd.CommandType = CommandType.StoredProcedure;
 
-                loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 10, poEntity.CCOMPANY_ID);
-                loDb.R_AddCommandParameter(loCmd, "@CPROPERTY_ID", DbType.String, 10, poEntity.CPROPERTY_ID);
-                loDb.R_AddCommandParameter(loCmd, "@CUSER_ID", DbType.String, 10, poEntity.CUSER_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 50, poEntity.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CPROPERTY_ID", DbType.String, 50, poEntity.CPROPERTY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CUSER_ID", DbType.String, 50, poEntity.CUSER_ID);
                 loDb.R_AddCommandParameter(loCmd, "@CPAY_TERM_CODE", DbType.String, 10, poEntity.CPAY_TERM_CODE);
 
                 var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
@@ -105,21 +105,19 @@ namespace GSM06500Back
                         lcAction = "EDIT";
                         break;
                     default:
-
                         break;
-
                 }
                 lcQuery = "RSP_GS_MAINTAIN_PAYMENT_TERM";
                 loCommand.CommandText = lcQuery;
                 loCommand.CommandType = CommandType.StoredProcedure;
 
-                loDb.R_AddCommandParameter(loCommand, "CCOMPANY_ID", DbType.String, 10, poNewEntity.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCommand, "CCOMPANY_ID", DbType.String, 50, poNewEntity.CCOMPANY_ID);
                 loDb.R_AddCommandParameter(loCommand, "CPROPERTY_ID", DbType.String, 10, poNewEntity.CPROPERTY_ID);
-                loDb.R_AddCommandParameter(loCommand, "CPAY_TERM_CODE", DbType.String, 10, poNewEntity.CPAY_TERM_CODE);
+                loDb.R_AddCommandParameter(loCommand, "CPAY_TERM_CODE", DbType.String, 8, poNewEntity.CPAY_TERM_CODE);
                 loDb.R_AddCommandParameter(loCommand, "CACTION", DbType.String, 10, lcAction);
-                loDb.R_AddCommandParameter(loCommand, "CPAY_TERM_NAME", DbType.String, 10, poNewEntity.CPAY_TERM_NAME);
-                loDb.R_AddCommandParameter(loCommand, "IPAY_TERM_DAYS", DbType.Int32, 10, poNewEntity.IPAY_TERM_DAYS);
-                loDb.R_AddCommandParameter(loCommand, "CUSER_ID", DbType.String, 10, poNewEntity.CUSER_ID);
+                loDb.R_AddCommandParameter(loCommand, "CPAY_TERM_NAME", DbType.String, 100, poNewEntity.CPAY_TERM_NAME);
+                loDb.R_AddCommandParameter(loCommand, "IPAY_TERM_DAYS", DbType.Int32, 999999, poNewEntity.IPAY_TERM_DAYS);
+                loDb.R_AddCommandParameter(loCommand, "CUSER_ID", DbType.String, 50, poNewEntity.CUSER_ID);
 
                 loDb.SqlExecNonQuery(loConn, loCommand, true);
 
@@ -161,8 +159,8 @@ namespace GSM06500Back
                 var lcQuery = @"RSP_GS_GET_PAYMENT_TERM_LIST";
                 loCmd.CommandText = lcQuery;
                 loCmd.CommandType = CommandType.StoredProcedure;
-                loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 10, poParameter.CCOMPANY_ID);
-                loDb.R_AddCommandParameter(loCmd, "@CPROPERTY_ID", DbType.String, 10, poParameter.CPROPERTY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 50, poParameter.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CPROPERTY_ID", DbType.String, 50, poParameter.CPROPERTY_ID);
                 loDb.R_AddCommandParameter(loCmd, "@CUSER_ID", DbType.String, 10, poParameter.CUSER_ID);
 
                 var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
@@ -196,8 +194,8 @@ namespace GSM06500Back
                 var lcQuery = @"RSP_GS_GET_PROPERTY_LIST";
                 loCmd.CommandText = lcQuery;
                 loCmd.CommandType = CommandType.StoredProcedure;
-                loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 10, poParameter.CCOMPANY_ID);
-                loDb.R_AddCommandParameter(loCmd, "@CUSER_ID", DbType.String, 10, poParameter.CUSER_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 50, poParameter.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CUSER_ID", DbType.String, 50, poParameter.CUSER_ID);
 
                 var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
 
