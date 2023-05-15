@@ -1,0 +1,4 @@
+6501	= Error process, please contact your administrator!
+6502	= Duplicate Payment Term Code!
+6503	= Cannot Delete, Payment Term Already in used!
+
