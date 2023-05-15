@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -16,21 +16,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Menu\BlazorClientHelper\BlazorClientHelper.csproj" />
+    <ProjectReference Include="..\..\COMMON\GS\GSM06500Common\GSM06500Common.csproj" />
+    <ProjectReference Include="..\..\Menu\BlazorClientHelper\BlazorClientHelper.csproj" />
+    <ProjectReference Include="..\GSM06500Model\GSM06500Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="GSM06500Common">
-      <HintPath>..\..\..\COMMON\GS\GSM06500Common\bin\Debug\netstandard2.1\GSM06500Common.dll</HintPath>
-    </Reference>
     <Reference Include="R_BlazorFrontEnd">
-      <HintPath>..\..\..\..\..\SYSTEM\SOURCE\LIBRARY\Front\R_BlazorFrontEnd.dll</HintPath>
+      <HintPath>..\..\..\..\SYSTEM\SOURCE\LIBRARY\Front\R_BlazorFrontEnd.dll</HintPath>
     </Reference>
     <Reference Include="R_BlazorFrontEnd.Controls">
-      <HintPath>..\..\..\..\..\SYSTEM\SOURCE\LIBRARY\Front\R_BlazorFrontEnd.Controls.dll</HintPath>
+      <HintPath>..\..\..\..\SYSTEM\SOURCE\LIBRARY\Front\R_BlazorFrontEnd.Controls.dll</HintPath>
     </Reference>
     <Reference Include="R_CommonFrontBackAPI">
-      <HintPath>..\..\..\..\..\SYSTEM\SOURCE\LIBRARY\Front\R_CommonFrontBackAPI.dll</HintPath>
+      <HintPath>..\..\..\..\SYSTEM\SOURCE\LIBRARY\Front\R_CommonFrontBackAPI.dll</HintPath>
     </Reference>
   </ItemGroup>
 
