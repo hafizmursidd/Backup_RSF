@@ -38,7 +38,7 @@ namespace GSM06500Back
 
                 try
                 {
-                    loDb.SqlExecNonQuery(loConn, loCommand, true);
+                    loDb.SqlExecNonQuery(loConn, loCommand, false);
                 }
                 catch (Exception ex)
                 {

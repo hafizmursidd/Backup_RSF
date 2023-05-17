@@ -45,17 +45,77 @@ namespace GSM04500Service
         [HttpPost]
         public R_ServiceDeleteResultDTO R_ServiceDelete(R_ServiceDeleteParameterDTO<GSM04500DTO> poParameter)
         {
-            throw new NotImplementedException();
+            R_Exception loException = new R_Exception();
+            R_ServiceDeleteResultDTO loRtn = null;
+            GSM04500Cls loCls;
+            GSM04500DBParameter loDbParameter;
+
+            try
+            {
+                loCls = new GSM04500Cls();
+                loRtn = new R_ServiceDeleteResultDTO();
+                loCls.R_Delete(poParameter.Entity);
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            };
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+
+            return loRtn;
         }
         [HttpPost]
         public R_ServiceGetRecordResultDTO<GSM04500DTO> R_ServiceGetRecord(R_ServiceGetRecordParameterDTO<GSM04500DTO> poParameter)
         {
-            throw new NotImplementedException();
+            var loEx = new R_Exception();
+            var loRtn = new R_ServiceGetRecordResultDTO<GSM04500DTO>();
+
+            try
+            {
+                var loCls = new GSM04500Cls();
+
+                loRtn.data = loCls.R_GetRecord(poParameter.Entity);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loRtn;
         }
         [HttpPost]
         public R_ServiceSaveResultDTO<GSM04500DTO> R_ServiceSave(R_ServiceSaveParameterDTO<GSM04500DTO> poParameter)
         {
-            throw new NotImplementedException();
+            R_Exception loException = new R_Exception();
+            R_ServiceSaveResultDTO<GSM04500DTO> loRtn = null;
+            GSM04500Cls loCls;
+
+            try
+            {
+                loCls = new GSM04500Cls();
+                loRtn = new R_ServiceSaveResultDTO<GSM04500DTO>();
+
+                //poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                //poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+
+                poParameter.Entity.CCOMPANY_ID = "RCD";
+                poParameter.Entity.CUSER_ID = "ADMIN";
+
+                // poParameter.Entity.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
+                //poParameter.Entity.CPROPERTY_ID = "ABCDEF";
+                loRtn.data = loCls.R_Save(poParameter.Entity, poParameter.CRUDMode);
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            };
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+
+            return loRtn;
         }
         [HttpPost]
         public IAsyncEnumerable<GSM04500DTO> GET_JOURNAL_GRP_LIST_STREAM()
@@ -70,10 +130,12 @@ namespace GSM04500Service
             {
                 loDbParameter = new GSM04500DBParameter();
 
-                loDbParameter.CCOMPANY_ID = "RCD";
-                loDbParameter.CUSER_ID = "hmc";
-                loDbParameter.CPROPERTY_ID = "JBMPC";
-                loDbParameter.CJRNGRP_TYPE = "10";
+                loDbParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                loDbParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
+
+                loDbParameter.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
+                loDbParameter.CJRNGRP_TYPE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJRNGRP_TYPE);
+                //loDbParameter.CJRNGRP_TYPE = "12";
 
                 var loCls = new GSM04500Cls();
 
