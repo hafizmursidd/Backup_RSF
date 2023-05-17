@@ -1,6 +1,8 @@
 ﻿using GSM04500Common;
 using R_BlazorFrontEnd;
+using R_BlazorFrontEnd.Enums;
 using R_BlazorFrontEnd.Exceptions;
+using R_CommonFrontBackAPI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,10 +36,9 @@ namespace GSM04500Model
             loEx.ThrowExceptionIfErrors();
         }
 
-        public async Task GetAllJournalAsync()
+        public async Task GetAllJournalAsync(string lcGroupId)
         {
             R_Exception loException = new R_Exception();
-            string lcGroupId = "10";
             try
             {
                 var loResult = await _model.GetAllJournalGroupListAsync(lcGroupId, PropertyValueContext);
@@ -66,7 +67,6 @@ namespace GSM04500Model
                     CUSER_ID = poProperty.CUSER_ID,
                     CPROPERTY_ID = poProperty.CPROPERTY_ID,
                     CJRNGRP_TYPE = poProperty.CJRNGRP_TYPE,
-
                     CJRNGRP_CODE = poProperty.CJRNGRP_CODE
                 };
                 loResult = await _model.R_ServiceGetRecordAsync(loParam);
@@ -87,10 +87,11 @@ namespace GSM04500Model
 
             try
             {
-                R_FrontContext.R_SetStreamingContext(ContextConstant.CJRNGRP_TYPE, poProperty.CJRNGRP_TYPE);
-                R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, poProperty.CPROPERTY_ID);
                 var loParam = new GSM04500DTO
                 {
+                    CCOMPANY_ID = poProperty.CCOMPANY_ID,
+                    CPROPERTY_ID = poProperty.CPROPERTY_ID,
+                    CJRNGRP_TYPE = poProperty.CJRNGRP_TYPE,
                     CJRNGRP_CODE = poProperty.CJRNGRP_CODE,
                     CJRNGRP_NAME = poProperty.CJRNGRP_NAME,
                     LACCRUAL = poProperty.LACCRUAL
@@ -102,6 +103,28 @@ namespace GSM04500Model
                 loEx.Add(ex);
             }
             loEx.ThrowExceptionIfErrors();
+        }
+
+        public async Task<GSM04500DTO> SaveJournalGroup(GSM04500DTO poNewEntity, R_eConductorMode peConductorMode)
+        {
+            var loEx = new R_Exception();
+            GSM04500DTO loResult = null;
+
+            try
+            {
+                poNewEntity.CPROPERTY_ID = PropertyValueContext;
+                R_FrontContext.R_SetStreamingContext(ContextConstant.CJRNGRP_TYPE, poNewEntity.CJRNGRP_TYPE);
+                loResult = await _model.R_ServiceSaveAsync(poNewEntity, (eCRUDMode)peConductorMode);
+                JournalGroup = loResult;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
         }
     }
 }

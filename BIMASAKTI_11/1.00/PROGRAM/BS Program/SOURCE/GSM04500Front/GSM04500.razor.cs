@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using GSM04500Common;
 using R_BlazorFrontEnd.Controls.Events;
 using R_BlazorFrontEnd.Exceptions;
+using R_BlazorFrontEnd.Controls.MessageBox;
 
 namespace GSM04500Front
 {
     public partial class GSM04500
     {
-        private GSM04500ViewModel JournalGroupViewModel = new();
+        private GSM04500ViewModel journalGroupViewModel = new();
         private R_ConductorGrid _conJournalGroupRef;
         private R_Grid<GSM04500DTO> _gridRef;
         private R_Conductor _conductorRef;
@@ -39,7 +40,7 @@ namespace GSM04500Front
 
             try
             {
-                await JournalGroupViewModel.GetPropertyList();
+                await journalGroupViewModel.GetPropertyList();
             }
             catch (Exception ex)
             {
@@ -68,10 +69,11 @@ namespace GSM04500Front
         private async Task R_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
+            string lcGroupId = null;
             try
             {
-
-                await JournalGroupViewModel.GetAllJournalAsync();
+                lcGroupId = "10";
+                await journalGroupViewModel.GetAllJournalAsync(lcGroupId);
             }
             catch (Exception ex)
             {
@@ -87,7 +89,7 @@ namespace GSM04500Front
             try
             {
                 var loParam = (GSM04500DTO)eventArgs.Data;
-                  eventArgs.Result = await JournalGroupViewModel.GetGroupJournaltOneRecord(loParam);
+                  eventArgs.Result = await journalGroupViewModel.GetGroupJournaltOneRecord(loParam);
             }
             catch (Exception ex)
             {
@@ -104,7 +106,7 @@ namespace GSM04500Front
             try
             {
                 var loParam = (GSM04500DTO)eventArgs.Data;
-                await JournalGroupViewModel.DeleteOneRecordJournalGroup(loParam);
+                await journalGroupViewModel.DeleteOneRecordJournalGroup(loParam);
             }
             catch (Exception ex)
             {
@@ -113,9 +115,30 @@ namespace GSM04500Front
 
             loEx.ThrowExceptionIfErrors();
         }
+        public async Task AfterDelete()
+        {
+            await R_MessageBox.Show("", "Delete Success", R_eMessageBoxButtonType.OK);
+        }
         private async Task ServiceSave(R_ServiceSaveEventArgs eventArgs)
         {
+            var loEx = new R_Exception();
+
+            try
+            {
+                var loParam = (GSM04500DTO)eventArgs.Data;
+                loParam.CJRNGRP_TYPE = "10";
+                await journalGroupViewModel.SaveJournalGroup(loParam, eventArgs.ConductorMode);
+
+                eventArgs.Result = journalGroupViewModel.JournalGroup;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
         }
+
 
     }
 }
