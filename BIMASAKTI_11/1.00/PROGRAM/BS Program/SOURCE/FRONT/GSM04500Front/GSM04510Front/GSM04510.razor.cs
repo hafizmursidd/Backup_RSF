@@ -1,15 +1,10 @@
 ﻿using GSM04500Common;
 using GSM04500Model;
+using R_BlazorFrontEnd.Controls;
 using R_BlazorFrontEnd.Controls.DataControls;
 using R_BlazorFrontEnd.Controls.Events;
-using R_BlazorFrontEnd.Controls;
-using R_BlazorFrontEnd.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using R_BlazorFrontEnd.Controls.MessageBox;
+using R_BlazorFrontEnd.Exceptions;
 
 namespace GSM04510Front
 {
@@ -70,6 +65,7 @@ namespace GSM04510Front
             string lcGroupId = null;
             try
             {
+                //lcGroupId ===> 11 untuk Tab Utility
                 lcGroupId = "11";
                 await journalGroupViewModel.GetAllJournalAsync(lcGroupId);
             }
@@ -123,6 +119,7 @@ namespace GSM04510Front
         {
             var loEx = new R_Exception();
 
+            //lcGroupId ===> 11 untuk Tab Utility
             try
             {
                 var loParam = (GSM04500DTO)eventArgs.Data;

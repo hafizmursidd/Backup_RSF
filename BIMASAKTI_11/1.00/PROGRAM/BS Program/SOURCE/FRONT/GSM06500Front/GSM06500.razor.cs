@@ -1,19 +1,10 @@
-﻿using Microsoft.AspNetCore.Components;
-using R_BlazorFrontEnd.Controls.DataControls;
-using R_BlazorFrontEnd.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GSM06500Common;
 using GSM06500Model;
-using GSM06500Common;
-using BlazorClientHelper;
-using R_BlazorFrontEnd.Exceptions;
+using R_BlazorFrontEnd.Controls;
+using R_BlazorFrontEnd.Controls.DataControls;
 using R_BlazorFrontEnd.Controls.Events;
-using R_BlazorFrontEnd;
 using R_BlazorFrontEnd.Controls.MessageBox;
-using R_BlazorFrontEnd.Enums;
+using R_BlazorFrontEnd.Exceptions;
 
 namespace GSM06500Front
 {

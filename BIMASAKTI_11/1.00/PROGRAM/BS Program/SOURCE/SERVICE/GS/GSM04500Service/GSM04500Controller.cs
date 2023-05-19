@@ -132,7 +132,7 @@ namespace GSM04500Service
 
                 var loCls = new GSM04500Cls();
 
-                loRtnTemp = loCls.JOURNAL_GROUP_LIST_SERVICE(loDbParameter);
+                loRtnTemp = loCls.JOURNAL_GROUP_LIST(loDbParameter);
                 loRtn = GET_JOURNAL_GROUP_LIST_SERVICE(loRtnTemp);
             }
             catch (Exception ex)

@@ -163,7 +163,7 @@ namespace GSM04500Back
             loException.ThrowExceptionIfErrors();
         }
 
-        public List<GSM04500DTO> JOURNAL_GROUP_LIST_SERVICE(GSM04500DBParameter poParameter)
+        public List<GSM04500DTO> JOURNAL_GROUP_LIST(GSM04500DBParameter poParameter)
         {
             R_Exception loException = new R_Exception();
             List<GSM04500DTO> loReturn = null;
@@ -183,7 +183,7 @@ namespace GSM04500Back
                 loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 20, poParameter.CCOMPANY_ID);
                 loDb.R_AddCommandParameter(loCmd, "@CPROPERTY_ID", DbType.String, 100, poParameter.CPROPERTY_ID);
                 loDb.R_AddCommandParameter(loCmd, "@CJOURNAL_GROUP_TYPE", DbType.String, 2, poParameter.CJRNGRP_TYPE);
-                loDb.R_AddCommandParameter(loCmd, "@CUSER_LOGIN_ID", DbType.String, 2, poParameter.CUSER_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CUSER_LOGIN_ID", DbType.String, 25, poParameter.CUSER_ID);
 
                 var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
 

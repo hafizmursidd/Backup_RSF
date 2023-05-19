@@ -56,8 +56,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\FRONT\GSM04500Front\GSM04510Front\GSM04510Front.csproj" />
+    <ProjectReference Include="..\..\FRONT\GSM04500Front\GSM04520Front\GSM04520Front.csproj" />
+    <ProjectReference Include="..\..\FRONT\GSM04500Front\GSM04530Front\GSM04530Front.csproj" />
+    <ProjectReference Include="..\..\FRONT\GSM04500Front\GSM04540Front\GSM04540Front.csproj" />
+    <ProjectReference Include="..\..\FRONT\GSM04500Front\GSM04550Front\GSM04550Front.csproj" />
+    <ProjectReference Include="..\..\FRONT\GSM04500Front\GSM04560Front\GSM04560Front.csproj" />
     <ProjectReference Include="..\..\FRONT\GSM06500Front\GSM06500Front.csproj" />
-    <ProjectReference Include="..\..\GSM04500Front\GSM04500Front.csproj" />
     <ProjectReference Include="..\BlazorClientHelper\BlazorClientHelper.csproj" />
     <ProjectReference Include="..\BlazorMenuCommon\BlazorMenuCommon.vbproj" />
   </ItemGroup>
