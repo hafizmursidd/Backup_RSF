@@ -15,6 +15,7 @@ namespace GSM04500Common
         public string CGOA_CODE { get; set; }
         public string CGOA_NAME { get; set; }
 
+        public string CDEPT_CODE { get; set; }
         public string CDEPT_NAME { get; set; }
         public string CGLACCOUNT_NO { get; set; }
         public string CGLACCOUNT_NAME { get; set; }

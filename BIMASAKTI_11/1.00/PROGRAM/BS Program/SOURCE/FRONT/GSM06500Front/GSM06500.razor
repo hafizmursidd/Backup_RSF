@@ -5,10 +5,11 @@
 
 <R_StackLayout>
     <R_StackLayout Row>
-        <R_ItemLayout xs="4">
+        <R_ItemLayout xs="1">
             <R_Label FontColor="Red" Class="fw-bold" FontSize="15">Property</R_Label>
+        
         </R_ItemLayout>
-        <R_ItemLayout xs="8">
+        <R_ItemLayout xs="2">
             <R_DropDownList Data="@PaymentTermViewModel.PropertyList"
                             @bind-Value="PaymentTermViewModel.PropertyValueContext"
                             ValueField="@nameof(GSM06500PropertyDTO.CPROPERTY_ID)"
@@ -23,7 +24,7 @@
 
 <R_StackLayout>
     <R_Grid @ref="@_gridRef"
-            DataSource="PaymentTermViewModel.TermofPaymentList"
+            DataSource="PaymentTermViewModel.PaymentOfTermList"
             Pageable="true"
             R_ConductorGridSource="@_conGridPaymentRef"
             R_GridType="@R_eGridType.Original"
@@ -37,7 +38,7 @@
             <R_GridTextColumn FieldName="CPAY_TERM_CODE" HeaderText="Term of Payment Code" R_EnableAdd />
             <R_GridTextColumn FieldName="CPAY_TERM_NAME" HeaderText="Term of Payment Name" R_EnableAdd R_EnableEdit />
             <R_GridTextColumn FieldName="IPAY_TERM_DAYS" HeaderText="TOP Days" R_EnableAdd R_EnableEdit />
-            <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="Last Updated By"  />
+            <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="Last Updated By" />
             <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date" />
             <R_GridTextColumn FieldName="CCREATE_BY" HeaderText="Created By" />
             <R_GridTextColumn FieldName="DCREATE_DATE" HeaderText="Created date" />

@@ -20,7 +20,7 @@ namespace GSM06500Front
             var loEx = new R_Exception();
             try
             {
-                await PropertyDropdown_ServiceGetListRecord(null);
+                await PropertyDropdown_ServiceGetListRecord(null);                
             }
             catch (Exception ex)
             {
@@ -67,6 +67,7 @@ namespace GSM06500Front
             {
 
                 await PaymentTermViewModel.GetAllTermOfPaymentAsync();
+                eventArgs.ListEntityResult = PaymentTermViewModel.PaymentOfTermList;
             }
             catch (Exception ex)
             {

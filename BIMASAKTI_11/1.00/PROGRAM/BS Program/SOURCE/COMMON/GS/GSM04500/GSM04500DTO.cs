@@ -9,7 +9,6 @@ namespace GSM04500Common
         public string CPROPERTY_ID { get; set; }
 
         public string CJRNGRP_TYPE { get; set; }
-
         public string CJRNGRP_CODE { get; set; }
         public string CJRNGRP_NAME { get; set; }
         public bool LACCRUAL { get; set; }

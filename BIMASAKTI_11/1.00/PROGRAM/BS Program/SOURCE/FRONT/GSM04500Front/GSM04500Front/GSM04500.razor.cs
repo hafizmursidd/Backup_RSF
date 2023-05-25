@@ -70,6 +70,7 @@ namespace GSM04500Front
                 //lcGroupId ===> 10 untuk Tab Service
                 lcGroupId = "10";
                 await journalGroupViewModel.GetAllJournalAsync(lcGroupId);
+                eventArgs.ListEntityResult = journalGroupViewModel.JournalGroupList;
             }
             catch (Exception ex)
             {

@@ -13,7 +13,7 @@ namespace GSM06500Model
     public class GSM06500ViewModel : R_ViewModel<GSM06500DTO>
     {
         private GSM06500Model _model = new GSM06500Model();
-        public ObservableCollection<GSM06500DTO> TermofPaymentList = new ObservableCollection<GSM06500DTO>();
+        public ObservableCollection<GSM06500DTO> PaymentOfTermList = new ObservableCollection<GSM06500DTO>();
         public GSM06500DTO PaymentOfTerm { get; set; } = new GSM06500DTO();
         public List<GSM06500PropertyDTO> PropertyList { get; set; } = new List<GSM06500PropertyDTO>();
         public string PropertyValueContext = "";
@@ -24,7 +24,7 @@ namespace GSM06500Model
             try
             {
                 var loResult = await _model.GetTermOfPaymentListAsyncModel(PropertyValueContext);
-                TermofPaymentList = new ObservableCollection<GSM06500DTO>(loResult.ListData);
+                PaymentOfTermList = new ObservableCollection<GSM06500DTO>(loResult.ListData);
             }
             catch (Exception ex)
             {

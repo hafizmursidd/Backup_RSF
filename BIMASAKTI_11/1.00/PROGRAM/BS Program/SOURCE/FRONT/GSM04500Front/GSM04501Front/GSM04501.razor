@@ -1,0 +1,97 @@
+﻿@*@page "/GSM04500"*@
+@inherits R_Page
+
+
+
+
+        <R_StackLayout Row="Enabled">
+            <R_StackLayout Row="true" class="d-flex align-items-center">
+                <R_ItemLayout>
+                    <R_Label>Journal Group</R_Label>
+                </R_ItemLayout>
+            </R_StackLayout>
+
+            @*    <R_ItemLayout xs="1" Class="col-2">
+            <R_TextBox Enabled="false" />
+            </R_ItemLayout>
+            <R_ItemLayout xs="2" Class="col-6">
+            <R_TextBox Enabled="false" />
+            </R_ItemLayout>*@
+        </R_StackLayout>
+
+        <R_StackLayout>
+            <R_Grid @ref="@_gridRef"
+                    DataSource="journalGOAViewModel.GOAList"
+                    R_ConductorGridSource="@_conJournalGOARef"
+                    R_GridType="@R_eGridType.Original"
+                    R_ServiceGetListRecord="@R_ServiceGetListRecord"
+                    Pageable="true"
+                    AllowDeleteRow="true"
+                    AllowAddNewRow="false"
+                    AllowEditRow="true">
+
+                <R_GridColumns>
+                    @*<R_GridTextColumn FieldName="CGOA_NAME" HeaderText="Group of Account" />*@
+                    <R_GridCheckBoxColumn FieldName="LDEPARTMENT_MODE" HeaderText="By Dept" R_EnableEdit />
+                    <R_GridTextColumn FieldName="CGLACCOUNT_NO" HeaderText="GL Account No" R_EnableEdit />
+                    <R_GridTextColumn FieldName="CGLACCOUNT_NAME" HeaderText="GL Account Name" R_EnableEdit />
+                    <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="last Updated By" />
+                    <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date" />
+                </R_GridColumns>
+
+            </R_Grid>
+        </R_StackLayout>
+
+        <R_ConductorGrid @ref="@_conJournalGOARef"
+                         R_ViewModel="@journalGOAViewModel"
+                         R_ServiceGetRecord="@R_ServiceGetRecordAsync"
+                         R_ServiceSave="@ServiceSave" />
+
+
+
+@*
+<R_StackLayout Row="Enabled">
+   <R_ItemLayout xs="4">
+        <R_Label>Group of Account</R_Label>
+    </R_ItemLayout>
+
+    <R_ItemLayout xs="1" Class="col-2">
+        <R_TextBox
+            @bind-Value="journalGOAViewModel.GOA.CGOA_CODE"
+             R_ConductorGridSource=""
+            Enabled="false" />
+    </R_ItemLayout>
+
+    <R_ItemLayout xs="2" Class="col-6">
+        <R_TextBox Enabled="false" />
+    </R_ItemLayout>
+</R_StackLayout>
+
+
+<R_StackLayout>
+    <R_Grid @ref="@_gridRef"
+            DataSource="journalGOAViewModel.GOAList"
+            R_ConductorGridSource="@_conJournalGOARef"
+            R_GridType="@R_eGridType.Original"
+            R_ServiceGetListRecord="@R_ServiceGetListRecord"
+            Pageable="true"
+            AllowDeleteRow="true"
+            AllowAddNewRow="false"
+            AllowEditRow="true">
+
+        <R_GridColumns>
+            <R_GridTextColumn FieldName="CDEPT_CODE" HeaderText="Department Code" />
+            <R_GridCheckBoxColumn FieldName="CDEPT_NAME" HeaderText="Department Name" R_EnableEdit />
+            <R_GridTextColumn FieldName="CGLACCOUNT_NO" HeaderText="GL Account No" R_EnableEdit />
+            <R_GridTextColumn FieldName="CGLACCOUNT_NAME" HeaderText="GL Account Name" R_EnableEdit />
+            <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="last Updated By" />
+            <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date" />
+        </R_GridColumns>
+
+    </R_Grid>
+</R_StackLayout>
+
+<R_ConductorGrid @ref="@_conJournalGOARef"
+                 R_ViewModel="@journalGOAViewModel"
+                 R_ServiceGetRecord="@R_ServiceGetRecordAsync"
+                 R_ServiceSave="@ServiceSave" />*@

@@ -9,6 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection.Metadata;
 
 namespace GSM04500Back
 {
@@ -21,12 +22,102 @@ namespace GSM04500Back
 
         protected override GSM04510GOADeptDTO R_Display(GSM04510GOADeptDTO poEntity)
         {
-            throw new NotImplementedException();
+            R_Exception loEexception = new R_Exception();
+            GSM04510GOADeptDTO loReturn = null;
+            R_Db loDb;
+
+            try
+            {
+                var lcQuery = @"RSP_GS_GET_JOURNAL_GRP_GOA_DEPT_DT";
+
+                loDb = new R_Db();
+                var loCmd = loDb.GetCommand();
+                var loConn = loDb.GetConnection();
+                loCmd.CommandText = lcQuery;
+                loCmd.CommandType = CommandType.StoredProcedure;
+
+                loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 20, poEntity.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CPROPERTY_ID", DbType.String, 100, poEntity.CPROPERTY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CJOURNAL_GROUP_TYPE", DbType.String, 2, poEntity.CJRNGRP_TYPE);
+                loDb.R_AddCommandParameter(loCmd, "@CJOURNAL_GROUP_CODE", DbType.String, 30, poEntity.CJRNGRP_CODE);
+                loDb.R_AddCommandParameter(loCmd, "@CGOA_CODE", DbType.String, 30, poEntity.CGOA_CODE);
+                loDb.R_AddCommandParameter(loCmd, "@CDEPT_CODE", DbType.String, 20, poEntity.CDEPT_CODE);
+                loDb.R_AddCommandParameter(loCmd, "@CUSER_LOGIN_ID", DbType.String, 25, poEntity.CUSER_ID);
+
+                var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, false);
+
+                loReturn = R_Utility.R_ConvertTo<GSM04510GOADeptDTO>(loReturnTemp).ToList().FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+
+                loEexception.Add(ex);
+            }
+        EndBlock:
+            loEexception.ThrowExceptionIfErrors();
+
+            return loReturn;
         }
 
         protected override void R_Saving(GSM04510GOADeptDTO poNewEntity, eCRUDMode poCRUDMode)
         {
-            throw new NotImplementedException();
+            R_Exception loException = new R_Exception();
+            string lcQuery = null;
+            R_Db loDb;
+            DbCommand loCommand;
+            DbConnection loConn = null;
+            string lcAction = null;
+            try
+            {
+                loDb = new R_Db();
+                loConn = loDb.GetConnection();
+                R_ExternalException.R_SP_Init_Exception(loConn);
+                loCommand = loDb.GetCommand();
+
+                switch (poCRUDMode)
+                {
+                    case eCRUDMode.AddMode:
+                        lcAction = "ADD";
+                        break;
+
+                    case eCRUDMode.EditMode:
+                        lcAction = "EDIT";
+                        break;
+                    default:
+                        break;
+                }
+
+                lcQuery = @"RSP_GS_MAINTAIN_JOURNAL_GROUP_ACCOUNT_DEPT";
+                loCommand.CommandText = lcQuery;
+                loCommand.CommandType = CommandType.StoredProcedure;
+
+                loDb.R_AddCommandParameter(loCommand, "@CCOMPANY_ID", DbType.String, 8, poNewEntity.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCommand, "@CPROPERTY_ID", DbType.String, 20, poNewEntity.CPROPERTY_ID);
+                loDb.R_AddCommandParameter(loCommand, "@CJOURNAL_GROUP_TYPE", DbType.String, 2, poNewEntity.CJRNGRP_TYPE);
+                loDb.R_AddCommandParameter(loCommand, "@CJOURNAL_GROUP_CODE", DbType.String, 8, poNewEntity.CJRNGRP_CODE);
+                loDb.R_AddCommandParameter(loCommand, "@CGOA_CODE", DbType.String, 8, poNewEntity.CGOA_CODE);
+                loDb.R_AddCommandParameter(loCommand, "@CDEPT_CODE", DbType.String, 20, poNewEntity.CDEPT_CODE);
+                loDb.R_AddCommandParameter(loCommand, "@CGLACCOUNT_NO", DbType.String, 20, poNewEntity.CGLACCOUNT_NO);
+                loDb.R_AddCommandParameter(loCommand, "CACTION", DbType.String, 10, lcAction);
+                loDb.R_AddCommandParameter(loCommand, "@CUSER_LOGIN_ID", DbType.String, 25, poNewEntity.CUSER_ID);
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+            finally
+            {
+                if (loConn != null)
+                {
+                    if (loConn.State != ConnectionState.Closed)
+                    {
+                        loConn.Close();
+                    }
+                    loConn.Dispose();
+                }
+            }
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
         }
 
         public List<GSM04510GOADeptDTO> JOURNAL_GROUP_GOA_DEPT_LIST(GSM04510GOADeptDBParameter poParameter)

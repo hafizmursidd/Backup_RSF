@@ -18,6 +18,12 @@ namespace GSM04500Common
         public string CGLACCOUNT_NAME { get; set; }
         public string CUPDATE_BY { get; set; }
         public DateTime DUPDATE_DATE { get; set; }
-
+        public string GROUPOFACCOUNT
+        {
+            get => _GROUPOFACCOUNT;
+            set => _GROUPOFACCOUNT = CGOA_NAME + " (" + CGOA_CODE + ")";
+        }
+        private string _GROUPOFACCOUNT;
     }
+
 }

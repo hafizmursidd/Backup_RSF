@@ -1,35 +1,65 @@
 ﻿using GSM04500Back;
 using GSM04500Common;
 using Microsoft.AspNetCore.Mvc;
+using R_BackEnd;
 using R_Common;
 using R_CommonFrontBackAPI;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GSM04500Service
 {
+    [ApiController]
+    [Route("api/[controller]/[action]")]
     public class GSM04510GOADeptController : ControllerBase, IGSM04510GOADept
     {
 
-
+        [HttpPost]
         public R_ServiceDeleteResultDTO R_ServiceDelete(R_ServiceDeleteParameterDTO<GSM04510GOADeptDTO> poParameter)
         {
             throw new NotImplementedException();
         }
-
+        [HttpPost]
         public R_ServiceGetRecordResultDTO<GSM04510GOADeptDTO> R_ServiceGetRecord(R_ServiceGetRecordParameterDTO<GSM04510GOADeptDTO> poParameter)
         {
-            throw new NotImplementedException();
-        }
+            var loEx = new R_Exception();
+            var loRtn = new R_ServiceGetRecordResultDTO<GSM04510GOADeptDTO>();
 
+            try
+            {
+                var loCls = new GSM04510GOADeptCls();
+                //poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                //poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+
+                poParameter.Entity.CCOMPANY_ID = "RCD";
+                poParameter.Entity.CPROPERTY_ID = "JBMPC";
+                poParameter.Entity.CJRNGRP_TYPE = "10";
+                poParameter.Entity.CJRNGRP_CODE = "A";
+                poParameter.Entity.CGOA_CODE = "ARDEP";
+                poParameter.Entity.CDEPT_CODE = "RSF";
+                poParameter.Entity.CUSER_ID = "HMC";
+
+                loRtn.data = loCls.R_GetRecord(poParameter.Entity);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loRtn;
+        }
+        [HttpPost]
         public R_ServiceSaveResultDTO<GSM04510GOADeptDTO> R_ServiceSave(R_ServiceSaveParameterDTO<GSM04510GOADeptDTO> poParameter)
         {
             throw new NotImplementedException();
         }
-
+        [HttpPost]
         public IAsyncEnumerable<GSM04510GOADeptDTO> JOURNAL_GRP_GOA_DEPT_LIST()
         {
             var loEx = new R_Exception();
