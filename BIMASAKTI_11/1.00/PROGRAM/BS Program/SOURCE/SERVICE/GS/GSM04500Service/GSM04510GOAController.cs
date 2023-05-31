@@ -32,19 +32,20 @@ namespace GSM04500Service
             try
             {
                 var loCls = new GSM04510GOACls();
-                //loDbParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
-                //loDbParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
-                //loDbParameter.Entity.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
-                //loDbParameter.Entity.CJRNGRP_TYPE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJRNGRP_TYPE);
-                //loDbParameter.Entity.CJOURNAL_GRP_CODE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJOURNAL_GRP_CODE);
+                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+                poParameter.Entity.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
+                poParameter.Entity.CJRNGRP_TYPE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJRNGRP_TYPE);
+                poParameter.Entity.CJRNGRP_CODE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJOURNAL_GRP_CODE);
+                poParameter.Entity.CGOA_CODE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CGOA_CODE);
 
+                //poParameter.Entity.CCOMPANY_ID = "RCD";
+                //poParameter.Entity.CUSER_ID = "HMC";
 
-                poParameter.Entity.CCOMPANY_ID = "RCD";
-                poParameter.Entity.CUSER_ID = "HMC";
-                poParameter.Entity.CPROPERTY_ID = "JBMPC";
-                poParameter.Entity.CJRNGRP_TYPE = "10";
-                poParameter.Entity.CJRNGRP_CODE = "A";
-                poParameter.Entity.CGOA_CODE = "AP";
+                //poParameter.Entity.CPROPERTY_ID = "JBMPC";
+                //poParameter.Entity.CJRNGRP_TYPE = "10";
+                //poParameter.Entity.CJRNGRP_CODE = "A";
+                //poParameter.Entity.CGOA_CODE = "AP";
 
                 loRtn.data = loCls.R_GetRecord(poParameter.Entity);
             }
@@ -70,18 +71,24 @@ namespace GSM04500Service
                 loCls = new GSM04510GOACls();
                 loRtn = new R_ServiceSaveResultDTO<GSM04510GOADTO>();
 
-                //poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
-                //poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
 
-                poParameter.Entity.CCOMPANY_ID = "RCD";
-                poParameter.Entity.CUSER_ID = "HMC";
-                poParameter.Entity.CPROPERTY_ID = "JBMPC";
-                poParameter.Entity.CJRNGRP_TYPE = "10";
-                poParameter.Entity.CJRNGRP_CODE = "A";
-                poParameter.Entity.CGOA_CODE = "AP";
-                poParameter.Entity.LDEPARTMENT_MODE = true;
-                poParameter.Entity.CGLACCOUNT_NO = "12.55.0000";
-                poParameter.CRUDMode = eCRUDMode.EditMode;
+                //poParameter.Entity.CCOMPANY_ID = "RCD";
+                //poParameter.Entity.CUSER_ID = "HMC";
+                poParameter.Entity.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
+                poParameter.Entity.CJRNGRP_TYPE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJRNGRP_TYPE);
+                poParameter.Entity.CJRNGRP_CODE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJOURNAL_GRP_CODE);
+                poParameter.Entity.CGOA_CODE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CGOA_CODE);
+                poParameter.Entity.LDEPARTMENT_MODE = poParameter.Entity.LDEPARTMENT_MODE;
+                poParameter.Entity.CGLACCOUNT_NO = poParameter.Entity.CGLACCOUNT_NO;
+
+                //poParameter.Entity.CPROPERTY_ID = "JBMPC";
+                //poParameter.Entity.CJRNGRP_TYPE = "10";
+                //poParameter.Entity.CJRNGRP_CODE = "A";
+                //poParameter.Entity.CGOA_CODE = "AP";
+                //poParameter.Entity.LDEPARTMENT_MODE = true;
+                //poParameter.Entity.CGLACCOUNT_NO = "12.55.0000";
 
 
                 loRtn.data = loCls.R_Save(poParameter.Entity, poParameter.CRUDMode);
@@ -118,7 +125,7 @@ namespace GSM04500Service
                 //loDbParameter.CUSER_ID = "HMC";
                 //loDbParameter.CPROPERTY_ID = "JBMPC";
                 //loDbParameter.CJRNGRP_TYPE = "10";
-                //loDbParameter.CJOURNAL_GRP_CODE = "A";
+                //loDbParameter.CJRNGRP_CODE = "A";
 
                 var loCls = new GSM04510GOACls();
 

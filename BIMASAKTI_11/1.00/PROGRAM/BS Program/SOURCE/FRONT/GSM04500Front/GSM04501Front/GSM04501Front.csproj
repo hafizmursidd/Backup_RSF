@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\BS Shared Form\SOURCE\FRONT\Lookup_GSFRONT\Lookup_GSFRONT.csproj" />
     <ProjectReference Include="..\..\..\Menu\BlazorClientHelper\BlazorClientHelper.csproj" />
     <ProjectReference Include="..\..\GSM04500Model\GSM04501Model\GSM04501Model.csproj" />
   </ItemGroup>

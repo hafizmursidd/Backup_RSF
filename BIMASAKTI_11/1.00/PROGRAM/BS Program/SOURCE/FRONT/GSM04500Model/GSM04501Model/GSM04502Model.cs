@@ -13,32 +13,34 @@ namespace GSM04501Model
     {
         private const string DEFAULT_HTTP = "R_DefaultServiceUrl";
         private const string DEFAULT_ENDPOINT = "api/GSM04510GOADept";
+        private const string DEFAULT_MODULE = "GS";
 
         public GSM04502Model(
             string pcHttpClientName = DEFAULT_HTTP,
             string pcRequestServiceEndPoint = DEFAULT_ENDPOINT,
+            string pcModule = DEFAULT_MODULE,
             bool plSendWithContext = true,
             bool plSendWithToken = true)
-            : base(pcHttpClientName, pcRequestServiceEndPoint, plSendWithContext, plSendWithToken)
+            : base(pcHttpClientName, pcRequestServiceEndPoint, pcModule, plSendWithContext, plSendWithToken)
         {
         }
 
 
-        public async Task<GSM04510GOADeptListDTO> GetAllGOADeptAsync(string lcJournalGRPType, string lcPropertyId, string lcJournalGRPCode)
+        public async Task<GSM04510GOADeptListDTO> GetAllGOADeptAsync(GSM04510GOADTO poEntity)
         {
             var loEx = new R_Exception();
             GSM04510GOADeptListDTO loResult = new GSM04510GOADeptListDTO();
             try
             {
-
-                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CJRNGRP_TYPE, lcJournalGRPType);
-                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, lcPropertyId);
-                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CJOURNAL_GRP_CODE, lcJournalGRPCode);
-
+                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CJRNGRP_TYPE, poEntity.CJRNGRP_TYPE);
+                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, poEntity.CPROPERTY_ID);
+                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CJOURNAL_GRP_CODE, poEntity.CJRNGRP_CODE);
+                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CGOA_CODE, poEntity.CGOA_CODE);
                 R_HTTPClientWrapper.httpClientName = _HttpClientName;
                 var loTmp = await R_HTTPClientWrapper.R_APIRequestStreamingObject<GSM04510GOADeptDTO>(
                     _RequestServiceEndPoint,
                     nameof(IGSM04510GOADept.JOURNAL_GRP_GOA_DEPT_LIST),
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
                 loResult.ListData = loTmp;

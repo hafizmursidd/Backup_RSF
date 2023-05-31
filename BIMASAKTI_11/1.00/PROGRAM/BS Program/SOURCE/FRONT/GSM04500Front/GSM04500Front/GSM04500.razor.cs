@@ -14,7 +14,7 @@ namespace GSM04500Front
         private R_ConductorGrid _conJournalGroupRef;
         private R_Grid<GSM04500DTO> _gridRef;
         private R_Conductor _conductorRef;
-
+        
         protected override async Task R_Init_From_Master(object poParameter)
         {
             var loEx = new R_Exception();

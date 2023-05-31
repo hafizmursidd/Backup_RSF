@@ -12,15 +12,17 @@ namespace GSM06500Model
     {
         private const string DEFAULT_HTTP = "R_DefaultServiceUrl";
         private const string DEFAULT_ENDPOINT = "api/GSM06500";
+        private const string DEFAULT_MODULE = "GS";
 
         public string lcPropertyId { get; set; }
 
         public GSM06500Model(
             string pcHttpClientName = DEFAULT_HTTP,
             string pcRequestServiceEndPoint = DEFAULT_ENDPOINT,
+            string pcModuleName = DEFAULT_MODULE,
             bool plSendWithContext = true,
             bool plSendWithToken = true)
-            : base(pcHttpClientName, pcRequestServiceEndPoint, plSendWithContext, plSendWithToken)
+            : base(pcHttpClientName, pcRequestServiceEndPoint,pcModuleName, plSendWithContext, plSendWithToken)
         {
         }
 
@@ -44,6 +46,7 @@ namespace GSM06500Model
                 loResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM06500ListDTO>(
                     _RequestServiceEndPoint,
                     nameof(IGSM06500.GetallTermOfpaymentOriginal),
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
             }
@@ -66,6 +69,7 @@ namespace GSM06500Model
                 loResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM06500PropertyListDTO>(
                     _RequestServiceEndPoint,
                     nameof(IGSM06500.GetAllPropertyList),
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
             }

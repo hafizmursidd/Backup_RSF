@@ -15,12 +15,15 @@ namespace Lookup_GSModel
     {
         private const string DEFAULT_HTTP = "R_DefaultServiceUrl";
         private const string DEFAULT_ENDPOINT = "api/PublicLookup";
+        private const string DEFAULT_MODULE = "GS";
+
         public PublicLookupModel(
             string pcHttpClientName = DEFAULT_HTTP,
             string pcRequestServiceEndPoint = DEFAULT_ENDPOINT,
+            string pcModuleName = DEFAULT_MODULE,
             bool plSendWithContext = true,
             bool plSendWithToken = true) :
-            base(pcHttpClientName, pcRequestServiceEndPoint, plSendWithContext, plSendWithToken)
+            base(pcHttpClientName, pcRequestServiceEndPoint, pcModuleName, plSendWithContext, plSendWithToken)
         {
         }
 
@@ -41,6 +44,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL00100GetSalesTaxList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -75,6 +79,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL00200GetWithholdingTaxList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -108,6 +113,7 @@ namespace Lookup_GSModel
                 var loTempResult = await R_HTTPClientWrapper.R_APIRequestObject<GSLGenericList<GSL00300DTO>>(
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL00300GetCurrencyList),
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -142,6 +148,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL00400GetJournalGroupList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -176,6 +183,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL00500GetGLAccountList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -209,6 +217,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL00550GetGOAList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -242,6 +251,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL00600GetUnitTypeCategoryList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -276,6 +286,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL00700GetDepartmentList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -310,6 +321,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL00800GetCurrencyTypeList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -344,6 +356,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL00900GetCenterList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -377,6 +390,7 @@ namespace Lookup_GSModel
                 var loTempResult = await R_HTTPClientWrapper.R_APIRequestObject<GSLGenericList<GSL01000DTO>>(
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL01000GetUserList),
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -411,6 +425,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL01100GetUserApprovalList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -445,6 +460,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL01200GetBankList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -479,6 +495,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL01300GetBankAccountList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -513,6 +530,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL01400GetOtherChargesList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -547,6 +565,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL01500GetCashDetailList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -579,6 +598,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL01500GetCashFlowGroupList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
@@ -613,6 +633,7 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL01600GetCashFlowGroupTypeList),
                     poParameter,
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 

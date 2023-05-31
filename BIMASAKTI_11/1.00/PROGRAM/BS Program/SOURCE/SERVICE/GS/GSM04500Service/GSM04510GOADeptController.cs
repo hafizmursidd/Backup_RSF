@@ -21,8 +21,30 @@ namespace GSM04500Service
         [HttpPost]
         public R_ServiceDeleteResultDTO R_ServiceDelete(R_ServiceDeleteParameterDTO<GSM04510GOADeptDTO> poParameter)
         {
-            throw new NotImplementedException();
+            R_Exception loException = new R_Exception();
+            R_ServiceDeleteResultDTO loRtn = null;
+            GSM04510GOADeptCls loCls;
+            GSM04510GOADeptDBParameter loDbParameter;
+
+            try
+            {
+                loCls = new GSM04510GOADeptCls();
+                loRtn = new R_ServiceDeleteResultDTO();
+                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+                loCls.R_Delete(poParameter.Entity);
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+
+            return loRtn;
+
         }
+
         [HttpPost]
         public R_ServiceGetRecordResultDTO<GSM04510GOADeptDTO> R_ServiceGetRecord(R_ServiceGetRecordParameterDTO<GSM04510GOADeptDTO> poParameter)
         {
@@ -32,16 +54,20 @@ namespace GSM04500Service
             try
             {
                 var loCls = new GSM04510GOADeptCls();
-                //poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
-                //poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+                poParameter.Entity.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
+                poParameter.Entity.CJRNGRP_TYPE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJRNGRP_TYPE);
+                poParameter.Entity.CJRNGRP_CODE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJOURNAL_GRP_CODE);
+                poParameter.Entity.CGOA_CODE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CGOA_CODE);
 
-                poParameter.Entity.CCOMPANY_ID = "RCD";
-                poParameter.Entity.CPROPERTY_ID = "JBMPC";
-                poParameter.Entity.CJRNGRP_TYPE = "10";
-                poParameter.Entity.CJRNGRP_CODE = "A";
-                poParameter.Entity.CGOA_CODE = "ARDEP";
-                poParameter.Entity.CDEPT_CODE = "RSF";
-                poParameter.Entity.CUSER_ID = "HMC";
+                //poParameter.Entity.CCOMPANY_ID = "RCD";
+                //poParameter.Entity.CPROPERTY_ID = "JBMPC";
+                //poParameter.Entity.CJRNGRP_TYPE = "10";
+                //poParameter.Entity.CJRNGRP_CODE = "A";
+                //poParameter.Entity.CGOA_CODE = "ARDEP";
+                //poParameter.Entity.CDEPT_CODE = "RSF";
+                //poParameter.Entity.CUSER_ID = "HMC";
 
                 loRtn.data = loCls.R_GetRecord(poParameter.Entity);
             }
@@ -57,7 +83,28 @@ namespace GSM04500Service
         [HttpPost]
         public R_ServiceSaveResultDTO<GSM04510GOADeptDTO> R_ServiceSave(R_ServiceSaveParameterDTO<GSM04510GOADeptDTO> poParameter)
         {
-            throw new NotImplementedException();
+            var loEx = new R_Exception();
+            var loRtn = new R_ServiceSaveResultDTO<GSM04510GOADeptDTO>();
+            GSM04510GOADeptCls loCls;
+
+            try
+            {
+                loCls = new GSM04510GOADeptCls();
+                loRtn = new R_ServiceSaveResultDTO<GSM04510GOADeptDTO>();
+
+                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+
+                loRtn.data = loCls.R_Save(poParameter.Entity, poParameter.CRUDMode);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            };
+            EndBlock:
+            loEx.ThrowExceptionIfErrors();
+
+            return loRtn;
         }
         [HttpPost]
         public IAsyncEnumerable<GSM04510GOADeptDTO> JOURNAL_GRP_GOA_DEPT_LIST()
@@ -72,18 +119,19 @@ namespace GSM04500Service
             {
                 loDbParameter = new GSM04510GOADeptDBParameter();
 
-                //loDbParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
-                //loDbParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
-                //loDbParameter.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
-                //loDbParameter.CJRNGRP_TYPE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJRNGRP_TYPE);
-                //loDbParameter.CJOURNAL_GRP_CODE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJOURNAL_GRP_CODE);
+                loDbParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                loDbParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
+                loDbParameter.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
+                loDbParameter.CJRNGRP_TYPE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJRNGRP_TYPE);
+                loDbParameter.CJRNGRP_CODE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CJOURNAL_GRP_CODE);
+                loDbParameter.CGOA_CODE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CGOA_CODE);
 
-                loDbParameter.CCOMPANY_ID = "RCD";
-                loDbParameter.CPROPERTY_ID = "JBMPC";
-                loDbParameter.CJRNGRP_TYPE = "10";
-                loDbParameter.CJOURNAL_GRP_CODE = "A";
-                loDbParameter.CGOA_CODE = "ARDEP";
-                loDbParameter.CUSER_ID = "HMC";
+                //loDbParameter.CCOMPANY_ID = "RCD";
+                //loDbParameter.CPROPERTY_ID = "JBMPC";
+                //loDbParameter.CJRNGRP_TYPE = "10";
+                //loDbParameter.CJRNGRP_CODE = "A";
+                //loDbParameter.CGOA_CODE = "ARDEP";
+                //loDbParameter.CUSER_ID = "HMC";
 
                 var loCls = new GSM04510GOADeptCls();
 

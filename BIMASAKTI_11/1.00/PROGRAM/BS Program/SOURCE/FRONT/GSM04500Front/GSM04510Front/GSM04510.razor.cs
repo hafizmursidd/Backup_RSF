@@ -68,6 +68,7 @@ namespace GSM04510Front
                 //lcGroupId ===> 11 untuk Tab Utility
                 lcGroupId = "11";
                 await journalGroupViewModel.GetAllJournalAsync(lcGroupId);
+                eventArgs.ListEntityResult = journalGroupViewModel.JournalGroupList;
             }
             catch (Exception ex)
             {

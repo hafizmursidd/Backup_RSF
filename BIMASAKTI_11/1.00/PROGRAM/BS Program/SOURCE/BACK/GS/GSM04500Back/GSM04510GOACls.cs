@@ -131,7 +131,7 @@ namespace GSM04500Back
 
                 loCmd = loDb.GetCommand();
                 //EXEC RSP_GS_GET_JOURNAL_GRP_GOA_LIST
-                //@CCOMPANY_ID, @CPROPERTY_ID, CJRNGRP_TYPE ('10') , @CJOURNAL_GRP_CODE, @CUSER_LOGIN_ID
+                //@CCOMPANY_ID, @CPROPERTY_ID, CJRNGRP_TYPE ('10') , @CJRNGRP_CODE, @CUSER_LOGIN_ID
                 var lcQuery = @"RSP_GS_GET_JOURNAL_GRP_GOA_LIST";
                 loCmd.CommandText = lcQuery;
                 loCmd.CommandType = CommandType.StoredProcedure;

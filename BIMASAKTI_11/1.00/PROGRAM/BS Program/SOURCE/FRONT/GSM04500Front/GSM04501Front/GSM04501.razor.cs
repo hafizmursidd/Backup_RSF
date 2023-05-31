@@ -7,20 +7,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BlazorClientHelper;
+using Lookup_GSCOMMON.DTOs;
+using Lookup_GSFRONT;
+using Microsoft.AspNetCore.Components;
 using R_BlazorFrontEnd.Controls.Events;
+using R_BlazorFrontEnd.Controls.MessageBox;
+using R_BlazorFrontEnd.Enums;
 using R_BlazorFrontEnd.Exceptions;
+using R_BlazorFrontEnd.Helpers;
 
 namespace GSM04501Front
 {
-    public partial class GSM04501
+    public partial class GSM04501 : R_Page
     {
-        private GSM04501ViewModel journalGOAViewModel = new();
-        private R_ConductorGrid _conJournalGOARef;
+        private GSM04501ViewModel JournalGOAViewModel = new();
         private R_Grid<GSM04510GOADTO> _gridRef;
+        private R_ConductorGrid _conJournalGOARef;
 
-        //private GSM04502ViewModel _GOADeptViewModel = new();
-        //private R_Grid<GSM04510GOADeptDTO> _gridDeptUserRef;
-        //private R_ConductorGrid _conGOADeptRef;
+        private GSM04502ViewModel GOADeptViewModel = new();
+        private R_ConductorGrid _conGOADeptRef;
+        private R_Grid<GSM04510GOADeptDTO> _gridGOADeptRef;
+        [Inject] IClientHelper clientHelper { get; set; }
 
         protected override async Task R_Init_From_Master(object poParameter)
         {
@@ -33,9 +41,9 @@ namespace GSM04501Front
             {
                 loEx.Add(ex);
             }
-
-            loEx.ThrowExceptionIfErrors();
+            R_DisplayException(loEx);
         }
+
         private async Task R_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
@@ -48,25 +56,26 @@ namespace GSM04501Front
                 lcJournalGRPType = "10";
                 lcPropertyId = "JBMPC";
                 lcJournalGRPCode = "A";
-                await journalGOAViewModel.GetAllJournalGrupGOAAsync(lcJournalGRPType, lcPropertyId, lcJournalGRPCode);
-                eventArgs.ListEntityResult = journalGOAViewModel.GOAList;
+                await JournalGOAViewModel.GetAllJournalGrupGOAAsync(lcJournalGRPType, lcPropertyId, lcJournalGRPCode);
+                eventArgs.ListEntityResult = JournalGOAViewModel.GOAList;
             }
             catch (Exception ex)
             {
                 loEx.Add(ex);
             }
 
-            loEx.ThrowExceptionIfErrors();
+            R_DisplayException(loEx);
         }
+
 
         private async Task R_ServiceGetRecordAsync(R_ServiceGetRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
-
             try
             {
                 var loParam = (GSM04510GOADTO)eventArgs.Data;
-                eventArgs.Result = await journalGOAViewModel.GetGOAOneRecord(loParam);
+                eventArgs.Result = await JournalGOAViewModel.GetGOAOneRecord(loParam);
+                
             }
             catch (Exception ex)
             {
@@ -75,6 +84,7 @@ namespace GSM04501Front
 
             loEx.ThrowExceptionIfErrors();
         }
+
         private async Task ServiceSave(R_ServiceSaveEventArgs eventArgs)
         {
             var loEx = new R_Exception();
@@ -85,8 +95,8 @@ namespace GSM04501Front
                 loParam.CPROPERTY_ID = "JBMPC";
                 loParam.CJRNGRP_CODE = "A";
 
-                await journalGOAViewModel.SaveGOA(loParam, eventArgs.ConductorMode);
-                //eventArgs.Result = journalGOAViewModel.GOA;
+                await JournalGOAViewModel.SaveGOA(loParam, eventArgs.ConductorMode);
+                eventArgs.Result = JournalGOAViewModel.GOA;
 
                 await _gridRef.R_RefreshGrid(null);
             }
@@ -96,6 +106,120 @@ namespace GSM04501Front
             }
 
             loEx.ThrowExceptionIfErrors();
+        }
+
+        private async Task Grid_Display(R_DisplayEventArgs eventArgs)
+        {
+            if (eventArgs.ConductorMode == R_eConductorMode.Normal)
+            {
+                var loParam = (GSM04510GOADTO)eventArgs.Data;
+                await _gridGOADeptRef.R_RefreshGrid(loParam);
+                
+            }
+        }
+
+        #region GroupOfAccountDept
+
+        private async Task GridGOADept_GetList(R_ServiceGetListRecordEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+               var liParam = ((GSM04510GOADTO)eventArgs.Parameter);
+                await GOADeptViewModel.GetGOAAllByDept(liParam);
+                eventArgs.ListEntityResult = GOADeptViewModel.GOADeptList;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            R_DisplayException(loEx);
+        }
+
+        private async Task R_ServiceGetRecordGOADeptAsync(R_ServiceGetRecordEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                var loParam = (GSM04510GOADeptDTO)eventArgs.Data;
+                eventArgs.Result = await GOADeptViewModel.GetGOADeptOneRecord(loParam);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+            loEx.ThrowExceptionIfErrors();
+        }
+        
+        private async Task ServiceSaveGOADept(R_ServiceSaveEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                var loParam = (GSM04510GOADeptDTO)eventArgs.Data;
+                loParam.CJRNGRP_TYPE = "10";
+                loParam.CPROPERTY_ID = "JBMPC";
+                loParam.CJRNGRP_CODE = "A";
+
+                await GOADeptViewModel.SaveGOADept(loParam,eventArgs.ConductorMode);
+                eventArgs.Result = GOADeptViewModel.GOADept;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
+
+        
+        //  Button LookUp DeptCode
+        private R_Lookup R_LookupCdeptCodeButton;
+        private void BeforeOpenLookUpCDeptCode(R_BeforeOpenLookupEventArgs eventArgs)
+        {
+            var param = new GSL00700ParameterDTO
+            {
+                
+                CCOMPANY_ID = clientHelper.CompanyId,
+                CUSER_ID = clientHelper.UserId
+            
+            };
+            eventArgs.Parameter = param;
+            eventArgs.TargetPageType = typeof(GSL00700);
+        }
+
+        private void AfterOpenLookUpCDeptCode(R_AfterOpenLookupEventArgs eventArgs)
+        {
+            var loTempResult = (GSL00700DTO)eventArgs.Result;
+            if (loTempResult == null)
+                return;
+            var loGetData = (GSM04510GOADeptDTO)_conGOADeptRef.R_GetCurrentData();
+            loGetData.CDEPT_CODE = loTempResult.CDEPT_CODE;
+            loGetData.CDEPT_NAME = loTempResult.CDEPT_NAME;
+
+        }
+        #endregion
+
+        private async Task ServiceDelete(R_ServiceDeleteEventArgs arg)
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                var loParam = (GSM04510GOADeptDTO)arg.Data;
+                await GOADeptViewModel.DeleteOneRecordGOADept(loParam);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
+        public async Task AfterDelete()
+        {
+            await R_MessageBox.Show("", "Delete Success", R_eMessageBoxButtonType.OK);
         }
     }
 }

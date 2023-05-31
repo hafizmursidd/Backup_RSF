@@ -12,12 +12,14 @@ namespace GSM04501Model
     {
         private const string DEFAULT_HTTP = "R_DefaultServiceUrl";
         private const string DEFAULT_ENDPOINT = "api/GSM04510GOA";
+        const string DEFAULT_MODULE = "GS";
         public GSM04501Model(
             string pcHttpClientName = DEFAULT_HTTP,
             string pcRequestServiceEndPoint = DEFAULT_ENDPOINT,
+            string pcModuleName = DEFAULT_MODULE,
             bool plSendWithContext = true,
             bool plSendWithToken = true)
-            : base(pcHttpClientName, pcRequestServiceEndPoint, plSendWithContext, plSendWithToken)
+            : base(pcHttpClientName, pcRequestServiceEndPoint, DEFAULT_MODULE, plSendWithContext, plSendWithToken)
         {
         }
 
@@ -37,6 +39,7 @@ namespace GSM04501Model
                 var loTmp = await R_HTTPClientWrapper.R_APIRequestStreamingObject<GSM04510GOADTO>(
                                        _RequestServiceEndPoint,
                                        nameof(IGSM04510GOA.JOURNAL_GRP_GOA_LIST),
+                                       DEFAULT_MODULE,
                                        _SendWithContext,
                                         _SendWithToken);
                 loResult.ListData = loTmp;

@@ -123,7 +123,6 @@ namespace GSM06500Front
 
             try
             {
-                //var lcPropertyId = "ABCDEF";
                 var loParam = (GSM06500DTO)eventArgs.Data;
                 await PaymentTermViewModel.SaveTermOfPayment(loParam, eventArgs.ConductorMode);
 

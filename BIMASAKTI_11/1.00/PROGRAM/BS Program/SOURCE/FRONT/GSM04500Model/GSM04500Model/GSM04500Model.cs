@@ -13,13 +13,15 @@ namespace GSM04500Model
 
         private const string DEFAULT_HTTP = "R_DefaultServiceUrl";
         private const string DEFAULT_ENDPOINT = "api/GSM04500";
+        private const string DEFAULT_MODULE = "GS";
 
         public GSM04500Model(
             string pcHttpClientName = DEFAULT_HTTP,
             string pcRequestServiceEndPoint = DEFAULT_ENDPOINT,
+            string pcModuleName = DEFAULT_MODULE,
             bool plSendWithContext = true,
             bool plSendWithToken = true)
-            : base(pcHttpClientName, pcRequestServiceEndPoint, plSendWithContext, plSendWithToken)
+            : base(pcHttpClientName, pcRequestServiceEndPoint, pcModuleName, plSendWithContext, plSendWithToken)
         {
         }
 
@@ -34,6 +36,7 @@ namespace GSM04500Model
                 loResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM04500PropertyListDTO>(
                     _RequestServiceEndPoint,
                     nameof(IGSM04500.GetAllPropertyList),
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
             }
@@ -60,6 +63,7 @@ namespace GSM04500Model
                 var loTmp = await R_HTTPClientWrapper.R_APIRequestStreamingObject<GSM04500DTO>(
                     _RequestServiceEndPoint,
                     nameof(IGSM04500.GET_JOURNAL_GRP_LIST_STREAM),
+                    DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
