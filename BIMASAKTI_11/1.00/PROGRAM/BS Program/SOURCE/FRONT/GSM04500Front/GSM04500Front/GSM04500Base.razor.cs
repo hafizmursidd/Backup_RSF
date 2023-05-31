@@ -1,5 +1,6 @@
 ﻿using GSM04500Common;
 using GSM04500Model;
+using Microsoft.AspNetCore.Components;
 using R_BlazorFrontEnd.Controls;
 using R_BlazorFrontEnd.Controls.DataControls;
 using R_BlazorFrontEnd.Controls.Events;
@@ -8,13 +9,20 @@ using R_BlazorFrontEnd.Exceptions;
 
 namespace GSM04500Front
 {
-    public partial class GSM04500
+    public partial class GSM04500Base
     {
         private GSM04500ViewModel journalGroupViewModel = new();
         private R_ConductorGrid _conJournalGroupRef;
         private R_Grid<GSM04500DTO> _gridRef;
         private R_Conductor _conductorRef;
-        
+
+        [Parameter]
+        public string JournalGRPType { get;set; } = "10";
+        [Parameter]
+        public string PropertId { get; set; }
+        [Parameter]
+        public string JournalGRPCode { get; set; }
+
         protected override async Task R_Init_From_Master(object poParameter)
         {
             var loEx = new R_Exception();
@@ -67,9 +75,12 @@ namespace GSM04500Front
             string lcGroupId = null;
             try
             {
-                //lcGroupId ===> 10 untuk Tab Service
-                lcGroupId = "10";
+                lcGroupId = JournalGRPType;
                 await journalGroupViewModel.GetAllJournalAsync(lcGroupId);
+                PropertId = journalGroupViewModel.PropertyValueContext;
+                JournalGRPCode = "A";
+               // JournalGRPCode = journalGroupViewModel.JournalGroupList.FirstOrDefault().ToString();
+                
                 eventArgs.ListEntityResult = journalGroupViewModel.JournalGroupList;
             }
             catch (Exception ex)
@@ -123,7 +134,7 @@ namespace GSM04500Front
             try
             {
                 var loParam = (GSM04500DTO)eventArgs.Data;
-                loParam.CJRNGRP_TYPE = "10";
+                loParam.CJRNGRP_TYPE = JournalGRPType;
                 await journalGroupViewModel.SaveJournalGroup(loParam, eventArgs.ConductorMode);
 
                 eventArgs.Result = journalGroupViewModel.JournalGroup;
@@ -136,6 +147,26 @@ namespace GSM04500Front
             loEx.ThrowExceptionIfErrors();
         }
 
+        //Change Tab
+        private async Task ChangeTab(R_TabStripTab arg)
+        {
+            var loEx = new R_Exception();
 
+            try
+            {
+
+                //await PropertyDropdown_ServiceGetListRecord(null);
+                /*
+                await _GSM05000NumberingViewModel.GetNumberingHeader();
+                await _gridRefNumbering.R_RefreshGrid(null);
+                */
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
     }
 }

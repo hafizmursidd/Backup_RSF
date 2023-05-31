@@ -1,5 +1,4 @@
-﻿ @* @page "/GSM04500"  *@
-@inherits R_Page
+﻿@inherits R_Page
 
 
 <R_StackLayout Row="Enabled">
@@ -10,10 +9,10 @@
     </R_StackLayout>
 
     <R_ItemLayout xs="1" Class="col-2">
-        <R_TextBox Enabled="false"/>
+        <R_TextBox Enabled="false" />
     </R_ItemLayout>
     <R_ItemLayout xs="2" Class="col-6">
-        <R_TextBox Enabled="false"/>
+        <R_TextBox Enabled="false" />
     </R_ItemLayout>
 </R_StackLayout>
 
@@ -28,12 +27,12 @@
             AllowAddNewRow="false"
             AllowEditRow="true">
         <R_GridColumns>
-            <R_GridTextColumn FieldName="GROUPOFACCOUNT" HeaderText="Group of Account"/>
-            <R_GridCheckBoxColumn FieldName="LDEPARTMENT_MODE" HeaderText="By Dept" R_EnableEdit/>
-            <R_GridTextColumn FieldName="CGLACCOUNT_NO" HeaderText="GL Account No" R_EnableEdit/>
-            <R_GridTextColumn FieldName="CGLACCOUNT_NAME" HeaderText="GL Account Name" R_EnableEdit/>
-            <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="last Updated By"/>
-            <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date"/>
+            <R_GridTextColumn FieldName="GROUPOFACCOUNT" HeaderText="Group of Account" />
+            <R_GridCheckBoxColumn FieldName="LDEPARTMENT_MODE" HeaderText="By Dept" R_EnableEdit />
+            <R_GridTextColumn FieldName="CGLACCOUNT_NO" HeaderText="GL Account No" R_EnableEdit />
+            <R_GridTextColumn FieldName="CGLACCOUNT_NAME" HeaderText="GL Account Name" R_EnableEdit />
+            <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="last Updated By" />
+            <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date" />
         </R_GridColumns>
 
     </R_Grid>
@@ -44,14 +43,14 @@
 
 <R_StackLayout Row>
     <R_ItemLayout xs="1" Class="col-lg-1">
-        <h5>GROUP OF ACCOUNT</h5>
+        <R_Label>GROUP OF ACCOUNT</R_Label>
     </R_ItemLayout>
     <R_ItemLayout xs="2" Class="col-lg-2">
         <h5>
 
-        <R_TextBox @bind-Value="@GOADeptViewModel.GroupOfAccount"
-                   R_ConductorGridSource="@_conGOADeptRef"  Enabled="false">
-        </R_TextBox>
+            <R_TextBox @bind-Value="@GOADeptViewModel.GroupOfAccount"
+                       R_ConductorGridSource="@_conGOADeptRef" Enabled="false">
+            </R_TextBox>
         </h5>
     </R_ItemLayout>
 </R_StackLayout>
@@ -68,23 +67,23 @@
             AllowEditRow="true">
 
         <R_GridColumns>
-            
-            <R_GridLookupColumn R_ResourceId="GSL00700" FieldName="CDEPT_CODE" HeaderText="Department Code" R_EnableAdd R_EnableEdit/>
-            <R_GridTextColumn FieldName="CDEPT_NAME" HeaderText="Department Name" R_EnableAdd/>
-            <R_GridLookupColumn FieldName="CGLACCOUNT_NO" HeaderText="GL Account No" R_EnableAdd R_EnableEdit/>
-            <R_GridTextColumn FieldName="CGLACCOUNT_NAME" HeaderText="GL Account Name" R_EnableAdd R_EnableEdit/>
-            <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="last Updated By"/>
-            <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date"/>
+
+            <R_GridLookupColumn R_ResourceId="GSL00700" FieldName="CDEPT_CODE" HeaderText="Department Code" R_EnableAdd R_EnableEdit />
+            <R_GridTextColumn FieldName="CDEPT_NAME" HeaderText="Department Name" R_EnableAdd />
+            <R_GridLookupColumn FieldName="CGLACCOUNT_NO" HeaderText="GL Account No" R_EnableAdd R_EnableEdit />
+            <R_GridTextColumn FieldName="CGLACCOUNT_NAME" HeaderText="GL Account Name" R_EnableAdd R_EnableEdit />
+            <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="last Updated By" />
+            <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date" />
         </R_GridColumns>
     </R_Grid>
 </R_StackLayout>
 
 <R_ConductorGrid @ref="@_conJournalGOARef"
                  R_ViewModel="@JournalGOAViewModel"
-                 R_IsHeader
+                      R_IsHeader
                  R_Display="@Grid_Display"
                  R_ServiceGetRecord="@R_ServiceGetRecordAsync"
-                 R_ServiceSave="@ServiceSave"/>
+                 R_ServiceSave="@ServiceSave" />
 
 <R_ConductorGrid @ref="@_conGOADeptRef"
                  R_ViewModel="@GOADeptViewModel"
@@ -92,4 +91,4 @@
                  R_ServiceGetRecord="R_ServiceGetRecordGOADeptAsync"
                  R_ServiceSave="@ServiceSaveGOADept"
                  R_ServiceDelete="ServiceDelete"
-                 R_AfterDelete="@AfterDelete"/>
+                 R_AfterDelete="@AfterDelete" />

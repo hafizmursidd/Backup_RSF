@@ -56,7 +56,7 @@ namespace GSM04500Back
             loEx.ThrowExceptionIfErrors();
         }
 
-        protected override GSM04500DTO R_Display(GSM04500DTO poEntity)
+        protected override GSM04500DTO R_Display(GSM04500DTO poEntity)  
         {
             R_Exception loEexception = new R_Exception();
             GSM04500DTO loReturn = null;
