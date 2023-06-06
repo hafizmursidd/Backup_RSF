@@ -19,7 +19,7 @@ namespace GSM04500Front
         [Parameter]
         public string JournalGRPType { get;set; } = "10";
         [Parameter]
-        public string PropertId { get; set; }
+        public string PropertyId { get; set; }
         [Parameter]
         public string JournalGRPCode { get; set; }
 
@@ -77,9 +77,8 @@ namespace GSM04500Front
             {
                 lcGroupId = JournalGRPType;
                 await journalGroupViewModel.GetAllJournalAsync(lcGroupId);
-                PropertId = journalGroupViewModel.PropertyValueContext;
-                JournalGRPCode = "A";
-               // JournalGRPCode = journalGroupViewModel.JournalGroupList.FirstOrDefault().ToString();
+                PropertyId = journalGroupViewModel.JournalGroupList.FirstOrDefault().CPROPERTY_ID;
+                JournalGRPCode = journalGroupViewModel.JournalGroupList.FirstOrDefault().CJRNGRP_CODE;
                 
                 eventArgs.ListEntityResult = journalGroupViewModel.JournalGroupList;
             }
@@ -147,19 +146,38 @@ namespace GSM04500Front
             loEx.ThrowExceptionIfErrors();
         }
 
-        //Change Tab
-        private async Task ChangeTab(R_TabStripTab arg)
+        //MAIN TAB
+        private async Task ChangeTabMain(R_TabStripTab arg)
         {
             var loEx = new R_Exception();
 
             try
             {
+                switch (arg.Title)
+                {
+                    case "Service":
+                        JournalGRPType = "10";
+                        break;
+                    case "Utility":
+                        JournalGRPType = "11";
+                        break;
+                    case "Deposit":
+                        JournalGRPType = "12";
+                        break;
+                    case "Customer":
+                        JournalGRPType = "20";
+                        break;
+                    case "Product":
+                        JournalGRPType = "30";
+                        break;
+                    case "Expenditure":
+                        JournalGRPType = "40";
+                        break;
+                    case "Supplier":
+                        JournalGRPType = "50";
+                        break;
 
-                //await PropertyDropdown_ServiceGetListRecord(null);
-                /*
-                await _GSM05000NumberingViewModel.GetNumberingHeader();
-                await _gridRefNumbering.R_RefreshGrid(null);
-                */
+                }
             }
             catch (Exception ex)
             {
@@ -168,5 +186,6 @@ namespace GSM04500Front
 
             loEx.ThrowExceptionIfErrors();
         }
+
     }
 }

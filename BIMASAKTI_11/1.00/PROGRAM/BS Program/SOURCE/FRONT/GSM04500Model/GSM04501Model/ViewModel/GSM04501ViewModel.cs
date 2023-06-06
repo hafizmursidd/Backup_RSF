@@ -17,12 +17,14 @@ namespace GSM04501Model
         private GSM04501Model _model = new GSM04501Model();
         public ObservableCollection<GSM04510GOADTO> GOAList = new ObservableCollection<GSM04510GOADTO>();
         public GSM04510GOADTO GOA { get; set; } = new GSM04510GOADTO();
+        public string journalGroup { get; set; }
         public async Task GetAllJournalGrupGOAAsync(string lcJournalGRPType, string lcPropertyId, string lcJournalGRPCode)
         {
             R_Exception loException = new R_Exception();
             try
             {
                 var loResult = await _model.GetAllGOAListAsync(lcJournalGRPType, lcPropertyId, lcJournalGRPCode);
+                journalGroup = GOA.CJRNGRP_CODE;
                 GOAList = new ObservableCollection<GSM04510GOADTO>(loResult.ListData);
             }
             catch (Exception ex)

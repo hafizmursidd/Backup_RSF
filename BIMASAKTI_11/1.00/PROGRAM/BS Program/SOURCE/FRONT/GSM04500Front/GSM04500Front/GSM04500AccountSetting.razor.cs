@@ -32,7 +32,7 @@ namespace GSM04500Front
         [Parameter]
         public string JournalGRPType { get; set; }
         [Parameter]
-        public string PropertId { get; set; }
+        public string PropertyId { get; set; }
         [Parameter]
         public string JournalGRPCode { get; set; }
 
@@ -60,8 +60,9 @@ namespace GSM04500Front
             {
                 //lcGroupId ===> 10 untuk Tab Service
                 lcJournalGRPType = JournalGRPType;
-                lcPropertyId = PropertId;
+                lcPropertyId = PropertyId;
                 lcJournalGRPCode = JournalGRPCode;
+
                 await JournalGOAViewModel.GetAllJournalGrupGOAAsync(lcJournalGRPType, lcPropertyId, lcJournalGRPCode);
                 eventArgs.ListEntityResult = JournalGOAViewModel.GOAList;
             }
@@ -123,6 +124,7 @@ namespace GSM04500Front
 
             }
         }
+
 
         #region GroupOfAccountDept
 

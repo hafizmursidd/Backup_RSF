@@ -23,7 +23,11 @@ namespace GSM04500Front
         private R_Conductor _conductorRef;
 
         [Parameter]
-        public string JournalGRPType { get; set; }
+        public string JournalGRPType { get; set; } = "10";
+        [Parameter]
+        public string PropertyId { get; set; }
+        [Parameter]
+        public string JournalGRPCode { get; set; }
 
         protected override async Task R_Init_From_Master(object poParameter)
         {
@@ -80,6 +84,10 @@ namespace GSM04500Front
                 //lcGroupId ===> 10 untuk Tab Service
                 lcGroupId = JournalGRPType;
                 await journalGroupViewModel.GetAllJournalAsync(lcGroupId);
+                PropertyId = journalGroupViewModel.JournalGroupList.FirstOrDefault().CPROPERTY_ID;
+                // JournalGRPCode = "A";
+                JournalGRPCode = journalGroupViewModel.JournalGroupList.FirstOrDefault().CJRNGRP_CODE;
+
                 eventArgs.ListEntityResult = journalGroupViewModel.JournalGroupList;
             }
             catch (Exception ex)
