@@ -65,7 +65,14 @@ namespace BlazorMenu.Authentication
                     _clientHelper.Set_CultureUI(leLoginCulture);
                 }
                 else
+                {
                     _clientHelper.Set_CultureUI(eCulture.English);
+                }
+
+                //if (!_navigationManager.Uri.Equals(_navigationManager.BaseUri, StringComparison.InvariantCultureIgnoreCase))
+                //{
+                //    _navigationManager.NavigateTo(_navigationManager.BaseUri);
+                //}
 
                 if (_menuService.MenuAccess == null)
                     await _menuService.SetMenuAccessAsync();
@@ -113,30 +120,19 @@ namespace BlazorMenu.Authentication
 
         private async Task UserLockingFlushAsync()
         {
-            var loEx = new R_Exception();
+            var lcSavedToken = _tokenRepository.R_GetToken();
+            var loUserClaim = GetClaimsFromToken(lcSavedToken);
 
-            try
+            var loParam = new LoginDTO
             {
-                var lcSavedToken = _tokenRepository.R_GetToken();
-                var loUserClaim = GetClaimsFromToken(lcSavedToken);
+                CCOMPANY_ID = loUserClaim.Where(x => x.Type == "COMPANY_ID").FirstOrDefault().Value,
+                CUSER_ID = loUserClaim.Where(x => x.Type == "USER_ID").FirstOrDefault().Value
+            };
 
-                var loParam = new LoginDTO
-                {
-                    CCOMPANY_ID = loUserClaim.Where(x => x.Type == "COMPANY_ID").FirstOrDefault().Value,
-                    CUSER_ID = loUserClaim.Where(x => x.Type == "USER_ID").FirstOrDefault().Value
-                };
+            R_LoginViewModel _loginViewModel = new R_LoginViewModel();
+            await _loginViewModel.UserLockingFlushAsync(loParam);
 
-                R_LoginViewModel _loginViewModel = new R_LoginViewModel();
-                await _loginViewModel.UserLockingFlushAsync(loParam);
-
-                ClearLocalStorage();
-            }
-            catch (Exception ex)
-            {
-                loEx.Add(ex);
-            }
-
-            loEx.ThrowExceptionIfErrors();
+            ClearLocalStorage();
         }
 
         private void ClearLocalStorage()

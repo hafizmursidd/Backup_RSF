@@ -1,0 +1,72 @@
+﻿@page "/GSM04500"
+@inherits R_Page
+
+<R_TabStrip OnActiveTabIndexChanged="@ChangeTabMain">
+
+    <R_TabStripTab Title="Service">
+
+        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
+            <R_TabStripTab Title="Journal Group">
+                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+            </R_TabStripTab>
+
+     @*       <R_TabStripTab Title="Account Setting">
+                <GSM04500AccountSetting JournalGRPType="@JournalGRPType"
+                                        PropertyId="@PropertyId"
+                                        JournalGRPCode="@JournalGRPCode">
+                </GSM04500AccountSetting>
+            </R_TabStripTab>*@
+        </R_TabStrip>
+    </R_TabStripTab>
+    
+
+    <R_TabStripTab Title="Utility">
+        <R_TabStrip>
+            <R_TabStripTab Title="Journal Group">
+                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+            </R_TabStripTab>
+        </R_TabStrip>
+    </R_TabStripTab>
+
+    <R_TabStripTab Title="Deposit">
+        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
+            <R_TabStripTab Title="Journal Group">
+                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+            </R_TabStripTab>
+        </R_TabStrip>
+    </R_TabStripTab>
+
+    <R_TabStripTab Title="Customer">
+        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
+            <R_TabStripTab Title="Journal Group">
+                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+            </R_TabStripTab>
+        </R_TabStrip>
+    </R_TabStripTab>
+
+    <R_TabStripTab Title="Product">
+        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
+            <R_TabStripTab Title="Journal Group">
+                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+            </R_TabStripTab>
+        </R_TabStrip>
+    </R_TabStripTab>
+
+    <R_TabStripTab Title="Expenditure">
+        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
+            <R_TabStripTab Title="Journal Group">
+                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+            </R_TabStripTab>
+        </R_TabStrip>
+    </R_TabStripTab>
+
+    <R_TabStripTab Title="Supplier">
+        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
+            <R_TabStripTab Title="Journal Group">
+                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+            </R_TabStripTab>
+        </R_TabStrip>
+    </R_TabStripTab>
+
+
+</R_TabStrip>

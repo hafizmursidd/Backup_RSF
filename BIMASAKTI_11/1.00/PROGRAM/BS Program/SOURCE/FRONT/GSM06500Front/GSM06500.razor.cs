@@ -65,7 +65,6 @@ namespace GSM06500Front
             var loEx = new R_Exception();
             try
             {
-
                 await PaymentTermViewModel.GetAllTermOfPaymentAsync();
                 eventArgs.ListEntityResult = PaymentTermViewModel.PaymentOfTermList;
             }

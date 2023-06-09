@@ -1,5 +1,4 @@
 ﻿using GSM04500Common;
-using GSM04500Model;
 using R_BlazorFrontEnd.Controls.DataControls;
 using R_BlazorFrontEnd.Controls;
 using System;
@@ -10,6 +9,7 @@ using System.Threading.Tasks;
 using R_BlazorFrontEnd.Exceptions;
 using R_BlazorFrontEnd.Controls.Events;
 using R_BlazorFrontEnd.Controls.MessageBox;
+using GSM04500Model.ViewModel;
 
 namespace GSM04520Front
 {

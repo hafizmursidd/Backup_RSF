@@ -60,14 +60,14 @@ namespace GSM04500Model
                 R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, lcPropertyId);
 
                 R_HTTPClientWrapper.httpClientName = _HttpClientName;
-                var loTmp = await R_HTTPClientWrapper.R_APIRequestStreamingObject<GSM04500DTO>(
+                var loTemp = await R_HTTPClientWrapper.R_APIRequestStreamingObject<GSM04500DTO>(
                     _RequestServiceEndPoint,
                     nameof(IGSM04500.GET_JOURNAL_GRP_LIST_STREAM),
                     DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
-                loResult.ListData = loTmp;
+                loResult.ListData = loTemp;
             }
             catch (Exception ex)
             {

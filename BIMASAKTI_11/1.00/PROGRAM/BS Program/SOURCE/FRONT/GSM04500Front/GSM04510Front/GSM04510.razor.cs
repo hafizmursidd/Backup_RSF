@@ -1,5 +1,5 @@
 ﻿using GSM04500Common;
-using GSM04500Model;
+using GSM04500Model.ViewModel;
 using R_BlazorFrontEnd.Controls;
 using R_BlazorFrontEnd.Controls.DataControls;
 using R_BlazorFrontEnd.Controls.Events;

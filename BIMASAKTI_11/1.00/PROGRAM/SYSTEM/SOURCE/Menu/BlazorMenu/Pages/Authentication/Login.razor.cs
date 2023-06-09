@@ -53,15 +53,8 @@ namespace BlazorMenu.Pages.Authentication
             }
             catch (R_Exception rex)
             {
-                loEx.Add(rex);
+                await R_MessageBox.Show("Error", rex.ErrorList[0].ErrDescp, R_eMessageBoxButtonType.OK);
             }
-            catch (Exception ex)
-            {
-                loEx.Add(ex);
-            }
-
-            if (loEx.HasError)
-                await R_MessageBox.Show("Error", loEx.ErrorList[0].ErrDescp, R_eMessageBoxButtonType.OK);
         }
 
         private async Task ValidateUser()
@@ -156,16 +149,12 @@ namespace BlazorMenu.Pages.Authentication
             }
             catch (R_Exception rex)
             {
-                loEx.Add(rex);
+                await R_MessageBox.Show("Error", rex.ErrorList[0].ErrDescp, R_eMessageBoxButtonType.OK);
+                _tokenRepository.R_SetToken("");
             }
             catch (Exception ex)
             {
-                loEx.Add(ex);
-            }
-
-            if (loEx.HasError)
-            {
-                await R_MessageBox.Show("Error", loEx.ErrorList[0].ErrDescp, R_eMessageBoxButtonType.OK);
+                await R_MessageBox.Show("Error", ex.Message, R_eMessageBoxButtonType.OK);
                 _tokenRepository.R_SetToken("");
             }
         }

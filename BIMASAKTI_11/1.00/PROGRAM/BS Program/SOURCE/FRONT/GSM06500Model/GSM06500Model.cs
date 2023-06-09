@@ -34,6 +34,10 @@ namespace GSM06500Model
         {
             throw new NotImplementedException();
         }
+        public GSM06500PropertyListDTO GetAllPropertyList()
+        {
+            throw new NotImplementedException();
+        }
         public async Task<GSM06500ListDTO> GetTermOfPaymentListAsyncModel(string lcPropertyId)
         {
             var loEx = new R_Exception();
@@ -83,10 +87,7 @@ namespace GSM06500Model
             return loResult;
         }
 
-        public GSM06500PropertyListDTO GetAllPropertyList()
-        {
-            throw new NotImplementedException();
-        }
+
 
 
 

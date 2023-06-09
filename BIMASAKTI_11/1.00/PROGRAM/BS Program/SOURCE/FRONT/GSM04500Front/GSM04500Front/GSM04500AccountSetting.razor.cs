@@ -1,8 +1,6 @@
 ﻿using BlazorClientHelper;
 using GSM04500Common;
-using GSM04501Model;
-using Lookup_GSCOMMON.DTOs;
-using Lookup_GSFRONT;
+using GSM04500Model;
 using Microsoft.AspNetCore.Components;
 using R_BlazorFrontEnd.Controls.DataControls;
 using R_BlazorFrontEnd.Controls.Events;
@@ -15,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GSM04500Model;
 
 namespace GSM04500Front
 {
@@ -29,12 +28,9 @@ namespace GSM04500Front
         private R_Grid<GSM04510GOADeptDTO> _gridGOADeptRef;
         [Inject] IClientHelper clientHelper { get; set; }
 
-        [Parameter]
-        public string JournalGRPType { get; set; }
-        [Parameter]
-        public string PropertyId { get; set; }
-        [Parameter]
-        public string JournalGRPCode { get; set; }
+        [Parameter] public string JournalGRPType { get; set; }
+        [Parameter] public string PropertyId { get; set; }
+        [Parameter] public string JournalGRPCode { get; set; }
 
         protected override async Task R_Init_From_Master(object poParameter)
         {
@@ -121,6 +117,7 @@ namespace GSM04500Front
             {
                 var loParam = (GSM04510GOADTO)eventArgs.Data;
                 await _gridGOADeptRef.R_RefreshGrid(loParam);
+                
 
             }
         }
@@ -184,50 +181,30 @@ namespace GSM04500Front
 
         //  Button LookUp DeptCode
         private R_Lookup R_LookupCdeptCodeButton;
-        private void BeforeOpenLookUpCDeptCode(R_BeforeOpenLookupEventArgs eventArgs)
-        {
-            var param = new GSL00700ParameterDTO
-            {
+        //private void BeforeOpenLookUpCDeptCode(R_BeforeOpenLookupEventArgs eventArgs)
+        //{
+        //    var param = new GSL00700ParameterDTO
+        //    {
 
-                CCOMPANY_ID = clientHelper.CompanyId,
-                CUSER_ID = clientHelper.UserId
+        //        CCOMPANY_ID = clientHelper.CompanyId,
+        //        CUSER_ID = clientHelper.UserId
 
-            };
-            eventArgs.Parameter = param;
-            eventArgs.TargetPageType = typeof(GSL00700);
-        }
+        //    };
+        //    eventArgs.Parameter = param;
+        //    eventArgs.TargetPageType = typeof(GSL00700);
+        //}
 
-        private void AfterOpenLookUpCDeptCode(R_AfterOpenLookupEventArgs eventArgs)
-        {
-            var loTempResult = (GSL00700DTO)eventArgs.Result;
-            if (loTempResult == null)
-                return;
-            var loGetData = (GSM04510GOADeptDTO)_conGOADeptRef.R_GetCurrentData();
-            loGetData.CDEPT_CODE = loTempResult.CDEPT_CODE;
-            loGetData.CDEPT_NAME = loTempResult.CDEPT_NAME;
+        //private void AfterOpenLookUpCDeptCode(R_AfterOpenLookupEventArgs eventArgs)
+        //{
+        //    var loTempResult = (GSL00700DTO)eventArgs.Result;
+        //    if (loTempResult == null)
+        //        return;
+        //    var loGetData = (GSM04510GOADeptDTO)_conGOADeptRef.R_GetCurrentData();
+        //    loGetData.CDEPT_CODE = loTempResult.CDEPT_CODE;
+        //    loGetData.CDEPT_NAME = loTempResult.CDEPT_NAME;
 
-        }
+
         #endregion
-
-        private async Task ServiceDelete(R_ServiceDeleteEventArgs arg)
-        {
-            var loEx = new R_Exception();
-
-            try
-            {
-                var loParam = (GSM04510GOADeptDTO)arg.Data;
-                await GOADeptViewModel.DeleteOneRecordGOADept(loParam);
-            }
-            catch (Exception ex)
-            {
-                loEx.Add(ex);
-            }
-
-            loEx.ThrowExceptionIfErrors();
-        }
-        public async Task AfterDelete()
-        {
-            await R_MessageBox.Show("", "Delete Success", R_eMessageBoxButtonType.OK);
-        }
     }
 }
+

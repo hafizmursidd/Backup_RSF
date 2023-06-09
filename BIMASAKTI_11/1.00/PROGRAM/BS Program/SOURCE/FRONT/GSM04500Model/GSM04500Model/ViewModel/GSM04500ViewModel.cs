@@ -38,9 +38,9 @@ namespace GSM04500Model
 
         public async Task GetAllJournalAsync(string lcGroupId)
         {
-                R_Exception loException = new R_Exception();
-                try
-                {
+            R_Exception loException = new R_Exception();
+            try
+            {
                 var loResult = await _model.GetAllJournalGroupListAsync(lcGroupId, PropertyValueContext);
                 JournalGroupList = new ObservableCollection<GSM04500DTO>(loResult.ListData);
             }

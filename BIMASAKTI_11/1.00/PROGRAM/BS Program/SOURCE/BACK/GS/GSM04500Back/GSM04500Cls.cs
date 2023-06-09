@@ -165,10 +165,10 @@ namespace GSM04500Back
 
         public List<GSM04500DTO> JOURNAL_GROUP_LIST(GSM04500DBParameter poParameter)
         {
-            R_Exception loException = new R_Exception();
-            List<GSM04500DTO> loReturn = null;
-            R_Db loDb;
-            DbCommand loCmd;
+                R_Exception loException = new R_Exception();
+                List<GSM04500DTO> loReturn = null;
+                R_Db loDb;
+                DbCommand loCmd;
 
             try
             {

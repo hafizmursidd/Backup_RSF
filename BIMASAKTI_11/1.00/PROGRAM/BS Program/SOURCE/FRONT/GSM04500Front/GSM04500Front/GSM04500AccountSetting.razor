@@ -1,15 +1,20 @@
 ﻿@inherits R_Page
 
 
-<R_StackLayout Row>
+<R_StackLayout Row="true">
     <R_ItemLayout xs="1" Class="col-lg-1">
-        <R_Label>GROUP OF ACCOUNT</R_Label>
+        <R_Label>Journal Group</R_Label>
     </R_ItemLayout>
-    <R_ItemLayout xs="2" Class="col-lg-2">
+    <R_ItemLayout>
         <h5>
-            <R_TextBox @bind-Value="@JournalGOAViewModel.journalGroup"
-                       R_ConductorGridSource="@_conGOADeptRef" Enabled="false">
+            <R_TextBox @bind-Value="@JournalGRPCode" Enabled="false">
             </R_TextBox>
+        </h5>
+    </R_ItemLayout>
+    <R_itemLayout>
+        <h5>
+            @*<R_TextBox @bind-Value="@GOA_Name" Enabled="false">*@
+            @*</R_TextBox>*@
         </h5>
     </R_ItemLayout>
 </R_StackLayout>
@@ -38,6 +43,7 @@
 
 <R_StackLayout mb="8">
 </R_StackLayout>
+
 
 <R_StackLayout Row>
     <R_ItemLayout xs="1" Class="col-lg-1">
@@ -87,5 +93,5 @@
                  R_ConductorParent="_conJournalGOARef"
                  R_ServiceGetRecord="R_ServiceGetRecordGOADeptAsync"
                  R_ServiceSave="@ServiceSaveGOADept"
-                 R_ServiceDelete="ServiceDelete"
-                 R_AfterDelete="@AfterDelete"/>
+                 @*R_ServiceDelete="ServiceDelete"*@
+                 />

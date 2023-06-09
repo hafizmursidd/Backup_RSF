@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
+    <PackageReference Include="EPPlus" Version="6.2.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.14" />
 	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.14" PrivateAssets="all" />
@@ -20,27 +21,19 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GSM04500Front\GSM04500Front\GSM04500Front.csproj" />
-    <ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GSM04500Front\GSM04501Front\GSM04501Front.csproj" />
-    <ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GSM04500Front\GSM04510Front\GSM04510Front.csproj" />
     <ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GSM06500Front\GSM06500Front.csproj" />
-    <ProjectReference Include="..\..\..\..\BS Program\SOURCE\GSM04511Front\GSM04511Front.csproj" />
+    <ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\LMM06000Front\LMM06000Front.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="BlazorClientHelper">
-      <HintPath>..\..\LIBRARY\Menu\BlazorClientHelper.dll</HintPath>
+      <HintPath>..\..\LIBRARY\Dll Menu\BlazorClientHelper.dll</HintPath>
     </Reference>
     <Reference Include="BlazorMenuCommon">
-      <HintPath>..\..\LIBRARY\Menu\BlazorMenuCommon.dll</HintPath>
+      <HintPath>..\..\LIBRARY\Dll Menu\BlazorMenuCommon.dll</HintPath>
     </Reference>
     <Reference Include="BlazorMenuModel">
-      <HintPath>..\..\LIBRARY\Menu\BlazorMenuModel.dll</HintPath>
-    </Reference>
-    <Reference Include="CommonCollectionLibrary">
-      <HintPath>..\..\LIBRARY\Front\CommonCollectionLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="FrontCollectionLibrary">
-      <HintPath>..\..\LIBRARY\Front\FrontCollectionLibrary.dll</HintPath>
+      <HintPath>..\..\LIBRARY\Dll Menu\BlazorMenuModel.dll</HintPath>
     </Reference>
     <Reference Include="R_APIClient">
       <HintPath>..\..\LIBRARY\Front\R_APIClient.dll</HintPath>
@@ -50,6 +43,9 @@
     </Reference>
     <Reference Include="R_AuthenticationEnumAndInterface">
       <HintPath>..\..\LIBRARY\Front\R_AuthenticationEnumAndInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="R_AuthenticationFront">
+      <HintPath>..\..\LIBRARY\Front\R_AuthenticationFront.dll</HintPath>
     </Reference>
     <Reference Include="R_BlazorFrontEnd">
       <HintPath>..\..\LIBRARY\Front\R_BlazorFrontEnd.dll</HintPath>
@@ -66,6 +62,9 @@
     <Reference Include="R_BlazorStartup">
       <HintPath>..\..\LIBRARY\Front\R_BlazorStartup.dll</HintPath>
     </Reference>
+    <Reference Include="R_BusinessObjectFront">
+      <HintPath>..\..\LIBRARY\Front\R_BusinessObjectFront.dll</HintPath>
+    </Reference>
     <Reference Include="R_CommonFrontBackAPI">
       <HintPath>..\..\LIBRARY\Front\R_CommonFrontBackAPI.dll</HintPath>
     </Reference>
@@ -78,15 +77,30 @@
     <Reference Include="R_CrossPlatformSecurity">
       <HintPath>..\..\LIBRARY\Front\R_CrossPlatformSecurity.dll</HintPath>
     </Reference>
+    <Reference Include="R_EmailEngineFront">
+      <HintPath>..\..\LIBRARY\Front\R_EmailEngineFront.dll</HintPath>
+    </Reference>
+    <Reference Include="R_LockingFront">
+      <HintPath>..\..\LIBRARY\Front\R_LockingFront.dll</HintPath>
+    </Reference>
+    <Reference Include="R_ProcessAndUploadFront">
+      <HintPath>..\..\LIBRARY\Front\R_ProcessAndUploadFront.dll</HintPath>
+    </Reference>
+    <Reference Include="R_Security">
+      <HintPath>..\..\LIBRARY\Front\R_Security.dll</HintPath>
+    </Reference>
     <Reference Include="R_SecurityPolicyCommon">
-      <HintPath>..\..\LIBRARY\Menu\R_SecurityPolicyCommon.dll</HintPath>
+      <HintPath>..\..\LIBRARY\Dll Menu\R_SecurityPolicyCommon.dll</HintPath>
     </Reference>
     <Reference Include="R_SecurityPolicyFront">
-      <HintPath>..\..\LIBRARY\Menu\R_SecurityPolicyFront.dll</HintPath>
+      <HintPath>..\..\LIBRARY\Dll Menu\R_SecurityPolicyFront.dll</HintPath>
+    </Reference>
+    <Reference Include="R_SecurityTokenCommon">
+      <HintPath>..\..\LIBRARY\Dll Menu\R_SecurityTokenCommon.dll</HintPath>
     </Reference>
   </ItemGroup>
 
     <!--<ItemGroup>
-	    <BlazorWebAssemblyLazyLoad Include="SAB00600Front.dll" />
+	    <BlazorWebAssemblyLazyLoad Include="SAB00700Front.dll" />
     </ItemGroup>-->
 </Project>

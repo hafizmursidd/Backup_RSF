@@ -1,0 +1,104 @@
+﻿@page "/LMM06000"
+@inherits R_Page
+
+
+<R_StackLayout>
+    <R_StackLayout Row>
+        <R_ItemLayout xs="1">
+            <R_Label FontColor="Red" Class="fw-bold" FontSize="15">Property</R_Label>
+
+        </R_ItemLayout>
+        <R_ItemLayout xs="2">
+            <R_DropDownList Data="@BillingRuleViewModel.PropertyList"
+                            @bind-Value="BillingRuleViewModel.PropertyValueContext"
+                            ValueField="@nameof(LMM06000PropertyDTO.CPROPERTY_ID)"
+                            TextField="@nameof(LMM06000PropertyDTO.CPROPERTY_NAME)"
+                            R_ConductorSource="@_conductorPropertyRef"
+                            OnChanged="@PropertyDropdown_OnChange">
+            </R_DropDownList>
+        </R_ItemLayout>
+    </R_StackLayout>
+</R_StackLayout>
+
+
+<R_StackLayout>
+    <R_StackLayout Row="Enabled">
+        <R_ItemLayout xs="1">
+
+            <R_Grid @ref="@_gridUnitTypeRef"
+                    DataSource="BillingRuleViewModel.UnitTypeList"
+                    R_ConductorGridSource="@_conductorUnitTypeRef"
+                    R_GridType="R_eGridType.Original"
+                    R_ServiceGetListRecord="GetListRecordUnitType"
+                    AllowDeleteRow="false"
+                    AllowAddNewRow="false"
+                    AllowEditRow="false">
+                <R_GridColumns>
+                    <R_GridTextColumn FieldName="CUNIT_TYPE_NAME"
+                                      HeaderText="Unit Type">
+                    </R_GridTextColumn>
+                </R_GridColumns>
+            </R_Grid>
+
+        </R_ItemLayout>
+
+        <R_ItemLayout xs="11" Class="ms-4">
+
+            <R_Grid @ref="@_gridBillingRuleRef"
+                    DataSource="BillingRuleViewModel.BillingRuleList"
+                    R_ConductorGridSource="@_conductorBillingRuleRef"
+                    R_GridType="R_eGridType.Original"
+                    R_ServiceGetListRecord="GetListRecordBillingRule"
+                    AllowDeleteRow="false"
+                    AllowAddNewRow="false"
+                    AllowEditRow="false">
+                <R_GridColumns>
+                    <R_GridTextColumn FieldName="CBILLING_RULE_CODE"
+                                      HeaderText="Billing Rule Code" />
+                    <R_GridTextColumn FieldName="CBILLING_RULE_NAME"
+                                      HeaderText="Billling Rule Name" />
+
+                    <R_GridTextColumn FieldName="IDP_PERCENTAGE"
+                                      HeaderText="%" />
+                    <R_GridTextColumn FieldName="IDP_INTERVAL"
+                                      HeaderText="Interval" />
+                    <R_GridTextColumn FieldName="CDP_PERIOD_MODE"
+                                      HeaderText="Period" />
+
+                    <R_GridTextColumn FieldName="IINSTALLMENT_PERCENTAGE"
+                                      HeaderText="%" />
+                    <R_GridTextColumn FieldName="IINSTALLMENT_INTERVAL"
+                                      HeaderText="Interval" />
+                    <R_GridTextColumn FieldName="CINSTALLMENT_PERIOD_MODE"
+                                      HeaderText="Period" />
+
+                    <R_GridTextColumn FieldName="IBANK_CREDIT_PERCENTAGE"
+                                      HeaderText="%" />
+                    <R_GridTextColumn FieldName="IBANK_CREDIT_INTERVAL"
+                                      HeaderText="Interval" />
+
+                    <R_GridTextColumn FieldName="LACTIVE"
+                                      HeaderText="Period" />
+
+                    <R_GridTextColumn FieldName="CUPDATE_BY"
+                                      HeaderText="Update By" />
+                    <R_GridTextColumn FieldName="CUPDATE_DATE"
+                                      HeaderText="Updated Date" />
+                    <R_GridTextColumn FieldName="CCREATE_BY"
+                                      HeaderText="Create By" />
+                    <R_GridTextColumn FieldName="CCREATE_DATE"
+                                      HeaderText="Created By" />
+                </R_GridColumns>
+            </R_Grid>
+
+        </R_ItemLayout>
+
+
+    </R_StackLayout>
+</R_StackLayout>
+<R_ConductorGrid @ref="@_conductorUnitTypeRef"
+                 R_ViewModel="@BillingRuleViewModel"
+                 R_Display="@Grid_Display" />
+
+<R_ConductorGrid @ref="@_conductorBillingRuleRef"
+                 R_ViewModel="@BillingRuleViewModel" />
