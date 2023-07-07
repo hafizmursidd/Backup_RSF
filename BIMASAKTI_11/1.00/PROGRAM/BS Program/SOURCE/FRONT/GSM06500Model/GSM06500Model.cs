@@ -25,11 +25,6 @@ namespace GSM06500Model
             : base(pcHttpClientName, pcRequestServiceEndPoint,pcModuleName, plSendWithContext, plSendWithToken)
         {
         }
-
-        public IAsyncEnumerable<GSM06500DTO> TermOfPayment()
-        {
-            throw new NotImplementedException();
-        }
         public GSM06500ListDTO GetallTermOfpaymentOriginal()
         {
             throw new NotImplementedException();

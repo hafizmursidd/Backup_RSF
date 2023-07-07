@@ -20,17 +20,11 @@ namespace LMM06000Service
             try
             {
                 var loCls = new LMM06000Cls();
-                //poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
-                //poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
-                //poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
-                //poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
-                //poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
-
-                poParameter.Entity.CCOMPANY_ID = "RCD";
-                poParameter.Entity.CUSER_ID = "hmc";
-                poParameter.Entity.CPROPERTY_ID = "JBMPC";
-                poParameter.Entity.CUNIT_TYPE_ID = "2BRoom";
-                poParameter.Entity.CBILLING_RULE_CODE = "RULES01";
+                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
 
                 loRtn.data = loCls.R_GetRecord(poParameter.Entity);
             }
@@ -56,27 +50,8 @@ namespace LMM06000Service
                 loCls = new LMM06000Cls();
                 loRtn = new R_ServiceSaveResultDTO<LMM06000BillingRuleDTO>();
 
-                poParameter.Entity.CCOMPANY_ID = "RCD";
-                poParameter.Entity.CPROPERTY_ID = "JBMPC";
-                poParameter.Entity.CUNIT_TYPE_ID = "1BRoom";
-                poParameter.Entity.CBILLING_RULE_CODE = "RULES03";
-                poParameter.Entity.CBILLING_RULE_NAME = "Iuran Bulan Keetig";
-
-                poParameter.Entity.LWITH_DP = false;
-                poParameter.Entity.IDP_PERCENTAGE = 0;
-                poParameter.Entity.IDP_INTERVAL = 0;
-                poParameter.Entity.CDP_PERIOD_MODE = "";
-                poParameter.Entity.LIINSTALLMENT = false;
-                poParameter.Entity.IINSTALLMENT_PERCENTAGE = 0;
-                poParameter.Entity.IINSTALLMENT_INTERVAL = 0;
-                poParameter.Entity.CINSTALLMENT_PERIOD_MODE = "";
-                poParameter.Entity.LBANK_CREDIT = false;
-                poParameter.Entity.IBANK_CREDIT_PERCENTAGE = 0;
-                poParameter.Entity.IBANK_CREDIT_INTERVAL = 0;
-
-                poParameter.Entity.LACTIVE = true;
-                poParameter.Entity.CUSER_ID = "hmc";
-
+                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
                 loRtn.data = loCls.R_Save(poParameter.Entity, poParameter.CRUDMode);
             }
             catch (Exception ex)
@@ -100,27 +75,9 @@ namespace LMM06000Service
             {
                 loCls = new LMM06000Cls();
                 loRtn = new R_ServiceDeleteResultDTO();
-                poParameter.Entity.CCOMPANY_ID = "RCD";
-                poParameter.Entity.CPROPERTY_ID = "JBMPC";
-                poParameter.Entity.CUNIT_TYPE_ID = "1BRoom";
-                poParameter.Entity.CBILLING_RULE_CODE = "RULES01";
-                poParameter.Entity.CBILLING_RULE_NAME = "Iuran Pertama";
-
-                poParameter.Entity.LWITH_DP = false;
-                poParameter.Entity.IDP_PERCENTAGE = 0;
-                poParameter.Entity.IDP_INTERVAL = 0;
-                poParameter.Entity.CDP_PERIOD_MODE = "";
-                poParameter.Entity.LIINSTALLMENT = false;
-                poParameter.Entity.IINSTALLMENT_PERCENTAGE = 0;
-                poParameter.Entity.IINSTALLMENT_INTERVAL = 0;
-                poParameter.Entity.CINSTALLMENT_PERIOD_MODE = "";
-                poParameter.Entity.LBANK_CREDIT = false;
-                poParameter.Entity.IBANK_CREDIT_PERCENTAGE = 0;
-                poParameter.Entity.IBANK_CREDIT_INTERVAL = 0;
-
-                poParameter.Entity.LACTIVE = true;
-                poParameter.Entity.CUSER_ID = "hmc";
-
+                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
+                
                 loCls.R_Delete(poParameter.Entity);
             }
             catch (Exception ex)
@@ -148,10 +105,35 @@ namespace LMM06000Service
                 loParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
                 loParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
 
-                //loParameter.CCOMPANY_ID = "RCD";
-                //loParameter.CUSER_ID = "admin";
-
                 var loResult = loCls.GetAllPropertyList(loParameter);
+                loRtn.Data = loResult;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loRtn;
+        }
+
+        [HttpPost]
+        public LMM06000PeriodListDTO GetAllPeriodList()
+        {
+            var loEx = new R_Exception();
+            LMM06000PeriodListDTO loRtn = null;
+
+            var loParameter = new LMM06000DBParameter();
+
+            try
+            {
+                var loCls = new LMM06000Cls();
+                loRtn = new LMM06000PeriodListDTO();
+                loParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                loParameter.CULTURE = R_BackGlobalVar.CULTURE;
+
+                var loResult = loCls.GetAllPeriodList(loParameter);
                 loRtn.Data = loResult;
             }
             catch (Exception ex)
@@ -199,12 +181,41 @@ namespace LMM06000Service
 
             return loRtn;
         }
+
+        [HttpPost]
+        public LMM06000ActiveInactiveDTO SetActiveInactive()
+        {
+            R_Exception loEx = new R_Exception();
+            LMM06000ActiveInactiveParameterDb loDbPar = new LMM06000ActiveInactiveParameterDb();
+            LMM06000ActiveInactiveDTO loRtn = new LMM06000ActiveInactiveDTO();
+            LMM06000Cls loCls = new LMM06000Cls();
+
+            try
+            {
+                loDbPar.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                loDbPar.CUSER_ID = R_BackGlobalVar.USER_ID;
+                loDbPar.CPROPERTY_ID = R_Utility.R_GetContext<string>(ContextConstant.CPROPERTY_ID);
+                loDbPar.CUNIT_TYPE_ID = R_Utility.R_GetContext<string>(ContextConstant.CUNIT_TYPE_ID);
+                loDbPar.CBILLING_RULE_CODE = R_Utility.R_GetContext<string>(ContextConstant.CBILLING_RULE_CODE);
+                loDbPar.LACTIVE = R_Utility.R_GetContext<bool>(ContextConstant.LACTIVE);
+
+                loCls.SetActiveInactiveDb(loDbPar);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loRtn;
+        }
+
         [HttpPost]
         public IAsyncEnumerable<LMM06000BillingRuleDTO> BillingRuleListStream()
         {
             var loEx = new R_Exception();
             LMM06000DBParameter loDbParameter;
-            R_Exception loException = new R_Exception();
             IAsyncEnumerable<LMM06000BillingRuleDTO> loRtn = null;
             List<LMM06000BillingRuleDTO> loRtnTemp;
 
@@ -216,13 +227,7 @@ namespace LMM06000Service
                 loDbParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
                 loDbParameter.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
                 loDbParameter.CUNIT_TYPE_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CUNIT_TYPE_ID);
-                loDbParameter.LACTIVE_ONLY = R_Utility.R_GetStreamingContext<bool>(ContextConstant.LACTIVE_ONLY);
-
-                //loDbParameter.CCOMPANY_ID = "RCD";
-                //loDbParameter.CUSER_ID = "hmc";
-                //loDbParameter.CPROPERTY_ID = "JBMPC";
-                //loDbParameter.CUNIT_TYPE_ID = "1BRoom";
-                //loDbParameter.LACTIVE_ONLY = false;
+                loDbParameter.LACTIVE_ONLY = false; //sesuai pernyataan dari bu Reni
 
                 var loCls = new LMM06000Cls();
                 loRtnTemp = loCls.BillingRuleList(loDbParameter);

@@ -5,6 +5,8 @@ using LMM06000Common;
 using R_APIClient;
 using R_BlazorFrontEnd.Exceptions;
 using System.Threading.Tasks;
+using R_BlazorFrontEnd.Controls.Events;
+using R_BlazorFrontEnd.Enums;
 
 namespace LMM06000Model
 {
@@ -14,11 +16,11 @@ namespace LMM06000Model
         private const string DEFAULT_ENDPOINT = "api/LMM06000";
         private const string DEFAULT_MODULE = "LM";
         public LMM06000Model(
-            string pcHttpClientName = DEFAULT_HTTP, 
+            string pcHttpClientName = DEFAULT_HTTP,
             string pcRequestServiceEndPoint = DEFAULT_ENDPOINT,
-            string pcModuleName = DEFAULT_MODULE, 
-            bool plSendWithContext = true, 
-            bool plSendWithToken = true) 
+            string pcModuleName = DEFAULT_MODULE,
+            bool plSendWithContext = true,
+            bool plSendWithToken = true)
             : base(pcHttpClientName, pcRequestServiceEndPoint, pcModuleName, plSendWithContext, plSendWithToken)
         {
         }
@@ -34,6 +36,16 @@ namespace LMM06000Model
         }
 
         public LMM06000UnitTypeListDTO GetAllUnitTypeList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public LMM06000PeriodListDTO GetAllPeriodList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public LMM06000ActiveInactiveDTO SetActiveInactive()
         {
             throw new NotImplementedException();
         }
@@ -62,7 +74,31 @@ namespace LMM06000Model
 
             return loResult;
         }
-        public async Task<LMM06000UnitTypeListDTO> GetUnitTypeAsyncModel( string lcPropertyId)
+        public async Task<LMM06000PeriodListDTO> GetPeriodAsyncModel()
+        {
+            var loEx = new R_Exception();
+            LMM06000PeriodListDTO loResult = null;
+
+            try
+            {
+                R_HTTPClientWrapper.httpClientName = _HttpClientName;
+                loResult = await R_HTTPClientWrapper.R_APIRequestObject<LMM06000PeriodListDTO>(
+                    _RequestServiceEndPoint,
+                    nameof(ILMM06000.GetAllPeriodList),
+                    DEFAULT_MODULE,
+                    _SendWithContext,
+                    _SendWithToken);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
+        }
+        public async Task<LMM06000UnitTypeListDTO> GetUnitTypeAsyncModel(string lcPropertyId)
         {
             var loEx = new R_Exception();
             LMM06000UnitTypeListDTO loResult = null;
@@ -88,18 +124,16 @@ namespace LMM06000Model
 
             return loResult;
         }
-        
+
         public async Task<LMM06000BillingRuleListDTO> GetBillingRuleListAsyncModel(string lcPropertyId, string lcUnitTypeId)
         {
             var loEx = new R_Exception();
             LMM06000BillingRuleListDTO loResult = new LMM06000BillingRuleListDTO();
-            bool lcLACTIVE_ONLY = false;
-    
+
             try
             {
                 R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, lcPropertyId);
                 R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CUNIT_TYPE_ID, lcUnitTypeId);
-                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.LACTIVE_ONLY, lcLACTIVE_ONLY);
 
                 R_HTTPClientWrapper.httpClientName = _HttpClientName;
                 var loTemp = await R_HTTPClientWrapper.R_APIRequestStreamingObject<LMM06000BillingRuleDTO>(
@@ -108,7 +142,7 @@ namespace LMM06000Model
                     DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
-                
+
                 loResult.Data = loTemp;
             }
             catch (Exception ex)
@@ -118,5 +152,34 @@ namespace LMM06000Model
             loEx.ThrowExceptionIfErrors();
             return loResult;
         }
+
+        #region SetActiveInactive
+
+        public async Task SetActiveInactiveAsync()
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                R_HTTPClientWrapper.httpClientName = DEFAULT_HTTP;
+                await R_HTTPClientWrapper.R_APIRequestObject<LMM06000ActiveInactiveDTO>(
+                    _RequestServiceEndPoint,
+                    nameof(ILMM06000.SetActiveInactive),
+                    DEFAULT_MODULE,
+                    _SendWithContext,
+                    _SendWithToken);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
+        #endregion
+
+
+
+
     }
 }

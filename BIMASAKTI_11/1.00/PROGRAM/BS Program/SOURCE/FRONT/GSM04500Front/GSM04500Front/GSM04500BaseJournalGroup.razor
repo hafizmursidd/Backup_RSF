@@ -1,72 +1,130 @@
 ﻿@page "/GSM04500"
 @inherits R_Page
 
-<R_TabStrip OnActiveTabIndexChanged="@ChangeTabMain">
 
+<R_StackLayout Class="d-flex justify-content-between col-9" Row="true">
+    <R_StackLayout Row Class="me-2">
+        <R_ItemLayout xs="4">
+            <R_Label FontColor="Red" Class="fw-bold" FontSize="15">Property</R_Label>
+        </R_ItemLayout>
+        <R_ItemLayout xs="8">
+            <R_ComboBox Data="@journalGroupViewModel.PropertyList"
+                        @bind-Value="@journalGroupViewModel.PropertyValueContext"
+                        ValueField="@nameof(GSM04500PropertyDTO.CPROPERTY_ID)"
+                        TextField="@nameof(GSM04500PropertyDTO.CPROPERTY_NAME)"
+                        R_ConductorSource="@_conductorRef" OnChanged="@PropertyDropdown_OnChange">
+            </R_ComboBox>
+        </R_ItemLayout>
+    </R_StackLayout>
+    <R_StackLayout Row>
+        <R_ItemLayout xs="4">
+            <R_Label FontColor="Red" Class="fw-bold" FontSize="15">Journal Group</R_Label>
+        </R_ItemLayout>
+        <R_ItemLayout xs="8">
+            <R_ComboBox Data="@journalGroupViewModel.PropertyList"
+                        @bind-Value="@journalGroupViewModel.PropertyValueContext"
+                        ValueField="@nameof(GSM04500PropertyDTO.CPROPERTY_ID)"
+                        TextField="@nameof(GSM04500PropertyDTO.CPROPERTY_NAME)"
+                        R_ConductorSource="@_conductorRef" OnChanged="@PropertyDropdown_OnChange">
+            </R_ComboBox>
+        </R_ItemLayout>
+    </R_StackLayout>
+</R_StackLayout>
+
+
+<R_TabStrip Class="p-4" OnActiveTabIndexChanged="@ChangeTabMain">
     <R_TabStripTab Title="Service">
-
-        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
-            <R_TabStripTab Title="Journal Group">
-                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
-            </R_TabStripTab>
-
-     @*       <R_TabStripTab Title="Account Setting">
-                <GSM04500AccountSetting JournalGRPType="@JournalGRPType"
-                                        PropertyId="@PropertyId"
-                                        JournalGRPCode="@JournalGRPCode">
-                </GSM04500AccountSetting>
-            </R_TabStripTab>*@
-        </R_TabStrip>
-    </R_TabStripTab>
-    
-
-    <R_TabStripTab Title="Utility">
         <R_TabStrip>
             <R_TabStripTab Title="Journal Group">
-                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+                @* <GSM04500ComponentJournalGroup *@
+                @*     JournalGRPType="@JournalGRPType" *@
+                @*     PropertyId="@journalGroupViewModel.PropertyValueContext"> *@
+                @* </GSM04500ComponentJournalGroup> *@
+                <R_StackLayout>
+                    <R_Grid @ref="@_gridRef"
+                            DataSource="journalGroupViewModel.JournalGroupList"
+                            Pageable="true"
+                            R_ConductorGridSource="@_conJournalGroupRef"
+                            R_GridType="@R_eGridType.Original"
+                            R_ServiceGetListRecord="@R_ServiceGetListRecord"
+                            AllowDeleteRow="true"
+                            AllowAddNewRow="true"
+                            AllowEditRow="true">
+
+                        <R_GridColumns>
+                            <R_GridTextColumn FieldName="CJRNGRP_CODE" HeaderText="Journal Group" R_EnableAdd />
+                            <R_GridTextColumn FieldName="CJRNGRP_NAME" HeaderText="Juornal Group Name" R_EnableAdd R_EnableEdit />
+                            <R_GridCheckBoxColumn FieldName="LACCRUAL" HeaderText="Enable Accrual" R_EnableAdd R_EnableEdit />
+                            <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="Last Updated By" />
+                            <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date" />
+                        </R_GridColumns>
+
+                    </R_Grid>
+                </R_StackLayout>
+                <R_ConductorGrid @ref="@_conJournalGroupRef"
+                                 R_ViewModel="@journalGroupViewModel"
+                                 R_ServiceGetRecord="@R_ServiceGetRecordAsync"
+                                 R_ServiceDelete="@ServiceDelete"
+                                 R_ServiceSave="@ServiceSave"
+                                 R_AfterDelete="@AfterDelete"
+                                 R_Display="Grid_Display" />
             </R_TabStripTab>
+
+            <R_TabStripTab Title="Account Setting">
+                <R_TabPage R_Before_Open_TabPage="Before_Open_AccountSetting">
+                </R_TabPage>
+            </R_TabStripTab>
+
         </R_TabStrip>
+    </R_TabStripTab>
+    @*
+    <R_TabStripTab Title="Utility">
+    <R_TabStrip>
+    <R_TabStripTab Title="Journal Group">
+    <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+    </R_TabStripTab>
+    </R_TabStrip>
     </R_TabStripTab>
 
     <R_TabStripTab Title="Deposit">
-        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
-            <R_TabStripTab Title="Journal Group">
-                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
-            </R_TabStripTab>
-        </R_TabStrip>
+    <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
+    <R_TabStripTab Title="Journal Group">
+    <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+    </R_TabStripTab>
+    </R_TabStrip>
     </R_TabStripTab>
 
     <R_TabStripTab Title="Customer">
-        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
-            <R_TabStripTab Title="Journal Group">
-                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
-            </R_TabStripTab>
-        </R_TabStrip>
+    <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
+    <R_TabStripTab Title="Journal Group">
+    <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+    </R_TabStripTab>
+    </R_TabStrip>
     </R_TabStripTab>
 
     <R_TabStripTab Title="Product">
-        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
-            <R_TabStripTab Title="Journal Group">
-                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
-            </R_TabStripTab>
-        </R_TabStrip>
+    <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
+    <R_TabStripTab Title="Journal Group">
+    <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+    </R_TabStripTab>
+    </R_TabStrip>
     </R_TabStripTab>
 
     <R_TabStripTab Title="Expenditure">
-        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
-            <R_TabStripTab Title="Journal Group">
-                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
-            </R_TabStripTab>
-        </R_TabStrip>
+    <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
+    <R_TabStripTab Title="Journal Group">
+    <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
+    </R_TabStripTab>
+    </R_TabStrip>
     </R_TabStripTab>
 
     <R_TabStripTab Title="Supplier">
-        <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
-            <R_TabStripTab Title="Journal Group">
-                <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
-            </R_TabStripTab>
-        </R_TabStrip>
+    <R_TabStrip OnActiveTabIndexChanged="@ChangeTabChild">
+    <R_TabStripTab Title="Journal Group">
+    <GSM04500ComponentJournalGroup JournalGRPType="@JournalGRPType"></GSM04500ComponentJournalGroup>
     </R_TabStripTab>
-
+    </R_TabStrip>
+    </R_TabStripTab>
+    *@
 
 </R_TabStrip>

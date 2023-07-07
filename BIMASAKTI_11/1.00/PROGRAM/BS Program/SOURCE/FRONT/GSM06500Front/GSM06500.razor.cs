@@ -20,7 +20,7 @@ namespace GSM06500Front
             var loEx = new R_Exception();
             try
             {
-                await PropertyDropdown_ServiceGetListRecord(null);                
+                await PropertyDropdown_ServiceGetListRecord(null);
             }
             catch (Exception ex)
             {
@@ -29,6 +29,7 @@ namespace GSM06500Front
 
             loEx.ThrowExceptionIfErrors();
         }
+
         private async Task PropertyDropdown_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
@@ -60,6 +61,7 @@ namespace GSM06500Front
 
             R_DisplayException(loEx);
         }
+
         private async Task R_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
@@ -92,6 +94,7 @@ namespace GSM06500Front
 
             loEx.ThrowExceptionIfErrors();
         }
+
         public async Task ServiceDelete(R_ServiceDeleteEventArgs eventArgs)
         {
             var loEx = new R_Exception();
@@ -109,7 +112,6 @@ namespace GSM06500Front
             loEx.ThrowExceptionIfErrors();
         }
 
-
         public async Task Conductor_AfterDelete()
         {
             await R_MessageBox.Show("", "Delete Success", R_eMessageBoxButtonType.OK);
@@ -117,7 +119,6 @@ namespace GSM06500Front
 
         private async Task ServiceSave(R_ServiceSaveEventArgs eventArgs)
         {
-
             var loEx = new R_Exception();
 
             try
@@ -135,10 +136,27 @@ namespace GSM06500Front
             loEx.ThrowExceptionIfErrors();
         }
 
+        public async Task ServiceValidation(R_ValidationEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                var loParam = (GSM06500DTO)eventArgs.Data;
 
+                if (string.IsNullOrEmpty(loParam.CPAY_TERM_CODE))
+                    loEx.Add(new Exception("Term of Payment Code is required."));
+                if (string.IsNullOrEmpty(loParam.CPAY_TERM_NAME))
+                    loEx.Add(new Exception("Term of Payment Name is required."));
+                if (loParam.IPAY_TERM_DAYS > 999999)
+                    loEx.Add(new Exception("Top Days is Too Long"));
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
 
-
-
-
+            eventArgs.Cancel = loEx.HasError;
+            loEx.ThrowExceptionIfErrors();
+        }
     }
 }

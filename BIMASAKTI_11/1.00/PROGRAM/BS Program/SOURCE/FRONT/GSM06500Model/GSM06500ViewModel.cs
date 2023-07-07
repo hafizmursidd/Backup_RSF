@@ -52,7 +52,7 @@ namespace GSM06500Model
             loEx.ThrowExceptionIfErrors();
         }
 
-        public async Task DeleteTermOfPayment(GSM06500DTO poProperty)
+        public async Task DeleteTermOfPayment(GSM06500DTO poEntity)
         {
             var loEx = new R_Exception();
 
@@ -60,12 +60,12 @@ namespace GSM06500Model
             {
                 var loParam = new GSM06500DTO
                 {
-                    CCOMPANY_ID = poProperty.CCOMPANY_ID,
-                    CPROPERTY_ID = poProperty.CPROPERTY_ID,
-                    CUSER_ID = poProperty.CUSER_ID,
-                    CPAY_TERM_CODE = poProperty.CPAY_TERM_CODE,
-                    CPAY_TERM_NAME = poProperty.CPAY_TERM_NAME,
-                    IPAY_TERM_DAYS = poProperty.IPAY_TERM_DAYS
+                    CCOMPANY_ID = poEntity.CCOMPANY_ID,
+                    CPROPERTY_ID = poEntity.CPROPERTY_ID,
+                    CUSER_ID = poEntity.CUSER_ID,
+                    CPAY_TERM_CODE = poEntity.CPAY_TERM_CODE,
+                    CPAY_TERM_NAME = poEntity.CPAY_TERM_NAME,
+                    IPAY_TERM_DAYS = poEntity.IPAY_TERM_DAYS
                 };
                 await _model.R_ServiceDeleteAsync(loParam);
             }
@@ -116,9 +116,7 @@ namespace GSM06500Model
             {
                 loEx.Add(ex);
             }
-
             loEx.ThrowExceptionIfErrors();
-
             return loResult;
         }
 

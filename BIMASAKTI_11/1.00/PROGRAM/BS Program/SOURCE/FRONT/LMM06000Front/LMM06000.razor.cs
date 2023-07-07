@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using BlazorClientHelper;
 using LMM06000Common;
 using LMM06000Model.ViewModel;
+using Lookup_LMCOMMON.DTOs;
+using Lookup_LMFRONT;
+using Microsoft.AspNetCore.Components;
 using R_BlazorFrontEnd.Controls;
 using R_BlazorFrontEnd.Controls.DataControls;
 using R_BlazorFrontEnd.Controls.Events;
 using R_BlazorFrontEnd.Enums;
 using R_BlazorFrontEnd.Exceptions;
+using R_BlazorFrontEnd.Helpers;
+using R_CommonFrontBackAPI;
 
 namespace LMM06000Front
 {
@@ -21,10 +23,14 @@ namespace LMM06000Front
         private R_ConductorGrid _conductorUnitTypeRef;
         private R_Grid<LMM06000UnitTypeDTO> _gridUnitTypeRef;
 
-        private R_ConductorGrid _conductorBillingRuleRef;
+        private R_Conductor _conductorBillingRuleRef;
         private R_Grid<LMM06000BillingRuleDTO> _gridBillingRuleRef;
 
         public LMM06000BillingRuleDTO loBillingRuleParam = new LMM06000BillingRuleDTO();
+        private string loLabel = "Activate";
+        [Inject] IClientHelper clientHelper { get; set; }
+
+        #region PropertyID
 
         protected override async Task R_Init_From_Master(object poParameter)
         {
@@ -68,7 +74,11 @@ namespace LMM06000Front
 
             R_DisplayException(loEx);
         }
-        
+        #endregion
+
+        #region UnitType
+
+
         private async Task GetListRecordUnitType(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
@@ -84,27 +94,31 @@ namespace LMM06000Front
 
             loEx.ThrowExceptionIfErrors();
         }
-        private async Task Grid_Display(R_DisplayEventArgs eventArgs)
+
+        private async Task Grid_DisplayUnitType(R_DisplayEventArgs eventArgs)
         {
             if (eventArgs.ConductorMode == R_eConductorMode.Normal)
             {
-                 var loParam = (LMM06000UnitTypeDTO)eventArgs.Data;
+                var loParam = (LMM06000UnitTypeDTO)eventArgs.Data;
 
-                 loBillingRuleParam.CPROPERTY_ID = loParam.CPROPERTY_ID;
-                 loBillingRuleParam.CUNIT_TYPE_ID = loParam.CUNIT_TYPE_ID;
-                 
-                 await _gridBillingRuleRef.R_RefreshGrid(null);
+                loBillingRuleParam.CPROPERTY_ID = loParam.CPROPERTY_ID;
+                loBillingRuleParam.CUNIT_TYPE_ID = loParam.CUNIT_TYPE_ID;
+
+                await _gridBillingRuleRef.R_RefreshGrid(null);
             }
         }
-        
-        private async Task GetListRecordBillingRule(R_ServiceGetListRecordEventArgs eventArgs)
+        #endregion
+
+        #region BillingRule
+
+        private async Task GetListRecordBillingRules(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
             try
             {
                 await BillingRuleViewModel.GetAllBillingRule(loBillingRuleParam.CPROPERTY_ID, loBillingRuleParam.CUNIT_TYPE_ID);
                 eventArgs.ListEntityResult = BillingRuleViewModel.BillingRuleList;
-                var temp = BillingRuleViewModel.BillingRuleList;
+               // _gridBillingRuleRef.AutoFitAllColumnsAsync();
             }
             catch (Exception ex)
             {
@@ -113,5 +127,259 @@ namespace LMM06000Front
 
             loEx.ThrowExceptionIfErrors();
         }
+
+        private async Task ServiceGetOneRecordBillingRule(R_ServiceGetRecordEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                var loParam = R_FrontUtility.ConvertObjectToObject<LMM06000BillingRuleDTO>(eventArgs.Data);
+
+                await BillingRuleViewModel.GetBillingRuleOneRecord(loParam);
+                eventArgs.Result = BillingRuleViewModel.BillingRuleDetail;
+                var temp = (LMM06000BillingRuleDTO)eventArgs.Result;
+                await PropertyDropdown_GetPeriodeList(null);
+
+                //Set ActiveInactive Value
+                BillingRuleViewModel.ActiveInactiveEntity.PROPERTY_ID = temp.CPROPERTY_ID;
+                BillingRuleViewModel.ActiveInactiveEntity.CUNIT_TYPE_ID = temp.CUNIT_TYPE_ID;
+                BillingRuleViewModel.ActiveInactiveEntity.CBILLING_RULE_CODE = temp.CBILLING_RULE_CODE;
+                if (loParam.LACTIVE)
+                {
+                    loLabel = "Inactive";
+                    BillingRuleViewModel.ActiveInactiveEntity.LACTIVE = false;
+                }
+                else
+                {
+                    loLabel = "Activate";
+                    BillingRuleViewModel.ActiveInactiveEntity.LACTIVE = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
+
+        private async Task PropertyDropdown_GetPeriodeList(R_ServiceGetListRecordEventArgs args)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                await BillingRuleViewModel.GetPeriodList();
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+            R_DisplayException(loEx);
+        }
+        #endregion
+
+        #region BeforeLookup
+
+        private R_Lookup R_Lookup_Unit_Charges_Button;
+        //BEFORE LOOKUP INSTALLMENT DAN BOOKING FEE
+        private void BeforeOpenLookUp_Unit_Charges(R_BeforeOpenLookupEventArgs eventArgs)
+        {
+            var param = new LML00200ParameterDTO()
+            {
+                CCOMPANY_ID = clientHelper.CompanyId,
+                CUSER_ID = clientHelper.UserId,
+                CPROPERTY_ID = BillingRuleViewModel.PropertyValueContext,
+                CCHARGE_TYPE_ID = ""
+            };
+            eventArgs.Parameter = param;
+            eventArgs.TargetPageType = typeof(LML00200);
+        }
+
+        //Before LookUp WITHDP
+        private void BeforeOpenLookUp_Unit_Charges_WithDP(R_BeforeOpenLookupEventArgs eventArgs)
+        {
+            var param = new LML00200ParameterDTO()
+            {
+                CCOMPANY_ID = clientHelper.CompanyId,
+                CUSER_ID = clientHelper.UserId,
+                CPROPERTY_ID = BillingRuleViewModel.PropertyValueContext,
+                CCHARGE_TYPE_ID = "07"
+            };
+            eventArgs.Parameter = param;
+            eventArgs.TargetPageType = typeof(LML00200);
+        }
+
+        #endregion
+
+        #region AfterLOOKUP
+
+        //After LookUp Booking Fee
+        private void AfterOpenLookUp_Unit_ChargesBookingFee(R_AfterOpenLookupEventArgs eventArgs)
+        {
+            var loTempResult = (LML00200DTO)eventArgs.Result;
+            if (loTempResult == null)
+                return;
+
+            var loGetData = (LMM06000BillingRuleDTO)_conductorBillingRuleRef.R_GetCurrentData();
+
+            loGetData.CBOOKING_FEE_CHARGE_ID = loTempResult.CCHARGES_ID;
+            loGetData.CCHARGES_NAME = loTempResult.CCHARGES_NAME;
+        }
+
+        //After Lookup Installment
+        private void AfterOpenLookUp_Unit_ChargesWithInstallment(R_AfterOpenLookupEventArgs eventArgs)
+        {
+            var loTempResult = (LML00200DTO)eventArgs.Result;
+            if (loTempResult == null)
+                return;
+
+            var loGetData = (LMM06000BillingRuleDTO)_conductorBillingRuleRef.R_GetCurrentData();
+
+            loGetData.CINSTALLMENT_CHARGE_ID = loTempResult.CCHARGES_ID;
+            loGetData.CINSTALLMENT_CHARGE_NAME = loTempResult.CCHARGES_NAME;
+
+        }
+
+        //After Lookup Unit Charges With DP
+        private void AfterOpenLookUp_Unit_ChargesWithDP(R_AfterOpenLookupEventArgs eventArgs)
+        {
+            var loTempResult = (LML00200DTO)eventArgs.Result;
+            if (loTempResult == null)
+                return;
+
+            var loGetData = (LMM06000BillingRuleDTO)_conductorBillingRuleRef.R_GetCurrentData();
+
+            loGetData.CDP_CHARGE_ID = loTempResult.CCHARGES_ID;
+            loGetData.CDP_CHARGE_NAME = loTempResult.CCHARGES_NAME;
+
+        }
+        #endregion
+
+        #region ADD and Edit
+        private void AfterAdd(R_AfterAddEventArgs eventArgs)
+        {
+
+
+            eventArgs.Data = new LMM06000BillingRuleDTO()
+            {
+                CUNIT_TYPE_ID = BillingRuleViewModel.UnitTypeValueContext,
+                CPROPERTY_ID = BillingRuleViewModel.PropertyValueContext,
+                LACTIVE = true,
+                LBOOKING_FEE = false,
+                CBOOKING_FEE_CHARGE_ID = "",
+                CDP_PERIOD_MODE = "",
+                LWITH_DP = false,
+                LINSTALLMENT = false,
+                CINSTALLMENT_CHARGE_ID = "",
+                CINSTALLMENT_PERIOD_MODE = "",
+                LBANK_CREDIT = false
+            };
+
+        }
+        private async Task ServiceSave(R_ServiceSaveEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                var loParam = (LMM06000BillingRuleDTO)eventArgs.Data;
+                await BillingRuleViewModel.SaveUnitType_BillingRule(loParam, (eCRUDMode)eventArgs.ConductorMode);
+
+                eventArgs.Result = BillingRuleViewModel.BillingRuleDetail;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
+
+        private void R_Validation(R_ValidationEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                var loParam = (LMM06000BillingRuleDTO)eventArgs.Data;
+
+                if (string.IsNullOrEmpty(loParam.CBILLING_RULE_CODE))
+                    loEx.Add(new Exception("Billing Rule Code is required."));
+                if (string.IsNullOrEmpty(loParam.CBILLING_RULE_NAME))
+                    loEx.Add(new Exception("Billing Rule Name is required."));
+
+                if (loParam.LBOOKING_FEE)
+                {
+                    if (string.IsNullOrEmpty(loParam.CBOOKING_FEE_CHARGE_ID))
+                        loEx.Add(new Exception("Charge Id Booking Fee is required."));
+                }
+                if (loParam.LWITH_DP)
+                {
+                    if (string.IsNullOrEmpty(loParam.CDP_PERIOD_MODE))
+                        loEx.Add(new Exception("Periode Mode With Dp is required."));
+                }
+                if (loParam.LINSTALLMENT)
+                {
+                    if (string.IsNullOrEmpty(loParam.CINSTALLMENT_PERIOD_MODE))
+                        loEx.Add(new Exception("Periode Mode Installment is required."));
+                    if (string.IsNullOrEmpty(loParam.CINSTALLMENT_CHARGE_ID))
+                        loEx.Add(new Exception("Charge Id Booking Fee is required."));
+                }
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            eventArgs.Cancel = loEx.HasError;
+            loEx.ThrowExceptionIfErrors();
+        }
+        #endregion
+
+        #region Delete
+
+        public async Task ServiceDelete(R_ServiceDeleteEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                var loParam = (LMM06000BillingRuleDTO)eventArgs.Data;
+                await BillingRuleViewModel.DeleteUnitType_BillingRule(loParam);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
+        #endregion
+
+        #region Active/Inactive
+
+        private void R_Before_Open_ActivateInactive(R_BeforeOpenPopupEventArgs eventArgs)
+        {
+            eventArgs.Parameter = "LMM06001";
+            eventArgs.TargetPageType = typeof(GFF00900FRONT.GFF00900);
+        }
+
+        private async Task R_After_Open_ActivateInactive(R_AfterOpenPopupEventArgs eventArgs)
+        {
+            R_Exception loException = new R_Exception();
+            try
+            {
+                var result = (bool)eventArgs.Result;
+                if (result)
+                    await BillingRuleViewModel.ActiveInactiveProcessAsync();
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+
+            loException.ThrowExceptionIfErrors();
+            await _gridBillingRuleRef.R_RefreshGrid(null);
+        }
+        #endregion
     }
 }

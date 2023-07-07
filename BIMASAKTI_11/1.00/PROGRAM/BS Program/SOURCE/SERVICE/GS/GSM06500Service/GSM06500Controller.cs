@@ -25,8 +25,8 @@ namespace GSM06500Service
 
                 loDbParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID; ;
                 loDbParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
-
                 loDbParameter.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
+
                 var loCls = new GSM06500Cls();
 
                 var loResult = loCls.TERM_OF_LIST(loDbParameter);
@@ -56,8 +56,6 @@ namespace GSM06500Service
 
                 loParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
                 loParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
-                //loParameter.CCOMPANY_ID = "RCD";
-                //loParameter.CUSER_ID = "Admin";
 
                 var loResult = loCls.GetAllPropertyList(loParameter);
                 loRtn.Data = loResult;
@@ -135,11 +133,8 @@ namespace GSM06500Service
                 loRtn = new R_ServiceSaveResultDTO<GSM06500DTO>();
                 poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
                 poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
-
-                //poParameter.Entity.CCOMPANY_ID = "RCD";
-                //poParameter.Entity.CUSER_ID = "ADMIN";
                 poParameter.Entity.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
-                //poParameter.Entity.CPROPERTY_ID = "ABCDEF";
+                
                 loRtn.data = loCls.R_Save(poParameter.Entity, poParameter.CRUDMode);
             }
             catch (Exception ex)
@@ -150,47 +145,6 @@ namespace GSM06500Service
             loException.ThrowExceptionIfErrors();
 
             return loRtn;
-
-
-        }
-
-        [HttpPost]
-        public IAsyncEnumerable<GSM06500DTO> TermOfPayment()
-        {
-            var loEx = new R_Exception();
-            GSM06500DBParameter loDbParameter;
-            R_Exception loException = new R_Exception();
-            IAsyncEnumerable<GSM06500DTO> loRtn = null;
-            List<GSM06500DTO> loRtnTemp;
-
-            try
-            {
-                loDbParameter = new GSM06500DBParameter();
-                loDbParameter.CCOMPANY_ID = "BAYAN";
-                loDbParameter.CPROPERTY_ID = "BAYAM";
-                loDbParameter.CUSER_ID = "0";
-
-                var loCls = new GSM06500Cls();
-
-                loRtnTemp = loCls.TERM_OF_LIST(loDbParameter);
-                loRtn = GetTermOfPayment(loRtnTemp);
-            }
-            catch (Exception ex)
-            {
-                loEx.Add(ex);
-            }
-
-            loEx.ThrowExceptionIfErrors();
-
-            return loRtn;
-        }
-
-        private async IAsyncEnumerable<GSM06500DTO> GetTermOfPayment(List<GSM06500DTO> poParameter)
-        {
-            foreach (var item in poParameter)
-            {
-                yield return item;
-            }
         }
 
     }

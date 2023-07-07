@@ -17,11 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\BS Shared Form\SOURCE\SERVICES\GFF00900SERVICES\GFF00900SERVICES.csproj" />
     <ProjectReference Include="..\..\..\..\..\BS Shared Form\SOURCE\SERVICES\Lookup_GSSERVICES\Lookup_GSSERVICES.csproj" />
     <ProjectReference Include="..\..\..\SERVICE\GS\BlazorMenuService\BlazorMenuService.csproj" />
     <ProjectReference Include="..\..\..\SERVICE\GS\GSM00100Service\GSM00100Service.csproj" />
     <ProjectReference Include="..\..\..\SERVICE\GS\GSM04500Service\GSM04500Service.csproj" />
     <ProjectReference Include="..\..\..\SERVICE\GS\GSM06500Service\GSM06500Service.csproj" />
+    <ProjectReference Include="..\..\..\SERVICE\GS\GST00500Service\GST00500Service.csproj" />
     <ProjectReference Include="..\..\..\SERVICE\GS\R_SecurityPolicyService\R_SecurityPolicyService.csproj" />
     <ProjectReference Include="..\..\..\SERVICE\GS\R_SecurityTokenService\R_SecurityTokenService.csproj" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-﻿using BlazorClientHelper;
+﻿
 using GSM04500Common;
 using GSM04500Model;
 using Microsoft.AspNetCore.Components;
@@ -14,6 +14,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GSM04500Model;
+using Lookup_GSCOMMON.DTOs;
+using Lookup_GSFRONT;
+using R_BlazorFrontEnd.Helpers;
+using R_BlazorFrontEnd.Controls.Grid.Columns;
+using GSM06500Common;
 
 namespace GSM04500Front
 {
@@ -26,17 +31,21 @@ namespace GSM04500Front
         private GSM04502ViewModel GOADeptViewModel = new();
         private R_ConductorGrid _conGOADeptRef;
         private R_Grid<GSM04510GOADeptDTO> _gridGOADeptRef;
-        [Inject] IClientHelper clientHelper { get; set; }
-
         [Parameter] public string JournalGRPType { get; set; }
         [Parameter] public string PropertyId { get; set; }
         [Parameter] public string JournalGRPCode { get; set; }
+
 
         protected override async Task R_Init_From_Master(object poParameter)
         {
             var loEx = new R_Exception();
             try
             {
+                var loParam = R_FrontUtility.ConvertObjectToObject<GSM04500AccountSetting>(poParameter);
+                JournalGRPType = loParam.JournalGRPType;
+                PropertyId = loParam.PropertyId;
+                JournalGRPCode = loParam.JournalGRPCode;
+
                 await _gridRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
@@ -49,17 +58,9 @@ namespace GSM04500Front
         private async Task R_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
-            string lcJournalGRPType = null;
-            string lcPropertyId = null;
-            string lcJournalGRPCode = null;
             try
             {
-                //lcGroupId ===> 10 untuk Tab Service
-                lcJournalGRPType = JournalGRPType;
-                lcPropertyId = PropertyId;
-                lcJournalGRPCode = JournalGRPCode;
-
-                await JournalGOAViewModel.GetAllJournalGrupGOAAsync(lcJournalGRPType, lcPropertyId, lcJournalGRPCode);
+                await JournalGOAViewModel.GetAllJournalGrupGOAAsync(JournalGRPType, PropertyId, JournalGRPCode);
                 eventArgs.ListEntityResult = JournalGOAViewModel.GOAList;
             }
             catch (Exception ex)
@@ -117,7 +118,7 @@ namespace GSM04500Front
             {
                 var loParam = (GSM04510GOADTO)eventArgs.Data;
                 await _gridGOADeptRef.R_RefreshGrid(loParam);
-                
+
 
             }
         }
@@ -163,10 +164,6 @@ namespace GSM04500Front
             try
             {
                 var loParam = (GSM04510GOADeptDTO)eventArgs.Data;
-                loParam.CJRNGRP_TYPE = "10";
-                loParam.CPROPERTY_ID = "JBMPC";
-                loParam.CJRNGRP_CODE = "A";
-
                 await GOADeptViewModel.SaveGOADept(loParam, eventArgs.ConductorMode);
                 eventArgs.Result = GOADeptViewModel.GOADept;
             }
@@ -179,30 +176,49 @@ namespace GSM04500Front
         }
 
 
+        #region LookUpGOADEPT
+
+
+
         //  Button LookUp DeptCode
-        private R_Lookup R_LookupCdeptCodeButton;
-        //private void BeforeOpenLookUpCDeptCode(R_BeforeOpenLookupEventArgs eventArgs)
-        //{
-        //    var param = new GSL00700ParameterDTO
-        //    {
+        private void BeforeOpenLookUpDeptCode(R_BeforeOpenGridLookupColumnEventArgs eventArgs)
+        {
+            switch (eventArgs.ColumnName)
+            {
+                case "CDEPT_CODE":
+                    eventArgs.Parameter = new GSL00700ParameterDTO();
+                    eventArgs.TargetPageType = typeof(GSL00700);
+                    break;
+                case "GLAccount_No":
+                    eventArgs.Parameter = new GSL00500ParameterDTO();
+                    eventArgs.TargetPageType = typeof(GSL00500);
+                    break;
 
-        //        CCOMPANY_ID = clientHelper.CompanyId,
-        //        CUSER_ID = clientHelper.UserId
+            }
+        }
 
-        //    };
-        //    eventArgs.Parameter = param;
-        //    eventArgs.TargetPageType = typeof(GSL00700);
-        //}
-
-        //private void AfterOpenLookUpCDeptCode(R_AfterOpenLookupEventArgs eventArgs)
-        //{
-        //    var loTempResult = (GSL00700DTO)eventArgs.Result;
-        //    if (loTempResult == null)
-        //        return;
-        //    var loGetData = (GSM04510GOADeptDTO)_conGOADeptRef.R_GetCurrentData();
-        //    loGetData.CDEPT_CODE = loTempResult.CDEPT_CODE;
-        //    loGetData.CDEPT_NAME = loTempResult.CDEPT_NAME;
-
+        private void AfterOpenLookUpDeptCode(R_AfterOpenGridLookupColumnEventArgs eventArgs)
+        {
+            //mengambil result dari popup dan set ke data row
+            if (eventArgs.Result == null)
+            {
+                return;
+            }
+            switch (eventArgs.ColumnName)
+            {
+                case "CDEPT_CODE":
+                    var loTempResult = R_FrontUtility.ConvertObjectToObject<GSL00700DTO>(eventArgs.Result);
+                    ((GSM04510GOADeptDTO)eventArgs.ColumnData).CDEPT_CODE = loTempResult.CDEPT_CODE;
+                    ((GSM04510GOADeptDTO)eventArgs.ColumnData).CDEPT_NAME = loTempResult.CDEPT_NAME;
+                    break;
+                case "GLAccount_No":
+                    var loTempResult2 = R_FrontUtility.ConvertObjectToObject<GSL00500DTO>(eventArgs.Result);
+                    ((GSM04510GOADeptDTO)eventArgs.ColumnData).CGLACCOUNT_NO = loTempResult2.CGLACCOUNT_NO;
+                    ((GSM04510GOADeptDTO)eventArgs.ColumnData).CGLACCOUNT_NAME = loTempResult2.CGLACCOUNT_NAME;
+                    break;
+            }
+        }
+        #endregion
 
         #endregion
     }

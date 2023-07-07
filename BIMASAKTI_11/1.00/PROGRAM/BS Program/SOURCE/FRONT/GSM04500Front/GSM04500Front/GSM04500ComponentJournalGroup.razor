@@ -1,23 +1,6 @@
 ﻿@inherits R_Page
 
 <R_StackLayout>
-    <R_StackLayout Row>
-        <R_ItemLayout xs="1">
-            <R_Label FontColor="Red" Class="fw-bold" FontSize="15">Property</R_Label>
-
-        </R_ItemLayout>
-        <R_ItemLayout xs="2">
-            <R_DropDownList Data="@journalGroupViewModel.PropertyList"
-                            @bind-Value="@journalGroupViewModel.PropertyValueContext"
-                            ValueField="@nameof(GSM04500PropertyDTO.CPROPERTY_ID)"
-                            TextField="@nameof(GSM04500PropertyDTO.CPROPERTY_NAME)"
-                            R_ConductorSource="@_conductorRef" OnChanged="@PropertyDropdown_OnChange">
-            </R_DropDownList>
-        </R_ItemLayout>
-    </R_StackLayout>
-</R_StackLayout>
-
-<R_StackLayout>
     <R_Grid @ref="@_gridRef"
             DataSource="journalGroupViewModel.JournalGroupList"
             Pageable="true"
@@ -38,8 +21,6 @@
 
     </R_Grid>
 </R_StackLayout>
-
-
 <R_ConductorGrid @ref="@_conJournalGroupRef"
                  R_ViewModel="@journalGroupViewModel"
                  R_ServiceGetRecord="@R_ServiceGetRecordAsync"
@@ -57,13 +38,7 @@
     </GSM04500AccountSetting>
 </R_TabStripTab>*@
 
-@*<R_TabStripTab Title="Account Setting">
-    <GSM04500BaseJournalGroup JournalGRPType="@JournalGRPType"
-                            PropertyId="@PropertyId"
-                            JournalGRPCode="@JournalGRPCode">
-    </GSM04500BaseJournalGroup>
-</R_TabStripTab>*@
-
+@*
 <R_TabStripTab Title="Account Setting">
     <R_StackLayout Row="true">
         <R_ItemLayout xs="1" Class="col-lg-1">
@@ -159,3 +134,4 @@
                          R_ServiceDelete="ServiceDelete" />
 
         </R_TabStripTab>
+*@

@@ -80,14 +80,23 @@ namespace LMM06000Back
                 loDb.R_AddCommandParameter(loCmd, "@CUNIT_TYPE_ID", DbType.String, 20, poNewEntity.CUNIT_TYPE_ID);
                 loDb.R_AddCommandParameter(loCmd, "@CBILLING_RULE_CODE", DbType.String, 50, poNewEntity.CBILLING_RULE_CODE);
                 loDb.R_AddCommandParameter(loCmd, "@CBILLING_RULE_NAME", DbType.String, 100, poNewEntity.CBILLING_RULE_NAME);
+
+                loDb.R_AddCommandParameter(loCmd, "@LBOOKING_FEE", DbType.Boolean, 2, poNewEntity.LBOOKING_FEE);
+                loDb.R_AddCommandParameter(loCmd, "@CBOOKING_FEE_CHARGES_ID", DbType.String, 50, poNewEntity.CBOOKING_FEE_CHARGE_ID);
+
                 loDb.R_AddCommandParameter(loCmd, "@LWITH_DP", DbType.Boolean, 2, poNewEntity.LWITH_DP);
                 loDb.R_AddCommandParameter(loCmd, "@IDP_PERCENTAGE", DbType.Int32, 25, poNewEntity.IDP_PERCENTAGE);
                 loDb.R_AddCommandParameter(loCmd, "@IDP_INTERVAL", DbType.Int32, 25, poNewEntity.IDP_INTERVAL);
                 loDb.R_AddCommandParameter(loCmd, "@CDP_PERIOD_MODE", DbType.String, 50, poNewEntity.CDP_PERIOD_MODE);
-                loDb.R_AddCommandParameter(loCmd, "@LINSTALLMENT", DbType.Boolean, 2, poNewEntity.LIINSTALLMENT);
+                loDb.R_AddCommandParameter(loCmd, "@CDP_CHARGE_ID", DbType.String, 50, poNewEntity.CDP_PERIOD_MODE);
+
+                loDb.R_AddCommandParameter(loCmd, "@LINSTALLMENT", DbType.Boolean, 2, poNewEntity.LINSTALLMENT);
                 loDb.R_AddCommandParameter(loCmd, "@IINSTALLMENT_PERCENTAGE", DbType.Int32, 50, poNewEntity.IINSTALLMENT_PERCENTAGE);
                 loDb.R_AddCommandParameter(loCmd, "@IINSTALLMENT_INTERVAL", DbType.Int32, 50, poNewEntity.IINSTALLMENT_INTERVAL);
                 loDb.R_AddCommandParameter(loCmd, "@CINSTALLMENT_PERIOD_MODE", DbType.String, 50, poNewEntity.CINSTALLMENT_PERIOD_MODE);
+                loDb.R_AddCommandParameter(loCmd, "@CINSTALLMENT_CHARGE_ID", DbType.String, 50, poNewEntity.CINSTALLMENT_CHARGE_ID);
+
+
                 loDb.R_AddCommandParameter(loCmd, "@LBANK_CREDIT", DbType.Boolean, 5, poNewEntity.LBANK_CREDIT);
                 loDb.R_AddCommandParameter(loCmd, "@IBANK_CREDIT_PERCENTAGE", DbType.Int32, 50, poNewEntity.IBANK_CREDIT_PERCENTAGE);
                 loDb.R_AddCommandParameter(loCmd, "@IBANK_CREDIT_INTERVAL", DbType.Int32, 50, poNewEntity.IBANK_CREDIT_INTERVAL);
@@ -149,14 +158,21 @@ namespace LMM06000Back
                 loDb.R_AddCommandParameter(loCmd, "@CBILLING_RULE_CODE", DbType.String, 50, poEntity.CBILLING_RULE_CODE);
                 loDb.R_AddCommandParameter(loCmd, "@CBILLING_RULE_NAME", DbType.String, 50, poEntity.CBILLING_RULE_NAME);
 
+                loDb.R_AddCommandParameter(loCmd, "@LBOOKING_FEE", DbType.Boolean, 2, poEntity.LBOOKING_FEE);
+                loDb.R_AddCommandParameter(loCmd, "@CBOOKING_FEE_CHARGES_ID", DbType.String, 50, poEntity.CBOOKING_FEE_CHARGE_ID);
+
                 loDb.R_AddCommandParameter(loCmd, "@LWITH_DP", DbType.Boolean, 2, poEntity.LWITH_DP);
                 loDb.R_AddCommandParameter(loCmd, "@IDP_PERCENTAGE", DbType.Int32, 25, poEntity.IDP_PERCENTAGE);
                 loDb.R_AddCommandParameter(loCmd, "@IDP_INTERVAL", DbType.Int32, 25, poEntity.IDP_INTERVAL);
                 loDb.R_AddCommandParameter(loCmd, "@CDP_PERIOD_MODE", DbType.String, 50, poEntity.CDP_PERIOD_MODE);
-                loDb.R_AddCommandParameter(loCmd, "@LINSTALLMENT", DbType.Boolean, 2, poEntity.LIINSTALLMENT);
+                loDb.R_AddCommandParameter(loCmd, "@CDP_CHARGE_ID", DbType.String, 50, poEntity.CDP_PERIOD_MODE);
+
+                loDb.R_AddCommandParameter(loCmd, "@LINSTALLMENT", DbType.Boolean, 2, poEntity.LINSTALLMENT);
                 loDb.R_AddCommandParameter(loCmd, "@IINSTALLMENT_PERCENTAGE", DbType.Int32, 50, poEntity.IINSTALLMENT_PERCENTAGE);
                 loDb.R_AddCommandParameter(loCmd, "@IINSTALLMENT_INTERVAL", DbType.Int32, 50, poEntity.IINSTALLMENT_INTERVAL);
                 loDb.R_AddCommandParameter(loCmd, "@CINSTALLMENT_PERIOD_MODE", DbType.String, 50, poEntity.CINSTALLMENT_PERIOD_MODE);
+                loDb.R_AddCommandParameter(loCmd, "@CINSTALLMENT_CHARGE_ID", DbType.String, 50, poEntity.CDP_PERIOD_MODE);
+
                 loDb.R_AddCommandParameter(loCmd, "@LBANK_CREDIT", DbType.Boolean, 5, poEntity.LBANK_CREDIT);
                 loDb.R_AddCommandParameter(loCmd, "@IBANK_CREDIT_PERCENTAGE", DbType.Int32, 50, poEntity.IBANK_CREDIT_PERCENTAGE);
                 loDb.R_AddCommandParameter(loCmd, "@IBANK_CREDIT_INTERVAL", DbType.Int32, 50, poEntity.IBANK_CREDIT_INTERVAL);
@@ -216,7 +232,6 @@ namespace LMM06000Back
             loException.ThrowExceptionIfErrors();
             return loReturn;
         }
-
 
         public List<LMM06000PropertyDTO> GetAllPropertyList(LMM06000DBParameter poParameter)
         {
@@ -286,6 +301,71 @@ namespace LMM06000Back
             return loReturn;
         }
 
+        public List<LMM06000PeriodDTO> GetAllPeriodList(LMM06000DBParameter poParameter)
+        {
+            R_Exception loException = new R_Exception();
+            List<LMM06000PeriodDTO> loReturn = null;
+            R_Db loDb;
+            DbCommand loCmd;
+            try
+            {
+                loDb = new R_Db();
+                var loConn = loDb.GetConnection();
+                loCmd = loDb.GetCommand();
+
+                var lcQuery = $@"SELECT * FROM RFT_GET_GSB_CODE_INFO ('BIMASAKTI', '{poParameter.CCOMPANY_ID}', '_PERIOD_MODE', '', '{poParameter.CULTURE}')";
+                loCmd.CommandText = lcQuery;
+                loCmd.CommandType = CommandType.Text;
+          
+                var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
+
+                loReturn = R_Utility.R_ConvertTo<LMM06000PeriodDTO>(loReturnTemp).ToList();
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+
+            EndBlock:
+            loException.ThrowExceptionIfErrors();
+
+            return loReturn;
+        }
+
+        public void SetActiveInactiveDb(LMM06000ActiveInactiveParameterDb poParameter)
+        {
+            R_Exception loEx = new R_Exception();
+            R_Db loDb;
+            DbConnection loConn;
+            DbCommand loCmd;
+            string lcQuery;
+
+            try
+            {
+                loDb = new R_Db();
+                loConn = loDb.GetConnection();
+                loCmd = loDb.GetCommand();
+
+                lcQuery = "RSP_LM_ACTIVE_INACTIVE_UNIT_TYPE_BILLING_RULE";
+                loCmd.CommandType = CommandType.StoredProcedure;
+                loCmd.CommandText = lcQuery;
+
+                loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 50, poParameter.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CPROPERTY_ID", DbType.String, 20, poParameter.CPROPERTY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@LACTIVE", DbType.Boolean, 1, poParameter.LACTIVE);
+                loDb.R_AddCommandParameter(loCmd, "@CUNIT_TYPE_ID", DbType.String, 50, poParameter.CUNIT_TYPE_ID);
+                loDb.R_AddCommandParameter(loCmd, "@CBILLING_RULE_CODE", DbType.String, 50, poParameter.CBILLING_RULE_CODE);
+                loDb.R_AddCommandParameter(loCmd, "@CUSER_ID", DbType.String, 50, poParameter.CUSER_ID);
+
+                loDb.SqlExecNonQuery(loConn, loCmd, true);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
 
     }
 }

@@ -6,6 +6,7 @@ using R_BusinessObjectFront;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,10 +21,9 @@ namespace Lookup_GSModel
         public PublicLookupModel(
             string pcHttpClientName = DEFAULT_HTTP,
             string pcRequestServiceEndPoint = DEFAULT_ENDPOINT,
-            string pcModuleName = DEFAULT_MODULE,
             bool plSendWithContext = true,
             bool plSendWithToken = true) :
-            base(pcHttpClientName, pcRequestServiceEndPoint, pcModuleName, plSendWithContext, plSendWithToken)
+            base(pcHttpClientName, pcRequestServiceEndPoint, DEFAULT_MODULE, plSendWithContext, plSendWithToken)
         {
         }
 
@@ -198,8 +198,45 @@ namespace Lookup_GSModel
 
             return loResult;
         }
+
+
         #endregion
 
+        #region GSL00510
+        public GSLGenericList<GSL00510DTO> GSL00510GetCOAList(GSL00510ParameterDTO poParameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<GSLGenericList<GSL00510DTO>> GSL00510GetCOAListAsync(GSL00510ParameterDTO poParameter)
+        {
+            var loEx = new R_Exception();
+            GSLGenericList<GSL00510DTO> loResult = new GSLGenericList<GSL00510DTO>();
+
+            try
+            {
+                R_HTTPClientWrapper.httpClientName = _HttpClientName;
+                var loTempResult = await R_HTTPClientWrapper.R_APIRequestObject<GSLGenericList<GSL00510DTO>, GSL00510ParameterDTO>(
+                    _RequestServiceEndPoint,
+                    nameof(IPublicLookup.GSL00510GetCOAList),
+                    poParameter,
+                    DEFAULT_MODULE,
+                    _SendWithContext,
+                    _SendWithToken);
+
+                loResult = loTempResult;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
+        }
+        #endregion
+        
         #region GSL00550
         public GSLGenericList<GSL00550DTO> GSL00550GetGOAList(GSL00550ParameterDTO poParameter)
         {
@@ -633,6 +670,106 @@ namespace Lookup_GSModel
                     _RequestServiceEndPoint,
                     nameof(IPublicLookup.GSL01600GetCashFlowGroupTypeList),
                     poParameter,
+                    DEFAULT_MODULE,
+                    _SendWithContext,
+                    _SendWithToken);
+
+                loResult = loTempResult;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
+        }
+
+
+        #endregion
+
+        #region GSL01700
+        public GSLGenericList<GSL01700DTO> GSL01700GetCurrencyRateList(GSL01700DTOParameter poParameter)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<GSLGenericList<GSL01700DTO>> GSL01700GetCurrencyRateListAsync(GSL01700DTOParameter poParameter)
+        {
+            var loEx = new R_Exception();
+            GSLGenericList<GSL01700DTO> loResult = new GSLGenericList<GSL01700DTO>();
+
+            try
+            {
+                R_HTTPClientWrapper.httpClientName = _HttpClientName;
+                var loTempResult = await R_HTTPClientWrapper.R_APIRequestObject<GSLGenericList<GSL01700DTO>, GSL01700DTOParameter>(
+                    _RequestServiceEndPoint,
+                    nameof(IPublicLookup.GSL01700GetCurrencyRateList),
+                    poParameter,
+                    DEFAULT_MODULE,
+                    _SendWithContext,
+                    _SendWithToken);
+
+                loResult = loTempResult;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
+            
+        }
+
+        public GSLGenericList<GSL01702DTO> GSL01700GetLocalAndBaseCurrencyList()
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<GSLGenericList<GSL01702DTO>> GSL01700GetLocalAndBaseCurrencyListAsync()
+        {
+            var loEx = new R_Exception();
+            GSLGenericList<GSL01702DTO> loResult = new GSLGenericList<GSL01702DTO>();
+
+            try
+            {
+                R_HTTPClientWrapper.httpClientName = _HttpClientName;
+                var loTempResult = await R_HTTPClientWrapper.R_APIRequestObject<GSLGenericList<GSL01702DTO>>(
+                    _RequestServiceEndPoint,
+                    nameof(IPublicLookup.GSL01700GetLocalAndBaseCurrencyList),
+                    DEFAULT_MODULE,
+                    _SendWithContext,
+                    _SendWithToken);
+
+                loResult = loTempResult;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
+        }
+
+        public GSLGenericList<GSL01701DTO> GSL01700GetRateTypeList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<GSLGenericList<GSL01701DTO>> GSL01700GetRateTypeListAsync()
+        {
+            var loEx = new R_Exception();
+            GSLGenericList<GSL01701DTO> loResult = new GSLGenericList<GSL01701DTO>();
+
+            try
+            {
+                R_HTTPClientWrapper.httpClientName = _HttpClientName;
+                var loTempResult = await R_HTTPClientWrapper.R_APIRequestObject<GSLGenericList<GSL01701DTO>>(
+                    _RequestServiceEndPoint,
+                    nameof(IPublicLookup.GSL01700GetRateTypeList),
                     DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);

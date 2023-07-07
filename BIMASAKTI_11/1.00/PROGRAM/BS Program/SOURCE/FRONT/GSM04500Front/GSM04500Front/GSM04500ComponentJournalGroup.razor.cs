@@ -44,7 +44,9 @@ namespace GSM04500Front
             var loEx = new R_Exception();
             try
             {
-                await PropertyDropdown_ServiceGetListRecord(null);
+                var aa = JournalGRPType;
+                //await PropertyDropdown_ServiceGetListRecord(null);
+                await _gridRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {
@@ -53,6 +55,7 @@ namespace GSM04500Front
 
             loEx.ThrowExceptionIfErrors();
         }
+        /*
         private async Task PropertyDropdown_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
@@ -82,7 +85,7 @@ namespace GSM04500Front
             }
             R_DisplayException(loEx);
         }
-        
+        */
 
         #region Journal Group
         private async Task R_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)

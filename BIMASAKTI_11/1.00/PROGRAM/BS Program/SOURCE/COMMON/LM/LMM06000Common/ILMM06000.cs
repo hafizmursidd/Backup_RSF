@@ -10,5 +10,7 @@ namespace LMM06000Common
         IAsyncEnumerable<LMM06000BillingRuleDTO> BillingRuleListStream();
         LMM06000PropertyListDTO GetAllPropertyList();
         LMM06000UnitTypeListDTO GetAllUnitTypeList();
+        LMM06000PeriodListDTO GetAllPeriodList();
+        LMM06000ActiveInactiveDTO SetActiveInactive();
     }
 }

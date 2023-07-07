@@ -36,9 +36,9 @@
 
         <R_GridColumns>
 
-            <R_GridTextColumn FieldName="CPAY_TERM_CODE" HeaderText="Term of Payment Code" R_EnableAdd />
-            <R_GridTextColumn FieldName="CPAY_TERM_NAME" HeaderText="Term of Payment Name" R_EnableAdd R_EnableEdit />
-            <R_GridTextColumn FieldName="IPAY_TERM_DAYS" HeaderText="TOP Days" R_EnableAdd R_EnableEdit />
+            <R_GridTextColumn MaxLength="8" FieldName="CPAY_TERM_CODE" HeaderText="Term of Payment Code" R_EnableAdd />
+            <R_GridTextColumn MaxLength="100" FieldName="CPAY_TERM_NAME" HeaderText="Term of Payment Name" R_EnableAdd R_EnableEdit />
+            <R_GridNumericColumn  Min="0" Max="999999" FieldName="IPAY_TERM_DAYS" HeaderText="TOP Days" R_EnableAdd R_EnableEdit />
             <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="Last Updated By" />
             <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date" />
             <R_GridTextColumn FieldName="CCREATE_BY" HeaderText="Created By" />
@@ -48,7 +48,11 @@
 </R_StackLayout>
 
 <R_ConductorGrid @ref="@_conGridPaymentRef"
+                 R_IsHeader="true"
                  R_ViewModel="@PaymentTermViewModel"
                  R_ServiceGetRecord="@R_ServiceGetRecordAsync"
                  R_ServiceDelete="@ServiceDelete"
-                 R_ServiceSave="@ServiceSave"/>
+                 R_AfterDelete="Conductor_AfterDelete"
+                 R_ServiceSave="@ServiceSave"
+                 R_Validation="@ServiceValidation"
+                 />
