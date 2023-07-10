@@ -22,8 +22,7 @@ namespace GST00500Model.ViewModel
             R_Exception loException = new R_Exception();
             try
             {
-                string lcLanguageId = "EN";
-                var loResult = await _modelGST00500Outbox.GetOutboxListAsyncModel(lcLanguageId);
+                var loResult = await _modelGST00500Outbox.GetOutboxListAsyncModel();
                 OutboxTransactionList = new ObservableCollection<GST00500DTO>(loResult);
             }
             catch (Exception ex)
@@ -34,10 +33,9 @@ namespace GST00500Model.ViewModel
         public async Task GetApprovalStatus(GST00500DTO poEntity)
         {
             R_Exception loException = new R_Exception();
-            string lcLanguageId = "EN";
             try
             {
-                var loResult = await _modelGST00500Outbox.GetApprovalStatusAsyncModel(poEntity, lcLanguageId);
+                var loResult = await _modelGST00500Outbox.GetApprovalStatusAsyncModel(poEntity);
                 OutboxApprovalStatusTransactionList = new ObservableCollection<GST00500ApprovalStatusDTO>(loResult.Data);
             }
             catch (Exception ex)

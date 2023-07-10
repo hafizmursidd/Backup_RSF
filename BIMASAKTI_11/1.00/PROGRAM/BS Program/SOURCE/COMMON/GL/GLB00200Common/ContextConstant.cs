@@ -8,5 +8,6 @@ namespace GLB00200Common
     {
         public const string CPERIOD = "CPERIOD";
         public const string CSEARCH_TEXT = "CSEARCH_TEXT";
+        public const string CREC_ID = "CREC_ID";
     }
 }

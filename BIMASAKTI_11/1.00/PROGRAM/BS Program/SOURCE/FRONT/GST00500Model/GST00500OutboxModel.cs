@@ -33,7 +33,7 @@ namespace GST00500Model
             throw new NotImplementedException();
         }
 
-        public async Task<List<GST00500DTO>> GetOutboxListAsyncModel(string lcLanguageId)
+        public async Task<List<GST00500DTO>> GetOutboxListAsyncModel()
         {
             var loEx = new R_Exception();
             List<GST00500DTO> loResult = null;
@@ -56,7 +56,7 @@ namespace GST00500Model
             return loResult;
         }
         
-        public async Task<GST00500ApprovalStatusListDTO> GetApprovalStatusAsyncModel(GST00500DTO poEntity, string lcLanguageId)
+        public async Task<GST00500ApprovalStatusListDTO> GetApprovalStatusAsyncModel(GST00500DTO poEntity)
         {
             var loEx = new R_Exception();
             GST00500ApprovalStatusListDTO loResult = null;

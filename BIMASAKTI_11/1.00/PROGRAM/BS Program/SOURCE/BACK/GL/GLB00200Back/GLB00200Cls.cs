@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Reflection.Metadata;
+using System.Transactions;
 using GLB00200Common;
 using R_BackEnd;
 using R_Common;
@@ -85,7 +86,7 @@ namespace GLB00200Back
             return loResult;
         }
 
-        public List<GLB00200DTO> GetDetail_ReversingJournalList(GLB00200DBParameter poParameter)
+        public List<GLB00200JournalDetailDTO> GetDetail_ReversingJournalList(GLB00200DBParameter poParameter)
         {
             R_Exception loException = new R_Exception();
             List<GLB00200JournalDetailDTO> loResult = null;
@@ -100,12 +101,11 @@ namespace GLB00200Back
                 loCommand.CommandText = lcQuery;
                 loCommand.CommandType = CommandType.StoredProcedure;
 
-                loDb.R_AddCommandParameter(loCommand, "@CREC_ID", DbType.String, 50, poParameter.CREC_ID);
+                loDb.R_AddCommandParameter(loCommand, "@CJRN_ID", DbType.String, 50, poParameter.CREC_ID);
                 loDb.R_AddCommandParameter(loCommand, "@CLANGUAGE_ID", DbType.String, 2, poParameter.CLANGUAGE_ID);
 
                 var loReturnTemp = loDb.SqlExecQuery(loConn, loCommand, true);
-                loResult = R_Utility.R_ConvertTo<GLB00200DTO>(loReturnTemp).ToList();
-
+                loResult = R_Utility.R_ConvertTo<GLB00200JournalDetailDTO>(loReturnTemp).ToList();
             }
             catch (Exception ex)
             {
@@ -114,5 +114,109 @@ namespace GLB00200Back
             loException.ThrowExceptionIfErrors();
             return loResult;
         }
+
+        public List<GLB00200ResultProcessReversing> ReversingJournalProcess(List<GLB00200DTO> poListParameter, GLB00200DBParameter poParameter)
+        {
+            R_Exception loException = new R_Exception();
+            List<GLB00200ResultProcessReversing> listReversingJournalProcessReturn = null;
+            int lnCount;
+            var loDb = new R_Db();
+            DbConnection loConn = null;
+            bool llStatusReversingJournal;
+            try
+            {
+                lnCount = 1;
+                foreach (var item in poListParameter)
+                {
+                    try
+                    {
+                        GLB00200ResultProcessReversing loTemp = new GLB00200ResultProcessReversing();
+                        using (TransactionScope TransScope = new TransactionScope(TransactionScopeOption.Required))
+                        {
+                            loConn = loDb.GetConnection();
+                            llStatusReversingJournal = ProcessEachReversingJournal(item, poParameter, loConn);
+
+                            loTemp.CREF_NO = item.CREF_NO;
+
+                            if (llStatusReversingJournal == false)
+                            {
+                                loTemp.LSUCCESSED = llStatusReversingJournal;
+                                listReversingJournalProcessReturn.Add(loTemp);
+                                goto EndDetail;
+                            }
+                            loTemp.LSUCCESSED = llStatusReversingJournal;
+                            listReversingJournalProcessReturn.Add(loTemp);
+
+                            TransScope.Complete();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        loException.Add(ex);
+
+                    }
+                EndDetail:
+                    lnCount++;
+                }
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+
+            finally
+            {
+                if (loConn != null)
+                {
+                    if (loConn.State != ConnectionState.Closed)
+                    {
+                        loConn.Close();
+                    }
+
+                    loConn.Dispose();
+                }
+            }
+
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+            return listReversingJournalProcessReturn;
+        }
+
+        private bool ProcessEachReversingJournal(GLB00200DTO poEntity, GLB00200DBParameter poParameter,
+            DbConnection poConnection)
+        {
+            var loEx = new R_Exception();
+            R_Db loDb;
+            DbConnection loConn = poConnection;
+            DbCommand loCommand;
+            string lcquery;
+            bool lbRtn = false;
+            try
+            {
+                loDb = new R_Db();
+                loCommand = loDb.GetCommand();
+                lcquery = @"RSP_GL_PROCESS_REVERSING_JRN";
+                loCommand.CommandText = lcquery;
+                loCommand.CommandType = CommandType.StoredProcedure;
+
+                loDb.R_AddCommandParameter(loCommand, "@CCOMPANY_ID", DbType.String, 50, poParameter.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCommand, "@CUSER_ID", DbType.String, 50, poParameter.CUSER_ID);
+                loDb.R_AddCommandParameter(loCommand, "@CDEPT_CODE", DbType.String, 25, poEntity.CDEPT_CODE);
+                loDb.R_AddCommandParameter(loCommand, "@CREF_NO", DbType.String, 25, poEntity.CREF_NO);
+                loDb.R_AddCommandParameter(loCommand, "@CREC_ID", DbType.String, 50, poEntity.CREC_ID);
+
+                loDb.SqlExecNonQuery(loConn, loCommand, false);
+                lbRtn = true;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+        EndBlock:
+            loEx.ThrowExceptionIfErrors();
+
+            return lbRtn;
+        }
     }
+
 }

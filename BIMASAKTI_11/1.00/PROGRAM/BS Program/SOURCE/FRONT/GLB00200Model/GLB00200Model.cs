@@ -33,6 +33,11 @@ namespace GLB00200Model
             throw new NotImplementedException();
         }
 
+        public GLB00200JournalDetailListDTO DetailReversingJournalProcessList()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<GLB00200MinMaxYearDTO> GetMinMaxYearAsyncModel()
         {
             var loEx = new R_Exception();
@@ -73,6 +78,30 @@ namespace GLB00200Model
                     _SendWithToken);
 
                 loResult.Data = loTemp;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+            loEx.ThrowExceptionIfErrors();
+            return loResult;
+        }
+
+        public async Task<GLB00200JournalDetailListDTO> GetDetail_ReversingJournalAsyncModel(string lcCREC_ID)
+        {
+            var loEx = new R_Exception();
+            GLB00200JournalDetailListDTO loResult = null;
+            try
+            {
+                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CREC_ID, lcCREC_ID);
+
+                R_HTTPClientWrapper.httpClientName = _HttpClientName;
+                loResult = await R_HTTPClientWrapper.R_APIRequestObject<GLB00200JournalDetailListDTO>(
+                    _RequestServiceEndPoint,
+                    nameof(IGLB00200.DetailReversingJournalProcessList),
+                    DEFAULT_MODULE,
+                    _SendWithContext,
+                    _SendWithToken);
             }
             catch (Exception ex)
             {

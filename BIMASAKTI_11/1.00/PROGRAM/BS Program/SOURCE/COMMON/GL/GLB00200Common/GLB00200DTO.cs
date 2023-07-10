@@ -11,13 +11,12 @@ namespace GLB00200Common
         public string CREC_ID { get; set; }
         public bool LVALID { get; set; }
         public string CDEPT_CODE { get; set; }
+
         public string CDEPT_CODE_NAME { get; set; }
         public string CREF_NO { get; set; }
         public string CDOC_NO { get; set; }
         public string CDOC_DATE { get; set; }
-        public int ISEQUENCE { get; set; }
-        public string CSTART_DATE { get; set; }
-        public string CNEXT_DATE { get; set; }
+        public string CREVERSE_DATE { get; set; }
         public string CTRANS_DESC { get; set; }
         public string CCURRENCY_CODE { get; set; }
         public decimal NTRANS_AMOUNT { get; set; }

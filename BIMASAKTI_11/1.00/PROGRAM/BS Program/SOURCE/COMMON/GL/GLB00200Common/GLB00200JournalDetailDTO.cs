@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using R_APICommonDTO;
 
 namespace GLB00200Common
@@ -6,7 +7,7 @@ namespace GLB00200Common
     public class GLB00200JournalDetailDTO
     {
         public string CREC_ID { get; set; }
-        public int INO { get; set; }
+        public Int64 INO { get; set; }
         public string CGLACCOUNT_NO { get; set; }
         public string CGLACCOUNT_NAME { get; set; }
         public string CCENTER_NAME { get; set; }
@@ -20,4 +21,5 @@ namespace GLB00200Common
     {
         public List<GLB00200JournalDetailDTO> Data { get; set; }
 
+    }
 }

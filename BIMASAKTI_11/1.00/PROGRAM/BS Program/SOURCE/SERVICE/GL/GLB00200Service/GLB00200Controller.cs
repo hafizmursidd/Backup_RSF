@@ -49,7 +49,34 @@ namespace GLB00200Service
 
             return loReturn;
         }
+        [HttpPost]
+        public GLB00200JournalDetailListDTO DetailReversingJournalProcessList()
+        {
+            R_Exception loException = new R_Exception();
+            GLB00200DBParameter loDbParameter;
+            GLB00200JournalDetailListDTO loReturn = new ();
+            try
+            {
+                loDbParameter = new GLB00200DBParameter();
+                loDbParameter.CLANGUAGE_ID = R_BackGlobalVar.CULTURE;
+                loDbParameter.CREC_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CREC_ID);
+                //loDbParameter.CLANGUAGE_ID = "EN";
+                //loDbParameter.CREC_ID = "2C6AFFF4-848E-405F-9A0C-C6E9AD240748";
 
+                var loCls = new GLB00200Cls();
+                var temp = loCls.GetDetail_ReversingJournalList(loDbParameter);
+                loReturn.Data= temp;
+
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+
+            loException.ThrowExceptionIfErrors();
+
+            return loReturn;
+        }
         [HttpPost]
         public IAsyncEnumerable<GLB00200DTO> ReversingJournalProcessListStream()
         {
@@ -79,6 +106,9 @@ namespace GLB00200Service
 
             return loRtn;
         }
+
+   
+
         private async IAsyncEnumerable<GLB00200DTO> Get_ReversingJournalProcessList(List<GLB00200DTO> poParameter)
         {
             foreach (var item in poParameter)

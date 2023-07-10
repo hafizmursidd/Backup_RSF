@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using GLB00200Common;
@@ -8,6 +9,7 @@ using GLB00200Model.ViewModel;
 using R_BlazorFrontEnd.Controls;
 using R_BlazorFrontEnd.Controls.DataControls;
 using R_BlazorFrontEnd.Controls.Events;
+using R_BlazorFrontEnd.Enums;
 using R_BlazorFrontEnd.Exceptions;
 
 namespace GLB00200Front
@@ -20,6 +22,8 @@ namespace GLB00200Front
         private R_Grid<GLB00200DTO> _gridReversing;
         private R_ConductorGrid _conductorReversingJournal;
 
+            //  public GLB00200DTO CurrentReversingJournal = new GLB00200DTO();
+
 
 
         protected override async Task R_Init_From_Master(object poParameter)
@@ -27,7 +31,9 @@ namespace GLB00200Front
             var loEx = new R_Exception();
             try
             {
-                await ServiceGetMinMaxYear(null);
+                await ServiceGetMinMaxYear();
+                await GetMonth();
+                await _gridReversing.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {
@@ -36,14 +42,13 @@ namespace GLB00200Front
             loEx.ThrowExceptionIfErrors();
         }
 
-        private async Task ServiceGetMinMaxYear(R_ServiceGetRecordEventArgs eventArgs)
+        private async Task ServiceGetMinMaxYear()
         {
             var loEx = new R_Exception();
 
             try
             {
                 await _viewModelGLB00200.GetMinMaxYear();
-                await _gridReversing.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {
@@ -51,6 +56,22 @@ namespace GLB00200Front
             }
 
             R_DisplayException(loEx);
+        }
+        public async Task GetMonth()
+        {
+            _viewModelGLB00200.GetMonthList = new List<GetMonthDTO>();
+
+            for (int i = 1; i <= 12; i++)
+            {
+                string monthId = i.ToString("D2");
+                GetMonthDTO month = new GetMonthDTO { Id = monthId };
+                _viewModelGLB00200.GetMonthList.Add(month);
+            }
+
+        }
+        private async Task OnChangedMonth(object param)
+        {
+            _viewModelGLB00200.PeriodMonth = (string)param;
         }
         private async Task GetList_ReversingJournal(R_ServiceGetListRecordEventArgs eventArgs)
         {
@@ -75,6 +96,7 @@ namespace GLB00200Front
             {
 
                 await _viewModelGLB00200.GetAllReversingJournalProcess();
+                //await _gridReversing.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {
@@ -112,6 +134,38 @@ namespace GLB00200Front
                 loEx.Add(ex);
             }
         EndBlock:
+            loEx.ThrowExceptionIfErrors();
+        }
+
+        private async Task Service_Display(R_DisplayEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                if (eventArgs.ConductorMode == R_eConductorMode.Normal)
+                {
+                    _viewModelGLB00200.CurrentReversingJournal = (GLB00200DTO)eventArgs.Data;
+                }
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+            loEx.ThrowExceptionIfErrors();
+        }
+        private async Task ButtonDetail_GetList_ReversingJournal(R_BeforeOpenPopupEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                eventArgs.TargetPageType = typeof(GLB00200Detail);
+                eventArgs.Parameter = _viewModelGLB00200.CurrentReversingJournal;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
             loEx.ThrowExceptionIfErrors();
         }
     }

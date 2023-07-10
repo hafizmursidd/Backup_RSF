@@ -14,12 +14,17 @@
             </R_NumericTextBox>
         </R_ItemLayout>
         <R_ItemLayout xs="1">
-            <R_NumericTextBox Class="ms-3" Min="1" Max="12"
-                              @bind-Value="_viewModelGLB00200.PeriodMonth">
-            </R_NumericTextBox>
+            <R_ComboBox Class="ms-3"
+                            Data="@_viewModelGLB00200.GetMonthList"
+                            @bind-Value="_viewModelGLB00200.PeriodMonth"
+                            ValueField="@nameof(GetMonthDTO.Id)"
+                            TextField="@nameof(GetMonthDTO.Id)"
+                            R_ConductorSource="@_conductorPeriod"
+                            OnChanged="@OnChangedMonth">
+            </R_ComboBox>
         </R_ItemLayout>
         <R_ItemLayout xs="2">
-            <R_TextBox MaxLength="30" Class="ms-3" 
+            <R_TextBox MaxLength="30" Class="ms-3"
                        @bind-Value="_viewModelGLB00200.lcSearchText">
             </R_TextBox>
         </R_ItemLayout>
@@ -30,7 +35,7 @@
             </R_Button>
         </R_ItemLayout>
         <R_ItemLayout>
-            <R_Button Class="ms-3" 
+            <R_Button Class="ms-3"
                       OnClick="@GetList_ReversingJournalWithCustomPeriod"
                       Text="Show All">
             </R_Button>
@@ -50,12 +55,13 @@
                 AllowDeleteRow="false"
                 AllowAddNewRow="false"
                 AllowEditRow="false"
-                Width="1250px">
+                Width="1150px"
+                >
             <R_GridColumns>
                 <R_GridCheckBoxSelectColumn Width="100px" FieldName="LSELECTED"
-                                            R_EnableEdit
-                                            R_EnableAdd
-                                            ShowSelectAllHeader>
+                                                                R_EnableEdit
+                                                                R_EnableAdd
+                                                                ShowSelectAllHeader>
                 </R_GridCheckBoxSelectColumn>
                 <R_GridTextColumn Width="150px" FieldName="CDEPT_CODE_NAME"
                                   HeaderText="Department">
@@ -69,16 +75,10 @@
                 <R_GridTextColumn Width="200px" FieldName="CDOC_DATE"
                                   HeaderText="Document Date">
                 </R_GridTextColumn>
-                <R_GridNumericColumn FieldName="ISEQUENCE"
+                <R_GridTextColumn FieldName="CREVERSE_DATE"
                                      HeaderText="Seq.">
-                </R_GridNumericColumn>
-                <R_GridTextColumn Width="200px" FieldName="CSTART_DATE"
-                                  HeaderText="Start Date">
                 </R_GridTextColumn>
-                <R_GridTextColumn Width="200px" FieldName="CNEXT_DATE"
-                                  HeaderText="Next Date">
-                </R_GridTextColumn>
-                <R_GridTextColumn Width="200px" FieldName="CTRANS_DESC"
+                <R_GridTextColumn Width="300px" FieldName="CTRANS_DESC"
                                   HeaderText="Description">
                 </R_GridTextColumn>
                 <R_GridTextColumn Width="200px" FieldName="CCURRENCY_CODE"
@@ -110,12 +110,18 @@
         </R_Button>
     </R_ItemLayout>
     <R_ItemLayout>
-        <R_Button Class="ms-3" Text="Detail">
-        </R_Button>
+        <R_Popup Class="ms-3"
+                 R_Before_Open_Popup="@ButtonDetail_GetList_ReversingJournal"
+                 R_ConductorGridSource="@_conductorReversingJournal">
+            Detail
+        </R_Popup>
     </R_ItemLayout>
 </R_StackLayout>
+
+
 <R_ConductorGrid @ref="_conductorReversingJournal"
                  R_ViewModel="_viewModelGLB00200"
-                 R_IsHeader>
+                 R_IsHeader
+                 R_Display="Service_Display">
 
 </R_ConductorGrid>
