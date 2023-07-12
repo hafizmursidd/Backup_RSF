@@ -43,7 +43,8 @@ namespace GSM06500Model
             {
                 var loResult = await _model.GetPropertyAsyncModel();
                 PropertyList = loResult.Data;
-            }
+                PropertyValueContext = PropertyList[0].CPROPERTY_ID;
+    }
             catch (Exception ex)
             {
                 loEx.Add(ex);

@@ -21,6 +21,7 @@ namespace GSM06500Front
             try
             {
                 await PropertyDropdown_ServiceGetListRecord(null);
+                _gridRef.AutoFitAllColumnsAsync();
             }
             catch (Exception ex)
             {
@@ -37,6 +38,7 @@ namespace GSM06500Front
             try
             {
                 await PaymentTermViewModel.GetPropertyList();
+                await _gridRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {

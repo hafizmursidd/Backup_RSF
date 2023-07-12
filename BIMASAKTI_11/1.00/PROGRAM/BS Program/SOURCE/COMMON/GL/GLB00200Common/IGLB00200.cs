@@ -10,5 +10,6 @@ namespace GLB00200Common
         GLB00200MinMaxYearDTO GetMinMaxYear();
         IAsyncEnumerable<GLB00200DTO> ReversingJournalProcessListStream();
         GLB00200JournalDetailListDTO DetailReversingJournalProcessList();
+        GLB00200ResultProcessReversingListDTO ProcessReversingJournal();
     }
 }

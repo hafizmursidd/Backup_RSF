@@ -60,5 +60,21 @@ namespace GLB00200Front
             loEx.ThrowExceptionIfErrors();
         }
 
+        #region CloseButton
+        private async Task OnClickClose()
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                await this.Close(true, true);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+            loEx.ThrowExceptionIfErrors();
+        }
+        #endregion
+
     }
 }

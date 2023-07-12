@@ -1,12 +1,13 @@
 ﻿@page "/GLB00200"
+@using R_BlazorFrontEnd.Controls.Events
 @inherits R_Page
 
 <R_StackLayout Class="mb-3">
     <R_StackLayout Row>
-        <R_ItemLayout>
-            <R_Label Class="me-3">Journal Period:</R_Label>
-        </R_ItemLayout>
         <R_ItemLayout xs="1">
+            <R_Label Class="me-1">Journal Period:</R_Label>
+        </R_ItemLayout>
+        <R_ItemLayout xs="2">
             <R_NumericTextBox Min="_viewModelGLB00200.lcGetPeriodYear.IMIN_YEAR"
                               Max="@_viewModelGLB00200.lcGetPeriodYear.IMAX_YEAR"
                               @bind-Value="_viewModelGLB00200.PeriodYear"
@@ -14,7 +15,7 @@
             </R_NumericTextBox>
         </R_ItemLayout>
         <R_ItemLayout xs="1">
-            <R_ComboBox Class="ms-3"
+            <R_ComboBox 
                             Data="@_viewModelGLB00200.GetMonthList"
                             @bind-Value="_viewModelGLB00200.PeriodMonth"
                             ValueField="@nameof(GetMonthDTO.Id)"
@@ -23,19 +24,19 @@
                             OnChanged="@OnChangedMonth">
             </R_ComboBox>
         </R_ItemLayout>
-        <R_ItemLayout xs="2">
-            <R_TextBox MaxLength="30" Class="ms-3"
+        <R_ItemLayout xs="2" Class="me-3">
+            <R_TextBox MaxLength="30"
                        @bind-Value="_viewModelGLB00200.lcSearchText">
             </R_TextBox>
         </R_ItemLayout>
-        <R_ItemLayout>
-            <R_Button Class="ms-3"
+        <R_ItemLayout xs="1">
+            <R_Button 
                       OnClick="@GetList_ReversingJournalWithSearch"
                       Text="Search">
             </R_Button>
         </R_ItemLayout>
-        <R_ItemLayout>
-            <R_Button Class="ms-3"
+        <R_ItemLayout xs="1"> 
+            <R_Button 
                       OnClick="@GetList_ReversingJournalWithCustomPeriod"
                       Text="Show All">
             </R_Button>
@@ -52,6 +53,7 @@
                 R_GridType="R_eGridType.Batch"
                 R_ServiceGetListRecord="GetList_ReversingJournal"
                 Pageable
+                R_RowRender="@((R_GridRowRenderEventArgs args) => R_RowForBackGround(args))"
                 AllowDeleteRow="false"
                 AllowAddNewRow="false"
                 AllowEditRow="false"
@@ -75,19 +77,19 @@
                 <R_GridTextColumn Width="200px" FieldName="CDOC_DATE"
                                   HeaderText="Document Date">
                 </R_GridTextColumn>
-                <R_GridTextColumn FieldName="CREVERSE_DATE"
-                                     HeaderText="Seq.">
+                <R_GridTextColumn Width="200px" FieldName="CREVERSE_DATE"
+                                  HeaderText="Reversing Date">
                 </R_GridTextColumn>
                 <R_GridTextColumn Width="300px" FieldName="CTRANS_DESC"
                                   HeaderText="Description">
                 </R_GridTextColumn>
-                <R_GridTextColumn Width="200px" FieldName="CCURRENCY_CODE"
+                <R_GridTextColumn Width="125px" FieldName="CCURRENCY_CODE"
                                   HeaderText="Currency">
                 </R_GridTextColumn>
                 <R_GridNumericColumn Width="200px" FieldName="NTRANS_AMOUNT"
                                      HeaderText="Amount">
                 </R_GridNumericColumn>
-                <R_GridTextColumn Width="200px" FieldName="CLOCAL_CURRENCY_CODE"
+                <R_GridTextColumn Width="125px" FieldName="CLOCAL_CURRENCY_CODE"
                                   HeaderText="Local Currency">
                 </R_GridTextColumn>
                 <R_GridNumericColumn Width="200px" FieldName="NLTRANS_AMOUNT"
@@ -105,14 +107,17 @@
 </R_StackLayout>
 
 <R_StackLayout Class="mt-3" Row>
-    <R_ItemLayout>
-        <R_Button Text="Process">
+    <R_ItemLayout xs="1">
+        <R_Button Enabled="_viewModelGLB00200.ButtonEnable" R_ConductorGridSource="_conductorReversingJournal"
+                  OnClick="@OnClickProcess">
+             Process
         </R_Button>
     </R_ItemLayout>
-    <R_ItemLayout>
-        <R_Popup Class="ms-3"
+    <R_ItemLayout xs="1">
+        <R_Popup Enabled="_viewModelGLB00200.ButtonEnable" Class="ms-3"
                  R_Before_Open_Popup="@ButtonDetail_GetList_ReversingJournal"
-                 R_ConductorGridSource="@_conductorReversingJournal">
+                 R_ConductorGridSource="@_conductorReversingJournal"
+                 R_EnableHasData="false">
             Detail
         </R_Popup>
     </R_ItemLayout>
@@ -122,6 +127,9 @@
 <R_ConductorGrid @ref="_conductorReversingJournal"
                  R_ViewModel="_viewModelGLB00200"
                  R_IsHeader
-                 R_Display="Service_Display">
+                 R_Display="Service_Display"
+                 R_BeforeSaveBatch="@BeforeSaveBatch"
+                 R_ServiceSaveBatch="@ServiceSaveBatch"
+                 R_AfterSaveBatch="@AfterSaveBatch">
 
 </R_ConductorGrid>

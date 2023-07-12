@@ -99,10 +99,12 @@ namespace GST00500Service
 
                 if (loParam.APPROVE_TRANSACTION == true)
                 {
+                    //Process Transaction Approval
                     loTemp = loCls.ProcessApprovalTransaction(loInboxApprovaltBatchListSelectedData, loParam);
                 }
                 else
                 {
+                    //Process Transaction Reject
                     loParam.CREASON_CODE = R_Utility.R_GetStreamingContext<string>(ContextConstant.CREASON_CODE);
                     loParam.TNOTES = R_Utility.R_GetStreamingContext<string>(ContextConstant.TNOTES);
 

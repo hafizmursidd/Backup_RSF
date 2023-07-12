@@ -54,7 +54,7 @@ namespace GLB00200Service
         {
             R_Exception loException = new R_Exception();
             GLB00200DBParameter loDbParameter;
-            GLB00200JournalDetailListDTO loReturn = new ();
+            GLB00200JournalDetailListDTO loReturn = new();
             try
             {
                 loDbParameter = new GLB00200DBParameter();
@@ -65,7 +65,7 @@ namespace GLB00200Service
 
                 var loCls = new GLB00200Cls();
                 var temp = loCls.GetDetail_ReversingJournalList(loDbParameter);
-                loReturn.Data= temp;
+                loReturn.Data = temp;
 
             }
             catch (Exception ex)
@@ -76,6 +76,36 @@ namespace GLB00200Service
             loException.ThrowExceptionIfErrors();
 
             return loReturn;
+        }
+        [HttpPost]
+        public GLB00200ResultProcessReversingListDTO ProcessReversingJournal()
+        {
+            var loEx = new R_Exception();
+            GLB00200ResultProcessReversingListDTO loReturn = new();
+            List<GLB00200DTO> loReversingListSelectedData = new List<GLB00200DTO>();
+            GLB00200DBParameter loParam = new GLB00200DBParameter();
+            List<GLB00200ResultProcessReversing> loTemp;
+
+            try
+            {
+                GLB00200Cls loCls = new GLB00200Cls();
+                loParam.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                loParam.CUSER_ID = R_BackGlobalVar.USER_ID;
+                loReversingListSelectedData =
+                    R_Utility.R_GetStreamingContext<List<GLB00200DTO>>(ContextConstant.LIST_REVERSING);
+
+                loTemp = loCls.ReversingJournalProcess(loReversingListSelectedData, loParam);
+                loReturn.Data = loTemp;
+
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+        EndBlock:
+            loEx.ThrowExceptionIfErrors();
+            return loReturn;
+
         }
         [HttpPost]
         public IAsyncEnumerable<GLB00200DTO> ReversingJournalProcessListStream()
@@ -107,7 +137,7 @@ namespace GLB00200Service
             return loRtn;
         }
 
-   
+
 
         private async IAsyncEnumerable<GLB00200DTO> Get_ReversingJournalProcessList(List<GLB00200DTO> poParameter)
         {

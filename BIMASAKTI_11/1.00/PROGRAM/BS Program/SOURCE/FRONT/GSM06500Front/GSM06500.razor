@@ -22,7 +22,7 @@
 
 
 
-<R_StackLayout>
+<R_StackLayout Class="mt-3">
     <R_Grid @ref="@_gridRef"
             DataSource="PaymentTermViewModel.PaymentOfTermList"
             Pageable="true"
@@ -32,17 +32,16 @@
             AllowDeleteRow="true"
             AllowAddNewRow="true"
             AllowEditRow="true"
-            >
+           Width="1000px">
 
         <R_GridColumns>
-
             <R_GridTextColumn MaxLength="8" FieldName="CPAY_TERM_CODE" HeaderText="Term of Payment Code" R_EnableAdd />
             <R_GridTextColumn MaxLength="100" FieldName="CPAY_TERM_NAME" HeaderText="Term of Payment Name" R_EnableAdd R_EnableEdit />
             <R_GridNumericColumn  Min="0" Max="999999" FieldName="IPAY_TERM_DAYS" HeaderText="TOP Days" R_EnableAdd R_EnableEdit />
             <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="Last Updated By" />
-            <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date" />
+            <R_GridDatePickerColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date" />
             <R_GridTextColumn FieldName="CCREATE_BY" HeaderText="Created By" />
-            <R_GridTextColumn FieldName="DCREATE_DATE" HeaderText="Created date" />
+            <R_GridDatePickerColumn FieldName="DCREATE_DATE" HeaderText="Created date" />
         </R_GridColumns>
     </R_Grid>
 </R_StackLayout>

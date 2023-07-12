@@ -4,25 +4,22 @@
 @inherits R_Page
 
 <R_StackLayout Row="true">
-    <R_ItemLayout>
+    <R_ItemLayout xs="1">
         <R_Label>Welcome:</R_Label>
     </R_ItemLayout>
-    <R_ItemLayout>
+    <R_ItemLayout xs="2">
         <R_TextBox @bind-Value="@_viewModelGST00500Inbox.UserName.CUSER_NAME"
                    R_ConductorSource="_conductorGetUserName"
                    Enabled="false">
         </R_TextBox>
     </R_ItemLayout>
-
 </R_StackLayout>
-<R_Label>
 
-</R_Label>
 <R_TabStrip OnActiveTabIndexChanged="@ChangeTab">
 
     @* $1$ INBOX TAB#1# *@
     <R_TabStripTab Title="Inbox" Id="TabInbox">
-        <R_ItemLayout>
+        <R_ItemLayout Class="mt-3">
             <R_Grid @ref="@_gridInboxTransRef"
                     DataSource="_viewModelGST00500Inbox.InboxTransactionList"
                     R_ConductorGridSource="@_conductorInboxTrans"
@@ -63,11 +60,11 @@
         <R_StackLayout Row="true" Class="d-flex justify-content-between mt-4">
             <R_StackLayout Row="true">
 
-                <R_ItemLayout>
+                <R_ItemLayout >
                     <R_Button R_ConductorGridSource="@_conductorInboxTrans"
                               OnClick="@OnClickApprove">Approve</R_Button>
                 </R_ItemLayout>
-                <R_ItemLayout>
+                <R_ItemLayout >
                     <R_Popup R_Before_Open_Popup="@R_Before_Open_Reject"
                              R_After_Open_Popup="@R_After_Open_Reject"
                              R_ConductorGridSource="@_conductorInboxTrans">Reject Transaction</R_Popup>

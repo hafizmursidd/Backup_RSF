@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -9,6 +10,8 @@ using GLB00200Model.ViewModel;
 using R_BlazorFrontEnd.Controls;
 using R_BlazorFrontEnd.Controls.DataControls;
 using R_BlazorFrontEnd.Controls.Events;
+using R_BlazorFrontEnd.Controls.Grid;
+using R_BlazorFrontEnd.Controls.MessageBox;
 using R_BlazorFrontEnd.Enums;
 using R_BlazorFrontEnd.Exceptions;
 
@@ -22,9 +25,7 @@ namespace GLB00200Front
         private R_Grid<GLB00200DTO> _gridReversing;
         private R_ConductorGrid _conductorReversingJournal;
 
-            //  public GLB00200DTO CurrentReversingJournal = new GLB00200DTO();
-
-
+        //  public GLB00200DTO CurrentReversingJournal = new GLB00200DTO();
 
         protected override async Task R_Init_From_Master(object poParameter)
         {
@@ -96,15 +97,26 @@ namespace GLB00200Front
             {
 
                 await _viewModelGLB00200.GetAllReversingJournalProcess();
-                //await _gridReversing.R_RefreshGrid(null);
+
+                if (_viewModelGLB00200.ReversingJournalProcessList.Count() < 1)
+                {
+                    loEx.Add(new Exception("Data Not Found!"));
+                    await _gridReversing.R_RefreshGrid(null);
+                    goto EndBlock;
+                }
+                _viewModelGLB00200.CurrentReversingJournal =
+                    _viewModelGLB00200.ReversingJournalProcessList.FirstOrDefault();
             }
             catch (Exception ex)
             {
                 loEx.Add(ex);
             }
-
+        EndBlock:
             loEx.ThrowExceptionIfErrors();
         }
+
+        #region SearchButton
+
         private async Task GetList_ReversingJournalWithSearch()
         {
             var loEx = new R_Exception();
@@ -126,6 +138,7 @@ namespace GLB00200Front
                 if (_viewModelGLB00200.ReversingJournalProcessList.Count() < 1)
                 {
                     loEx.Add(new Exception("Data Not Found!"));
+                    await _gridReversing.R_RefreshGrid(null);
                     goto EndBlock;
                 }
             }
@@ -137,6 +150,7 @@ namespace GLB00200Front
             loEx.ThrowExceptionIfErrors();
         }
 
+        #endregion
         private async Task Service_Display(R_DisplayEventArgs eventArgs)
         {
             var loEx = new R_Exception();
@@ -168,5 +182,98 @@ namespace GLB00200Front
 
             loEx.ThrowExceptionIfErrors();
         }
+
+
+        #region ProcessButton
+        private async Task OnClickProcess()
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                await _conductorReversingJournal.R_SaveBatch();
+                await this.Close(true, true);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+            loEx.ThrowExceptionIfErrors();
+        }
+        #endregion
+
+        #region Save Batch
+        private void BeforeSaveBatch(R_BeforeSaveBatchEventArgs events)
+        {
+            var loData = (List<GLB00200DTO>)events.Data;
+
+            if (loData.Count == 0)
+            {
+                R_MessageBox.Show("", "No Data Found!", R_eMessageBoxButtonType.OK);
+                events.Cancel = true;
+            }
+
+            //if (LINCREMENT_FLAG == 0)
+            //{
+            //    R_MessageBox.Show("", "Cannot process Recurring Journal with Manual Numbering! Transaction numbering setting for Recurring Journal should be auto increment, not manual numbering!", R_eMessageBoxButtonType.OK);
+            //    events.Cancel = true;
+            //}
+        }
+        private async Task ServiceSaveBatch(R_ServiceSaveBatchEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                _viewModelGLB00200.loProcessReversingList = (List<GLB00200DTO>)eventArgs.Data;
+
+                await _viewModelGLB00200.ProcessReversingJournal();
+                await _gridReversing.R_RefreshGrid(null);
+
+
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+            loEx.ThrowExceptionIfErrors();
+        }
+
+        private void AfterSaveBatch(R_AfterSaveBatchEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                R_MessageBox.Show("", $"Processing Master Ref. No. CREF_NO {_viewModelGLB00200.ResultProcessList} SUCCESSFUL!", R_eMessageBoxButtonType.OK);
+              
+                if(!string.IsNullOrEmpty(_viewModelGLB00200.ResultFailedProcessList))
+                {
+                    loEx.Add(new Exception($"Failed to process Master Ref. No. CREF_NO {_viewModelGLB00200.ResultFailedProcessList} Failed!"));
+                    goto EndBlock;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            EndBlock:
+            loEx.ThrowExceptionIfErrors();
+        }
+        #endregion
+
+        #region Validation to BAckground red
+        private void R_RowForBackGround(R_GridRowRenderEventArgs eventArgs)
+        {
+            var loData = (GLB00200DTO)eventArgs.Data;
+
+            if (loData.LVALID == false)
+            {
+                eventArgs.RowStyle = new R_GridRowRenderStyle
+                {
+                    BackgroundColor = "RED"
+                };
+            }
+        }
+        #endregion
     }
 }

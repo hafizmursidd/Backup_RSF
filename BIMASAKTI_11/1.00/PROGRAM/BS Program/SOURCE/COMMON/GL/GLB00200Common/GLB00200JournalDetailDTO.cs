@@ -8,6 +8,7 @@ namespace GLB00200Common
     {
         public string CREC_ID { get; set; }
         public Int64 INO { get; set; }
+        public int NO_Convert { get; set; }
         public string CGLACCOUNT_NO { get; set; }
         public string CGLACCOUNT_NAME { get; set; }
         public string CCENTER_NAME { get; set; }

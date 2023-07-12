@@ -21,6 +21,7 @@ namespace GST00500Model.ViewModel
         public List<GST00500RejectDTO> ReasonOfRejectList = new List<GST00500RejectDTO>();
         public GST00500RejectTransactionDTO ParamTransactionStatus = new GST00500RejectTransactionDTO();
         public List<GST00500ApprovalTransactionDTO> ApprovalTransacReturnFromBack = null;
+
         public string ResultSuccesTransaction = "";
         public string ResultFailedTransaction = "";
 
@@ -87,6 +88,7 @@ namespace GST00500Model.ViewModel
                var loResult = await _modelGST00500.SaveTransactionListAsync();
                ApprovalTransacReturnFromBack = loResult.Data;
 
+               //for notification 
                GetResultTransaction(ApprovalTransacReturnFromBack);
             }
             catch (Exception ex)

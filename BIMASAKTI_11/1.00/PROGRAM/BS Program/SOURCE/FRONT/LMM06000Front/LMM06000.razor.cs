@@ -52,6 +52,7 @@ namespace LMM06000Front
             try
             {
                 await BillingRuleViewModel.GetPropertyList();
+                await _gridUnitTypeRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {

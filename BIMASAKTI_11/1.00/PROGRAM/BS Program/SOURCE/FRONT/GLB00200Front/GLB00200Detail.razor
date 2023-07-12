@@ -6,7 +6,7 @@
 
     <R_StackLayout Row>
         <R_ItemLayout>
-            <R_Label Class="me-3">Reference No.:</R_Label>
+            <R_Label >Reference No.:</R_Label>
         </R_ItemLayout>
         <R_ItemLayout>
             <R_TextBox @bind-Value="_viewModelGLB00200Detail.CurrentReversingJournal.CREF_NO"
@@ -15,8 +15,8 @@
             </R_TextBox>
         </R_ItemLayout>
 
-        <R_ItemLayout>
-            <R_Label Class="me-3">Amount</R_Label>
+        <R_ItemLayout xs="1">
+            <R_Label Class="ms-3">Amount</R_Label>
         </R_ItemLayout>
         <R_ItemLayout>
             <R_NumericTextBox @bind-Value="_viewModelGLB00200Detail.CurrentReversingJournal.NTRANS_AMOUNT"
@@ -27,7 +27,7 @@
     </R_StackLayout>
 
     <R_StackLayout>
-        <R_ItemLayout>
+        <R_ItemLayout Class="mt-3">
             <R_Grid @ref="_gridReversingDetail"
                     DataSource="_viewModelGLB00200Detail.DetailReversingJournalList"
                     R_ConductorGridSource="_conductorReversingJournalDetail"
@@ -39,7 +39,7 @@
                     AllowEditRow="false"
                     Width="650px">
                 <R_GridColumns>
-                    <R_GridNumericColumn Width="75px" FieldName="INO"
+                    <R_GridNumericColumn Width="75px" FieldName="NO_Convert"
                                          HeaderText="No.">
                     </R_GridNumericColumn>
                     <R_GridTextColumn Width="150px" FieldName="CGLACCOUNT_NO"
@@ -60,16 +60,25 @@
                     <R_GridTextColumn Width="100px" FieldName="NCREDIT"
                                       HeaderText="Credit">
                     </R_GridTextColumn>
-                    <R_GridTextColumn Width="250px" FieldName="CDETAIL_DESC"
+                    <R_GridTextColumn Width="300px" FieldName="CDETAIL_DESC"
                                       HeaderText="Description">
                     </R_GridTextColumn>
 
                 </R_GridColumns>
             </R_Grid>
+            </R_ItemLayout>
+            </R_StackLayout>
+
+    <R_StackLayout Class="mt-3" Row>
+        <R_ItemLayout xs="1">
+            <R_Button OnClick="@OnClickClose">
+                Close
+            </R_Button>
         </R_ItemLayout>
     </R_StackLayout>
 
     <R_ConductorGrid @ref="_conductorReversingJournalDetail"
+                              R_IsHeader
                      R_ViewModel="_viewModelGLB00200Detail">
 
     </R_ConductorGrid>

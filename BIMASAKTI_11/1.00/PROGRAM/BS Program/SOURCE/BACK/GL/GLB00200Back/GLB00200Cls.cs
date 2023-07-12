@@ -130,6 +130,8 @@ namespace GLB00200Back
                 {
                     try
                     {
+
+                        listReversingJournalProcessReturn  = new List<GLB00200ResultProcessReversing>();
                         GLB00200ResultProcessReversing loTemp = new GLB00200ResultProcessReversing();
                         using (TransactionScope TransScope = new TransactionScope(TransactionScopeOption.Required))
                         {

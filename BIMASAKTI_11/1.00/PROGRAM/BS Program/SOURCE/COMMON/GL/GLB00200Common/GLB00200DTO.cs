@@ -13,13 +13,13 @@ namespace GLB00200Common
         public string CDEPT_CODE { get; set; }
 
         public string CDEPT_CODE_NAME { get; set; }
-        public string CREF_NO { get; set; }
+        public string CREF_NO { get; set; } = "";
         public string CDOC_NO { get; set; }
         public string CDOC_DATE { get; set; }
         public string CREVERSE_DATE { get; set; }
         public string CTRANS_DESC { get; set; }
         public string CCURRENCY_CODE { get; set; }
-        public decimal NTRANS_AMOUNT { get; set; }
+        public decimal NTRANS_AMOUNT { get; set; } =0;
         public string CLOCAL_CURRENCY_CODE { get; set; }
         public decimal NLTRANS_AMOUNT { get;}
         public string CBASE_CURRENCY_CODE { get; set; }
