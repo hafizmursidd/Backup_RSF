@@ -18,8 +18,10 @@ namespace GSM04500Model
         public ObservableCollection<GSM04510GOADeptDTO> GOADeptList = new ObservableCollection<GSM04510GOADeptDTO>();
         public GSM04510GOADeptDTO GOADept { get; set; } = new GSM04510GOADeptDTO();
         public string GroupOfAccount { get; set; }
-        
-        
+
+
+
+
         public async Task GetGOAAllByDept(GSM04510GOADTO poEntity)
         {
             var loEx = new R_Exception();
@@ -69,10 +71,10 @@ namespace GSM04500Model
 
             try
             {
-                R_FrontContext.R_SetStreamingContext(ContextConstant.CJRNGRP_TYPE, poNewEntity.CJRNGRP_TYPE);
-                R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, poNewEntity.CPROPERTY_ID);
-                R_FrontContext.R_SetStreamingContext(ContextConstant.CJOURNAL_GRP_CODE, poNewEntity.CJRNGRP_CODE);
-                R_FrontContext.R_SetStreamingContext(ContextConstant.CGOA_CODE, poNewEntity.CGOA_CODE);
+                //R_FrontContext.R_SetStreamingContext(ContextConstant.CJRNGRP_TYPE, poNewEntity.CJRNGRP_TYPE);
+                //R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, poNewEntity.CPROPERTY_ID);
+                //R_FrontContext.R_SetStreamingContext(ContextConstant.CJOURNAL_GRP_CODE, poNewEntity.CJRNGRP_CODE);
+                //R_FrontContext.R_SetStreamingContext(ContextConstant.CGOA_CODE, poNewEntity.CGOA_CODE);
 
 
                 loResult = await _modelGOADept.R_ServiceSaveAsync(poNewEntity, (eCRUDMode)peConductorMode);

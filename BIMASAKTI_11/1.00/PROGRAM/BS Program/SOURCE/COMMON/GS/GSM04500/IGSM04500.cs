@@ -7,6 +7,7 @@ namespace GSM04500Common
     {
         IAsyncEnumerable<GSM04500DTO> GET_JOURNAL_GRP_LIST_STREAM();
         GSM04500PropertyListDTO GetAllPropertyList();
+        GSM04500JournalGroupTypeListDTO GetAllJournalGorupTypeList();
     }
 
 }

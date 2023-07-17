@@ -6,5 +6,6 @@
             public string CUSER_ID { get; set; }
             public string CPROPERTY_ID { get; set; }
             public string CJRNGRP_TYPE { get; set; }
+            public string LANGUAGE  { get; set; }
     }
 }

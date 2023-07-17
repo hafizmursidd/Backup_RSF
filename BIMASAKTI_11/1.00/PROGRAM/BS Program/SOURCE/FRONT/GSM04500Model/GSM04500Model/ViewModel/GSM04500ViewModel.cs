@@ -14,10 +14,23 @@ namespace GSM04500Model
     public class GSM04500ViewModel : R_ViewModel<GSM04500DTO>
     {
         private GSM04500Model _model = new GSM04500Model();
+        private GSM04500ModelUploadTemplate _modelUploadTemplate = new GSM04500ModelUploadTemplate();
         public List<GSM04500PropertyDTO> PropertyList { get; set; } = new List<GSM04500PropertyDTO>();
-        public string PropertyValueContext = "";
+        public List<GSM04500JournalGroupTypeDTO> JournalGroupTypeList { get; set; } = new List<GSM04500JournalGroupTypeDTO>();
+        
         public ObservableCollection<GSM04500DTO> JournalGroupList = new ObservableCollection<GSM04500DTO>();
         public GSM04500DTO JournalGroup { get; set; } = new GSM04500DTO();
+
+        public GSM04500DTO JournalGroupCurrent  = new GSM04500DTO();
+
+        public string PropertyValueContext = "";
+        public string JournalGroupTypeValue = "";
+        public string JournalGroupCodeValue = "";
+        public bool DropdownGroupType = true;
+        public bool DropdownProperty = true;
+        public bool btnUploadEnable = false;
+
+        public bool VisibleColumn_LACCRUAL = false;
 
 
         public async Task GetPropertyList()
@@ -28,6 +41,7 @@ namespace GSM04500Model
             {
                 var loResult = await _model.GetPropertyListAsyncModel();
                 PropertyList = loResult.Data;
+                PropertyValueContext = PropertyList[0].CPROPERTY_ID;
             }
             catch (Exception ex)
             {
@@ -37,12 +51,44 @@ namespace GSM04500Model
             loEx.ThrowExceptionIfErrors();
         }
 
-        public async Task GetAllJournalAsync(string lcGroupId)
+        public async Task GetJournalGroupTypeList()
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                var loResult = await _model.GetJournalGroupTypeListAsyncModel();
+                JournalGroupTypeList = loResult.Data;
+                JournalGroupTypeValue = JournalGroupTypeList[0].CCODE;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
+
+
+        public async Task GetAllJournalAsync()
         {
             R_Exception loException = new R_Exception();
             try
             {
-                var loResult = await _model.GetAllJournalGroupListAsync(lcGroupId, PropertyValueContext);
+                switch (JournalGroupTypeValue)
+                {
+                    case "10":
+                    case "11":
+                    case "40":
+                        VisibleColumn_LACCRUAL = true;
+                        break;
+                    default:
+                        VisibleColumn_LACCRUAL = false;
+                        break;
+                }
+
+                var x = VisibleColumn_LACCRUAL;
+                var loResult = await _model.GetAllJournalGroupListAsync(JournalGroupTypeValue, PropertyValueContext);
                 JournalGroupList = new ObservableCollection<GSM04500DTO>(loResult.ListData);
             }
             catch (Exception ex)
@@ -114,7 +160,7 @@ namespace GSM04500Model
             try
             {
                 poNewEntity.CPROPERTY_ID = PropertyValueContext;
-                R_FrontContext.R_SetStreamingContext(ContextConstant.CJRNGRP_TYPE, poNewEntity.CJRNGRP_TYPE);
+                poNewEntity.CJRNGRP_TYPE = JournalGroupTypeValue;
                 loResult = await _model.R_ServiceSaveAsync(poNewEntity, (eCRUDMode)peConductorMode);
                 JournalGroup = loResult;
             }
@@ -127,5 +173,31 @@ namespace GSM04500Model
 
             return loResult;
         }
+
+        #region Template
+
+        
+
+        public async Task<GSM04500UploadFileDTO> DownloadTemplate()
+        {
+            var loEx = new R_Exception();
+            GSM04500UploadFileDTO loResult = null;
+
+            try
+            {
+                loResult = await _modelUploadTemplate.DownloadTemplateFileAsync();
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
+        }
+
+
+        #endregion
     }
 }

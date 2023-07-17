@@ -11,6 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\..\BS Shared Form\SOURCE\BACK\Lookup_LMBACK\Lookup_LMBACK.csproj" />
 	  <ProjectReference Include="..\..\..\BACK\LM\LMM06000\LMM06000Back.csproj" />
 	</ItemGroup>
 

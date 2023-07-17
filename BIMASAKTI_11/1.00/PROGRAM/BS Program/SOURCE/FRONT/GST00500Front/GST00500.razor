@@ -5,9 +5,9 @@
 
 <R_StackLayout Row="true">
     <R_ItemLayout xs="1">
-        <R_Label>Welcome:</R_Label>
+        <R_Label>Welcome: </R_Label>
     </R_ItemLayout>
-    <R_ItemLayout xs="2">
+    <R_ItemLayout xs="1">
         <R_TextBox @bind-Value="@_viewModelGST00500Inbox.UserName.CUSER_NAME"
                    R_ConductorSource="_conductorGetUserName"
                    Enabled="false">
@@ -60,11 +60,11 @@
         <R_StackLayout Row="true" Class="d-flex justify-content-between mt-4">
             <R_StackLayout Row="true">
 
-                <R_ItemLayout >
+                <R_ItemLayout xs="3">
                     <R_Button R_ConductorGridSource="@_conductorInboxTrans"
                               OnClick="@OnClickApprove">Approve</R_Button>
                 </R_ItemLayout>
-                <R_ItemLayout >
+                <R_ItemLayout Class="ms-2">
                     <R_Popup R_Before_Open_Popup="@R_Before_Open_Reject"
                              R_After_Open_Popup="@R_After_Open_Reject"
                              R_ConductorGridSource="@_conductorInboxTrans">Reject Transaction</R_Popup>

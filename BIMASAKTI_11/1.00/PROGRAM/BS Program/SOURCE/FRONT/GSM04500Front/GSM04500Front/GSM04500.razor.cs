@@ -5,26 +5,23 @@ using R_BlazorFrontEnd.Controls;
 using R_BlazorFrontEnd.Controls.DataControls;
 using R_BlazorFrontEnd.Controls.Events;
 using R_BlazorFrontEnd.Controls.MessageBox;
+using R_BlazorFrontEnd.Controls.Tab;
 using R_BlazorFrontEnd.Enums;
 using R_BlazorFrontEnd.Exceptions;
+using Microsoft.JSInterop;
 
 namespace GSM04500Front
 {
-    public partial class GSM04500BaseJournalGroup
+    public partial class GSM04500
     {
         private GSM04500ViewModel journalGroupViewModel = new();
         private R_ConductorGrid _conJournalGroupRef;
         private R_Grid<GSM04500DTO> _gridRef;
         private R_Conductor _conductorRef;
 
-        [Parameter] public string JournalGRPType { get; set; } = "10";
-        [Parameter] public string PropertyId { get; set; }
-        [Parameter] public string JournalGRPCode { get; set; }
-        [Parameter] public string GOA_CODE { get; set; }
-        [Parameter] public string GOA_Name { get; set; }
-
-        public GSM04500DTO manipulate = new GSM04500DTO();
-
+        private R_TabStrip _tabStrip;
+        private R_TabPage _tabPageAccountSetting;
+        [Inject] IJSRuntime JS { get; set; }
         protected override async Task R_Init_From_Master(object poParameter)
         {
             var loEx = new R_Exception();
@@ -46,6 +43,8 @@ namespace GSM04500Front
             try
             {
                 await journalGroupViewModel.GetPropertyList();
+                await journalGroupViewModel.GetJournalGroupTypeList();
+                await _gridRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {
@@ -59,7 +58,15 @@ namespace GSM04500Front
             var loEx = new R_Exception();
             try
             {
-                await _gridRef.R_RefreshGrid(null);
+                await _gridRef.R_RefreshGrid(poParam);
+                var x = _tabStrip.ActiveTab;
+                journalGroupViewModel.DropdownGroupType = true;
+                if (_tabStrip.ActiveTab.Id == "Tab_AccountSetting")
+                {
+                    journalGroupViewModel.DropdownGroupType = false;
+                    //  await _tabPageAccountSetting.InvokeRefreshTabPageAsync(journalGroupViewModel.PropertyValueContext);
+                    // await _tabPageAccountSetting.InvokeRefreshTabPageAsync(journalGroupViewModel.JournalGroupTypeValue);
+                }
             }
             catch (Exception ex)
             {
@@ -72,15 +79,11 @@ namespace GSM04500Front
         private async Task R_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
-            string lcGroupId = null;
             try
             {
-                lcGroupId = JournalGRPType;
-                await journalGroupViewModel.GetAllJournalAsync(lcGroupId);
+                await journalGroupViewModel.GetAllJournalAsync();
                 eventArgs.ListEntityResult = journalGroupViewModel.JournalGroupList;
                 var loTemp = journalGroupViewModel.JournalGroupList.FirstOrDefault();
-                PropertyId = loTemp.CPROPERTY_ID;
-                JournalGRPCode = loTemp.CJRNGRP_CODE;
             }
             catch (Exception ex)
             {
@@ -131,7 +134,10 @@ namespace GSM04500Front
             try
             {
                 var loParam = (GSM04500DTO)eventArgs.Data;
-                loParam.CJRNGRP_TYPE = JournalGRPType;
+                //if (R_eConductorMode.Normal== eventArgs.ConductorMode || R_eConductorMode.Add == eventArgs.ConductorMode)
+                //{                   
+                //await journalGroupViewModel.SaveJournalGroup(loParam, R_eConductorMode.Add);
+                //}
                 await journalGroupViewModel.SaveJournalGroup(loParam, eventArgs.ConductorMode);
 
                 eventArgs.Result = journalGroupViewModel.JournalGroup;
@@ -143,108 +149,95 @@ namespace GSM04500Front
 
             loEx.ThrowExceptionIfErrors();
         }
+        private async Task ServiceBeforeAdd(R_AfterAddEventArgs eventArgs)
+        {
+            eventArgs.Data = new GSM04500DTO()
+            {
+                DCREATE_DATE = DateTime.Now,
+                DUPDATE_DATE = DateTime.Now
+            };
+        }
 
         private async Task Grid_Display(R_DisplayEventArgs eventArgs)
         {
             if (eventArgs.ConductorMode == R_eConductorMode.Normal)
             {
                 var loParam = (GSM04500DTO)eventArgs.Data;
-
-                PropertyId = loParam.CPROPERTY_ID;
-                JournalGRPCode = loParam.CJRNGRP_CODE;
-                GOA_Name = loParam.CJRNGRP_NAME;
+                journalGroupViewModel.JournalGroupCurrent = loParam;
             }
+        }
+
+        public async Task ServiceValidation(R_ValidationEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+            try
+            {
+                var loParam = (GSM04500DTO)eventArgs.Data;
+
+                if (string.IsNullOrEmpty(loParam.CJRNGRP_CODE))
+                    loEx.Add(new Exception("Journal Code is required."));
+                if (string.IsNullOrEmpty(loParam.CJRNGRP_NAME))
+                    loEx.Add(new Exception("Journal Group Name is required."));
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            eventArgs.Cancel = loEx.HasError;
+            loEx.ThrowExceptionIfErrors();
         }
         #endregion
 
-        //MAIN TAB
+        #region CHANGE TAB
+        //CHANGE TAB
 
         private void Before_Open_AccountSetting(R_BeforeOpenTabPageEventArgs eventArgs)
         {
-            eventArgs.TargetPageType = typeof(GSM04500AccountSetting);
-
-            var loparam = new GSM04500AccountSetting();
-            loparam.JournalGRPType = JournalGRPType;
-            loparam.PropertyId = PropertyId;
-            loparam.JournalGRPCode = JournalGRPCode;
-
-            eventArgs.Parameter = loparam;
+            eventArgs.TargetPageType = typeof(GSM04500AccountSetting);;
+            eventArgs.Parameter = journalGroupViewModel.JournalGroupCurrent;
         }
-        private async Task ChangeTabMain(R_TabStripTab arg)
+
+        private void onTabChange(R_TabStripActiveTabIndexChangingEventArgs eventArgs)
         {
-            var loEx = new R_Exception();
+            journalGroupViewModel.DropdownProperty = true;
+            journalGroupViewModel.DropdownGroupType = true;
+            if (eventArgs.TabStripTab.Id == "Tab_AccountSetting")
+            {
+                journalGroupViewModel.DropdownProperty = false;
+                journalGroupViewModel.DropdownGroupType = false;
+            }
+        }
+        //private void R_TabEventCallback(object poValue)
+        //{
+        //    journalGroupViewModel.DropdownGroupType = false;
+        //}
+        #endregion
+
+        #region Template
+        private async Task _Staff_TemplateBtn_OnClick()
+        {
+            var loData = new List<GSM04500DTO>();
             try
             {
-                switch (arg.Title)
-                {
-                    case "Service":
-                        JournalGRPType = "10";
-                        break;
-                    case "Utility":
-                        JournalGRPType = "11";
-                        break;
-                    case "Deposit":
-                        JournalGRPType = "12";
-                        break;
-                    case "Customer":
-                        JournalGRPType = "20";
-                        break;
-                    case "Product":
-                        JournalGRPType = "30";
-                        break;
-                    case "Expenditure":
-                        JournalGRPType = "40";
-                        break;
-                    case "Supplier":
-                        JournalGRPType = "50";
-                        break;
+                var loValidate = await R_MessageBox.Show("", "Are you sure download this template?", R_eMessageBoxButtonType.YesNo);
 
+                if (loValidate == R_eMessageBoxResult.Yes)
+                {
+                    var loByteFile = await journalGroupViewModel.DownloadTemplate();
+
+                    var saveFileName = $"Staff {journalGroupViewModel.PropertyValueContext}.xlsx";
+
+                    await JS.downloadFileFromStreamHandler(saveFileName, loByteFile.FileBytes);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                loEx.Add(ex);
+                throw;
             }
-
-            loEx.ThrowExceptionIfErrors();
         }
 
-        //CHILD TAB
-        private async Task ChangeTabChild(R_TabStripTab arg)
-        {
-            var loEx = new R_Exception();
-            try
-            {
 
-                //var a = JournalGRPType;
-                //var B = JournalGRPCode;
-                //var c = PropertyId;
-                //lakukan manipulate disini
-                //case "Deposit":
-                //    JournalGRPType = "12";
-                //    break;
-                //case "Customer":
-                //    JournalGRPType = "20";
-                //    break;
-                //case "Product":
-                //    JournalGRPType = "30";
-                //    break;
-                //case "Expenditure":
-                //    JournalGRPType = "40";
-                //    break;
-                //case "Supplier":
-                //    JournalGRPType = "50";
-                //    break;
-
-
-            }
-            catch (Exception ex)
-            {
-                loEx.Add(ex);
-            }
-
-            loEx.ThrowExceptionIfErrors();
-        }
-
+        #endregion
     }
 }

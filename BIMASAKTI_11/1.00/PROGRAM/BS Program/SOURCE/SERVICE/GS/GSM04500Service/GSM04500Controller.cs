@@ -40,6 +40,34 @@ namespace GSM04500Service
         }
 
         [HttpPost]
+        public GSM04500JournalGroupTypeListDTO GetAllJournalGorupTypeList()
+        {
+            var loEx = new R_Exception();
+            GSM04500JournalGroupTypeListDTO loResult = null;
+            var loParameter = new GSM04500DBParameter();
+
+            try
+            {
+                var loCls = new GSM04500Cls();
+                loResult = new GSM04500JournalGroupTypeListDTO();
+
+                loParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                loParameter.LANGUAGE = R_BackGlobalVar.CULTURE;
+
+                var loResultTemp = loCls.GetAllJournalGroupTypeList(loParameter);
+                loResult.Data = loResultTemp;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
+        }
+
+        [HttpPost]
         public R_ServiceDeleteResultDTO R_ServiceDelete(R_ServiceDeleteParameterDTO<GSM04500DTO> poParameter)
         {
             R_Exception loException = new R_Exception();

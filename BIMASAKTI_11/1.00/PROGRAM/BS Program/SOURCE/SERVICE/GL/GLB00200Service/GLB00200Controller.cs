@@ -27,17 +27,17 @@ namespace GLB00200Service
             throw new NotImplementedException();
         }
         [HttpPost]
-        public GLB00200MinMaxYearDTO GetMinMaxYear()
+        public GLB00200InitalProcessDTO GetInitialProcess()
         {
             R_Exception loException = new R_Exception();
             GLB00200DBParameter loDbParameter = new();
-            GLB00200MinMaxYearDTO loReturn = null;
+            GLB00200InitalProcessDTO loReturn = null;
             try
             {
                 var loCls = new GLB00200Cls();
                 loDbParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
-
-                loReturn = loCls.GetMinMaxYear(loDbParameter);
+                loDbParameter.CCOMPANY_ID = "RCD";
+                loReturn = loCls.InitialProcess(loDbParameter);
 
             }
             catch (Exception ex)
@@ -107,6 +107,8 @@ namespace GLB00200Service
             return loReturn;
 
         }
+
+
         [HttpPost]
         public IAsyncEnumerable<GLB00200DTO> ReversingJournalProcessListStream()
         {

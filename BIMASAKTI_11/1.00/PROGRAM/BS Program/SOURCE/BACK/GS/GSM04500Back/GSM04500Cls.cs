@@ -33,7 +33,7 @@ namespace GSM04500Back
                 loDb.R_AddCommandParameter(loCommand, "@CJRNGRP_CODE", DbType.String, 8, poEntity.CJRNGRP_CODE);
                 loDb.R_AddCommandParameter(loCommand, "@CJRNGRP_NAME", DbType.String, 80, poEntity.CJRNGRP_NAME);
                 loDb.R_AddCommandParameter(loCommand, "@LACCRUAL", DbType.Boolean, 25, poEntity.LACCRUAL);
-               
+
                 loDb.R_AddCommandParameter(loCommand, "@CACTION", DbType.String, 10, lcAction);
                 loDb.R_AddCommandParameter(loCommand, "@CUSER_ID", DbType.String, 10, poEntity.CUSER_ID);
 
@@ -56,7 +56,7 @@ namespace GSM04500Back
             loEx.ThrowExceptionIfErrors();
         }
 
-        protected override GSM04500DTO R_Display(GSM04500DTO poEntity)  
+        protected override GSM04500DTO R_Display(GSM04500DTO poEntity)
         {
             R_Exception loEexception = new R_Exception();
             GSM04500DTO loReturn = null;
@@ -111,6 +111,7 @@ namespace GSM04500Back
                 switch (poCRUDMode)
                 {
                     case eCRUDMode.AddMode:
+                    case eCRUDMode.NormalMode:
                         lcAction = "ADD";
                         break;
 
@@ -165,10 +166,10 @@ namespace GSM04500Back
 
         public List<GSM04500DTO> JOURNAL_GROUP_LIST(GSM04500DBParameter poParameter)
         {
-                R_Exception loException = new R_Exception();
-                List<GSM04500DTO> loReturn = null;
-                R_Db loDb;
-                DbCommand loCmd;
+            R_Exception loException = new R_Exception();
+            List<GSM04500DTO> loReturn = null;
+            R_Db loDb;
+            DbCommand loCmd;
 
             try
             {
@@ -222,6 +223,42 @@ namespace GSM04500Back
                 var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
 
                 loReturn = R_Utility.R_ConvertTo<GSM04500PropertyDTO>(loReturnTemp).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+
+            return loReturn;
+        }
+
+        public List<GSM04500JournalGroupTypeDTO> GetAllJournalGroupTypeList(GSM04500DBParameter poParameter)
+        {
+            R_Exception loException = new R_Exception();
+            List<GSM04500JournalGroupTypeDTO> loReturn = null;
+            R_Db loDb;
+            DbCommand loCmd;
+
+            try
+            {
+                loDb = new R_Db();
+                var loConn = loDb.GetConnection();
+                loCmd = loDb.GetCommand();
+
+                var lcQuery = @"SELECT * FROM RFT_GET_GSB_CODE_INFO ('BIMASAKTI', @CCOMPANY_ID, '_BS_JOURNAL_GRP_TYPE', '', @LANGUAGE_ID)";
+                loCmd.CommandText = lcQuery;
+                loCmd.CommandType = CommandType.Text;
+
+
+                loDb.R_AddCommandParameter(loCmd, "@CCOMPANY_ID", DbType.String, 8, poParameter.CCOMPANY_ID);
+                loDb.R_AddCommandParameter(loCmd, "@LANGUAGE_ID", DbType.String, 5, poParameter.LANGUAGE);
+
+                var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
+
+                loReturn = R_Utility.R_ConvertTo<GSM04500JournalGroupTypeDTO>(loReturnTemp).ToList();
 
             }
             catch (Exception ex)

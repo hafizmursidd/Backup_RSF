@@ -33,7 +33,8 @@
                     Pageable
                     AllowDeleteRow="false"
                     AllowAddNewRow="false"
-                    AllowEditRow="false">
+                    AllowEditRow="false"
+                    Width="200px">
                 <R_GridColumns>
                     <R_GridTextColumn FieldName="CUNIT_TYPE_NAME"
                                       HeaderText="Unit Type">
@@ -50,7 +51,7 @@
                     R_GridType="R_eGridType.Navigator"
                     R_ServiceGetListRecord="GetListRecordBillingRules"
                     Pageable
-                    Width="1000px">
+                    Width="900px">
                 @*List Of Billing Rule*@
                 <R_GridColumns>
                     <R_GridTextColumn MaxLength="20" FieldName="CBILLING_RULE_CODE"
@@ -153,14 +154,14 @@
                                    Enabled="false">
                         </R_TextBox>
                     </R_ItemLayout>
-                    <R_ItemLayout>
+                    <R_ItemLayout xs="1">
                         <R_Lookup @ref="@R_Lookup_Unit_Charges_Button"
                                   R_Before_Open_Lookup="@BeforeOpenLookUp_Unit_Charges"
                                   R_After_Open_Lookup="@AfterOpenLookUp_Unit_ChargesBookingFee"
                                   R_ConductorSource="@_conductorBillingRuleRef"
                                   R_EnableAdd="true"
-                                  R_EnableEdit="true">
-                            Pick
+                                  R_EnableEdit="true"
+                                  >
                         </R_Lookup>
                     </R_ItemLayout>
                     <R_ItemLayout xs="1">
@@ -239,14 +240,13 @@
                                    Enabled="false">
                         </R_TextBox>
                     </R_ItemLayout>
-                    <R_ItemLayout>
+                    <R_ItemLayout xs="1">
                         <R_Lookup @ref="@R_Lookup_Unit_Charges_Button"
                                   R_Before_Open_Lookup="@BeforeOpenLookUp_Unit_Charges_WithDP"
                                   R_After_Open_Lookup="@AfterOpenLookUp_Unit_ChargesWithDP"
                                   R_ConductorSource="@_conductorBillingRuleRef"
                                   R_EnableAdd="true"
                                   R_EnableEdit="true">
-                            Pick
                         </R_Lookup>
                     </R_ItemLayout>
                     <R_ItemLayout xs="1">
@@ -327,14 +327,13 @@
 
                         </R_TextBox>
                     </R_ItemLayout>
-                    <R_ItemLayout>
+                    <R_ItemLayout xs="1">
                         <R_Lookup @ref="@R_Lookup_Unit_Charges_Button"
                                   R_Before_Open_Lookup="@BeforeOpenLookUp_Unit_Charges"
                                   R_After_Open_Lookup="@AfterOpenLookUp_Unit_ChargesWithInstallment"
                                   R_ConductorSource="@_conductorBillingRuleRef"
                                   R_EnableAdd="true"
                                   R_EnableEdit="true">
-                            Pick
                         </R_Lookup>
                     </R_ItemLayout>
                     <R_ItemLayout xs="1">

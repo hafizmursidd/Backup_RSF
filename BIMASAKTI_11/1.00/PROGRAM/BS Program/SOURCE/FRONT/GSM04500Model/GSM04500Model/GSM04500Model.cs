@@ -49,6 +49,30 @@ namespace GSM04500Model
 
             return loResult;
         }
+        public async Task<GSM04500JournalGroupTypeListDTO> GetJournalGroupTypeListAsyncModel()
+        {
+            var loEx = new R_Exception();
+            GSM04500JournalGroupTypeListDTO loResult = null;
+
+            try
+            {
+                R_HTTPClientWrapper.httpClientName = _HttpClientName;
+                loResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM04500JournalGroupTypeListDTO>(
+                    _RequestServiceEndPoint,
+                    nameof(IGSM04500.GetAllJournalGorupTypeList),
+                    DEFAULT_MODULE,
+                    _SendWithContext,
+                    _SendWithToken);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
+        }
 
         public async Task<GSM04500ListDTO> GetAllJournalGroupListAsync(string lcJournalGRPType, string lcPropertyId)
         {
@@ -78,7 +102,13 @@ namespace GSM04500Model
 
         }
 
+
         public GSM04500PropertyListDTO GetAllPropertyList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public GSM04500JournalGroupTypeListDTO GetAllJournalGorupTypeList()
         {
             throw new NotImplementedException();
         }

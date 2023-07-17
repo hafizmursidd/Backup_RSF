@@ -141,6 +141,16 @@ namespace GSM04500Back
                 loDb.R_AddCommandParameter(loCommand, "@CGLACCOUNT_NO", DbType.String, 20, poNewEntity.CGLACCOUNT_NO);
                 loDb.R_AddCommandParameter(loCommand, "CACTION", DbType.String, 10, lcAction);
                 loDb.R_AddCommandParameter(loCommand, "@CUSER_ID", DbType.String, 25, poNewEntity.CUSER_ID);
+                try
+                {
+                    loDb.SqlExecNonQuery(loConn, loCommand, false);
+                }
+                catch (Exception ex)
+                {
+                    loException.Add(ex);
+                }
+                loException.Add(R_ExternalException.R_SP_Get_Exception(loConn));
+
             }
             catch (Exception ex)
             {

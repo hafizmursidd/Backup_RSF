@@ -17,8 +17,14 @@ namespace GSM04500Model
         private GSM04501Model _model = new GSM04501Model();
         public ObservableCollection<GSM04510GOADTO> GOAList = new ObservableCollection<GSM04510GOADTO>();
         public GSM04510GOADTO GOA { get; set; } = new GSM04510GOADTO();
-        public string journalGroup { get; set; }
-        public async Task GetAllJournalGrupGOAAsync(string lcJournalGRPType, string lcPropertyId, string lcJournalGRPCode)
+
+        public GSM04500DTO CurrentJournalGroup = new GSM04500DTO();
+        public GSM04510GOADTO CurrentGOA  = new GSM04510GOADTO();
+        public bool ButtonAddOnGOA_Dept=true;
+
+        public bool checking_ByDept = false;
+
+        public async Task GetAllJournalGrupGOAAsync( string lcPropertyId, string lcJournalGRPType, string lcJournalGRPCode)
         {
             R_Exception loException = new R_Exception();
             try
@@ -64,10 +70,6 @@ namespace GSM04500Model
 
             try
             {
-                R_FrontContext.R_SetStreamingContext(ContextConstant.CJRNGRP_TYPE, poNewEntity.CJRNGRP_TYPE);
-                R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, poNewEntity.CPROPERTY_ID);
-                R_FrontContext.R_SetStreamingContext(ContextConstant.CJOURNAL_GRP_CODE, poNewEntity.CJRNGRP_CODE);
-
                 loResult = await _model.R_ServiceSaveAsync(poNewEntity, (eCRUDMode)peConductorMode);
                 GOA = loResult;
             }

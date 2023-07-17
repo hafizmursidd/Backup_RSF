@@ -24,7 +24,7 @@ namespace GLB00200Model.ViewModel
         //List for Convert
         public List<int> NO_Convert = new List<int>();
 
-        public GLB00200MinMaxYearDTO lcGetPeriodYear = new GLB00200MinMaxYearDTO();
+        public GLB00200InitalProcessDTO loGetInitialProcess = new GLB00200InitalProcessDTO();
         public int PeriodYear = DateTime.Now.Year;
         public string PeriodMonth = DateTime.Now.Month.ToString("D2");
         public string lcSearchText = "";
@@ -34,13 +34,14 @@ namespace GLB00200Model.ViewModel
         public string ResultProcessList = null;
         public string ResultFailedProcessList = null;
         public bool ButtonEnable = false;
-        public async Task GetMinMaxYear()
+
+        public async Task GetInitialprocess()
         {
             R_Exception loException = new R_Exception();
             try
             {
-                var loResult = await _modelGLB00200Model.GetMinMaxYearAsyncModel();
-                lcGetPeriodYear = loResult;
+                var loResult = await _modelGLB00200Model.GetInitialProcessAsyncModel();
+                loGetInitialProcess = loResult;
             }
             catch (Exception ex)
             {

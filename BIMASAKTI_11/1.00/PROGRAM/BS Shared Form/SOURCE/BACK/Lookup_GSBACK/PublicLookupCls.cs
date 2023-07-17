@@ -186,6 +186,33 @@ namespace Lookup_GSLBACK
             return loResult;
         }
 
+        public List<GSL00520DTO> GetALLGOACOA(GSL00520ParameterDTO poEntity)
+        {
+            var loEx = new R_Exception();
+            List<GSL00520DTO> loResult = null;
+
+            try
+            {
+                var loDb = new R_Db();
+                var loConn = loDb.GetConnection("R_DefaultConnectionString");
+
+                var lcQuery = $"EXEC RSP_GS_GET_GOA_COA_LIST " +
+                    $"@CCOMPANY_ID = '{poEntity.CCOMPANY_ID}', " +
+                    $"@CGOA_CODE = '{poEntity.CGOA_CODE}'";
+
+
+                loResult = loDb.SqlExecObjectQuery<GSL00520DTO>(lcQuery, loConn, true);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
+        }
+
         public List<GSL00550DTO> GetALLGOA(GSL00550ParameterDTO poEntity)
         {
             var loEx = new R_Exception();

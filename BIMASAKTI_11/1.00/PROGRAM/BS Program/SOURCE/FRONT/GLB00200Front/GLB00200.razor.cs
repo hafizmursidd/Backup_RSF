@@ -32,7 +32,7 @@ namespace GLB00200Front
             var loEx = new R_Exception();
             try
             {
-                await ServiceGetMinMaxYear();
+                await ServiceGetInitialProcess();
                 await GetMonth();
                 await _gridReversing.R_RefreshGrid(null);
             }
@@ -43,13 +43,13 @@ namespace GLB00200Front
             loEx.ThrowExceptionIfErrors();
         }
 
-        private async Task ServiceGetMinMaxYear()
+        private async Task ServiceGetInitialProcess()
         {
             var loEx = new R_Exception();
 
             try
             {
-                await _viewModelGLB00200.GetMinMaxYear();
+                await _viewModelGLB00200.GetInitialprocess();
             }
             catch (Exception ex)
             {
@@ -211,12 +211,12 @@ namespace GLB00200Front
                 R_MessageBox.Show("", "No Data Found!", R_eMessageBoxButtonType.OK);
                 events.Cancel = true;
             }
-
-            //if (LINCREMENT_FLAG == 0)
-            //{
-            //    R_MessageBox.Show("", "Cannot process Recurring Journal with Manual Numbering! Transaction numbering setting for Recurring Journal should be auto increment, not manual numbering!", R_eMessageBoxButtonType.OK);
-            //    events.Cancel = true;
-            //}
+            //Validasi Incement Flag
+            if (_viewModelGLB00200.loGetInitialProcess.LINCREMENT_FLAG == false)
+            {
+                R_MessageBox.Show("", "Cannot process Recurring Journal with Manual Numbering! Transaction numbering setting for Recurring Journal should be auto increment, not manual numbering!", R_eMessageBoxButtonType.OK);
+                events.Cancel = true;
+            }
         }
         private async Task ServiceSaveBatch(R_ServiceSaveBatchEventArgs eventArgs)
         {
@@ -243,8 +243,8 @@ namespace GLB00200Front
             try
             {
                 R_MessageBox.Show("", $"Processing Master Ref. No. CREF_NO {_viewModelGLB00200.ResultProcessList} SUCCESSFUL!", R_eMessageBoxButtonType.OK);
-              
-                if(!string.IsNullOrEmpty(_viewModelGLB00200.ResultFailedProcessList))
+
+                if (!string.IsNullOrEmpty(_viewModelGLB00200.ResultFailedProcessList))
                 {
                     loEx.Add(new Exception($"Failed to process Master Ref. No. CREF_NO {_viewModelGLB00200.ResultFailedProcessList} Failed!"));
                     goto EndBlock;
@@ -256,7 +256,7 @@ namespace GLB00200Front
                 loEx.Add(ex);
             }
 
-            EndBlock:
+        EndBlock:
             loEx.ThrowExceptionIfErrors();
         }
         #endregion

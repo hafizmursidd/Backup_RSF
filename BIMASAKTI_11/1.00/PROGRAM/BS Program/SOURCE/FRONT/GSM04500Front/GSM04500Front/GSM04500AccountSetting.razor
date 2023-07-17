@@ -2,20 +2,16 @@
 
 
 <R_StackLayout Row="true">
-    <R_ItemLayout xs="1" Class="col-lg-1">
+    <R_ItemLayout xs="1">
         <R_Label>Journal Group</R_Label>
     </R_ItemLayout>
-    <R_ItemLayout>
-        <h5>
-            <R_TextBox @bind-Value="@JournalGRPCode" Enabled="false">
+    <R_ItemLayout xs="1">
+        <R_TextBox @bind-Value="@JournalGOAViewModel.CurrentJournalGroup.CJRNGRP_CODE" Enabled="false">
             </R_TextBox>
-        </h5>
     </R_ItemLayout>
-    <R_itemLayout>
-        <h5>
-            @*<R_TextBox @bind-Value="@GOA_Name" Enabled="false">*@
-            @*</R_TextBox>*@
-        </h5>
+    <R_itemLayout xs="1">
+           <R_TextBox @bind-Value="@JournalGOAViewModel.CurrentJournalGroup.CJRNGRP_NAME" Enabled="false">
+            </R_TextBox>
     </R_ItemLayout>
 </R_StackLayout>
 
@@ -28,25 +24,26 @@
             Pageable="true"
             AllowDeleteRow="true"
             AllowAddNewRow="false"
-            AllowEditRow="true">
+            AllowEditRow="true" 
+            Width="1100px"
+            R_Before_Open_Grid_Lookup="BeforeOpenLookUGOA"
+            R_After_Open_Grid_Lookup="AfterOpenLookGOA">
         <R_GridColumns>
             <R_GridTextColumn FieldName="GROUPOFACCOUNT" HeaderText="Group of Account"/>
             <R_GridCheckBoxColumn FieldName="LDEPARTMENT_MODE" HeaderText="By Dept" R_EnableEdit/>
-            <R_GridTextColumn FieldName="CGLACCOUNT_NO" HeaderText="GL Account No" R_EnableEdit/>
-            <R_GridTextColumn FieldName="CGLACCOUNT_NAME" HeaderText="GL Account Name" R_EnableEdit/>
-            <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="last Updated By"/>
-            <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date"/>
+            <R_GridLookupColumn FieldName="CGLACCOUNT_NO" Name="GLAccount_No" HeaderText="GL Account No" R_EnableAdd R_EnableEdit/>
+            <R_GridTextColumn FieldName="CGLACCOUNT_NAME" HeaderText="GL Account Name"/>
+            <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="Updated By"/>
+            <R_GridDatePickerColumn FieldName="DUPDATE_DATE" HeaderText="Updated Date"/>
+            <R_GridTextColumn FieldName="CCREATE_BY" HeaderText="Created By"/>
+            <R_GridDatePickerColumn FieldName="DCREATE_DATE" HeaderText="Created Date"/>
         </R_GridColumns>
 
     </R_Grid>
 </R_StackLayout>
 
-<R_StackLayout mb="8">
-</R_StackLayout>
-
-
-<R_StackLayout Row>
-    <R_ItemLayout xs="1" Class="col-lg-1">
+<R_StackLayout Row Class="mt-3">
+    <R_ItemLayout xs="2">
         <R_Label>GROUP OF ACCOUNT</R_Label>
     </R_ItemLayout>
     <R_ItemLayout xs="2" Class="col-lg-2">
@@ -65,9 +62,10 @@
             R_GridType="@R_eGridType.Original"
             R_ServiceGetListRecord="@GridGOADept_GetList"
             Pageable="true"
-            AllowDeleteRow="true"
-            AllowAddNewRow="true"
-            AllowEditRow="true"
+            AllowDeleteRow="@JournalGOAViewModel.checking_ByDept"
+            AllowAddNewRow="@JournalGOAViewModel.checking_ByDept"
+            AllowEditRow="@JournalGOAViewModel.checking_ByDept"
+            Width="1100px"
             R_Before_Open_Grid_Lookup="BeforeOpenLookUpDeptCode"
             R_After_Open_Grid_Lookup="AfterOpenLookUpDeptCode"
             >
@@ -76,11 +74,13 @@
             <R_GroupBox Enabled="@JournalGOAViewModel.Data.LDEPARTMENT_MODE" ShowBorder="false">
                 <R_StackLayout>
                     <R_GridLookupColumn FieldName="@nameof(GSM04510GOADeptDTO.CDEPT_CODE)" Name="CDEPT_CODE" HeaderText="Department Code" R_EnableAdd R_EnableEdit/>
-                    <R_GridTextColumn FieldName="CDEPT_NAME" HeaderText="Department Name"/>
+                    <R_GridTextColumn FieldName="CDEPT_NAME" HeaderText="Department Name" />
                     <R_GridLookupColumn FieldName="CGLACCOUNT_NO" Name="GLAccount_No" HeaderText="GL Account No" R_EnableAdd R_EnableEdit/>
-                    <R_GridTextColumn FieldName="CGLACCOUNT_NAME" HeaderText="GL Account Name"/>
-                    <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="last Updated By"/>
-                    <R_GridTextColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date"/>
+                    <R_GridTextColumn FieldName="CGLACCOUNT_NAME" HeaderText="GL Account Name" />
+                    <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="Updated By" />
+                    <R_GridDatePickerColumn FieldName="DUPDATE_DATE" HeaderText="Updated Date" />
+                    <R_GridTextColumn FieldName="CCREATE_BY" HeaderText="Created By" />
+                    <R_GridDatePickerColumn FieldName="DCREATE_DATE" HeaderText="Created Date"/>
                 </R_StackLayout>
             </R_GroupBox>
         </R_GridColumns>
@@ -92,12 +92,12 @@
                  R_IsHeader
                  R_Display="@Grid_Display"
                  R_ServiceGetRecord="@R_ServiceGetRecordAsync"
-                 R_ServiceSave="@ServiceSave"/>
+                 R_ServiceSave="@ServiceSaveGOA"/>
 
 <R_ConductorGrid @ref="@_conGOADeptRef"
                  R_ViewModel="@GOADeptViewModel"
                  R_ConductorParent="_conJournalGOARef"
                  R_ServiceGetRecord="R_ServiceGetRecordGOADeptAsync"
                  R_ServiceSave="@ServiceSaveGOADept"
-                 @*R_ServiceDelete="ServiceDelete"*@
+                 R_AfterAdd="@ServiceAfterAdd"
                  />

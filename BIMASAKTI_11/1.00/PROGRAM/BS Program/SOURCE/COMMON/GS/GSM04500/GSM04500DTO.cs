@@ -1,4 +1,6 @@
-﻿using System;
+﻿using R_APICommonDTO;
+using System;
+using System.Collections.Generic;
 
 namespace GSM04500Common
 {
@@ -14,7 +16,13 @@ namespace GSM04500Common
         public bool LACCRUAL { get; set; }
         public string CUPDATE_BY { get; set; }
         public DateTime DUPDATE_DATE { get; set; }
+        public string CCREATE_BY { get; set; }
+        public DateTime DCREATE_DATE { get; set; }
 
+    }
+    public class GSM04500ListDTO : R_APIResultBaseDTO
+    {
+        public List<GSM04500DTO> ListData { get; set; }
     }
 
 

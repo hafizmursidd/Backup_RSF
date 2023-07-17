@@ -19,13 +19,9 @@
 		<ProjectReference Include="..\..\..\..\..\BS Shared Form\SOURCE\BACK\Lookup_GSCOMMON\Lookup_GSCOMMON.csproj" />
 		<ProjectReference Include="..\..\..\..\..\BS Shared Form\SOURCE\FRONT\Lookup_GSFRONT\Lookup_GSFRONT.csproj" />
 		<ProjectReference Include="..\..\GSM04500Model\GSM04500Model\GSM04500Model.csproj" />
-		<ProjectReference Include="..\..\GSM06500Front\GSM06500Front.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="BlazorClientHelper">
-		  <HintPath>..\..\..\..\..\SYSTEM\SOURCE\LIBRARY\Dll Menu\BlazorClientHelper.dll</HintPath>
-		</Reference>
 		<Reference Include="R_BlazorFrontEnd">
 			<HintPath>..\..\..\..\..\SYSTEM\SOURCE\LIBRARY\Front\R_BlazorFrontEnd.dll</HintPath>
 		</Reference>

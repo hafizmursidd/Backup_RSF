@@ -23,7 +23,8 @@ namespace GLB00200Model
         {
         }
 
-        public GLB00200MinMaxYearDTO GetMinMaxYear()
+
+        public GLB00200InitalProcessDTO GetInitialProcess()
         {
             throw new NotImplementedException();
         }
@@ -43,16 +44,16 @@ namespace GLB00200Model
             throw new NotImplementedException();
         }
 
-        public async Task<GLB00200MinMaxYearDTO> GetMinMaxYearAsyncModel()
+        public async Task<GLB00200InitalProcessDTO> GetInitialProcessAsyncModel()
         {
             var loEx = new R_Exception();
-            GLB00200MinMaxYearDTO loResult = new GLB00200MinMaxYearDTO();
+            GLB00200InitalProcessDTO loResult = new GLB00200InitalProcessDTO();
             try
             {
                 R_HTTPClientWrapper.httpClientName = _HttpClientName;
-                loResult = await R_HTTPClientWrapper.R_APIRequestObject<GLB00200MinMaxYearDTO>(
+                loResult = await R_HTTPClientWrapper.R_APIRequestObject<GLB00200InitalProcessDTO>(
                     _RequestServiceEndPoint,
-                    nameof(IGLB00200.GetMinMaxYear),
+                    nameof(IGLB00200.GetInitialProcess),
                     DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);

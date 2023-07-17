@@ -19,17 +19,17 @@
     <PackageReference Include="Telerik.UI.for.Blazor" Version="4.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GLB00200Front\GLB00200Front.csproj" />
-    <ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GSM04500Front\GSM04500Front\GSM04500Front.csproj" />
-    <ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GSM06500Front\GSM06500Front.csproj" />
-    <ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GST00500Front\GST00500Front.csproj" />
-    <ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\LMM06000Front\LMM06000Front.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GLB00200Front\GLB00200Front.csproj" />
+		<ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GSM04500Front\GSM04500Front\GSM04500Front.csproj" />
+		<ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GSM06500Front\GSM06500Front.csproj" />
+		<ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\GST00500Front\GST00500Front.csproj" />
+		<ProjectReference Include="..\..\..\..\BS Program\SOURCE\FRONT\LMM06000Front\LMM06000Front.csproj" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="BlazorClientHelper">
-		  <HintPath>..\..\LIBRARY\Menu\BlazorClientHelper.dll</HintPath>
+			<HintPath>..\..\LIBRARY\Menu\BlazorClientHelper.dll</HintPath>
 		</Reference>
 		<Reference Include="BlazorMenuCommon">
 			<HintPath>..\..\LIBRARY\Menu\BlazorMenuCommon.dll</HintPath>
@@ -87,6 +87,9 @@
 		</Reference>
 		<Reference Include="R_SecurityPolicyFront">
 			<HintPath>..\..\LIBRARY\Menu\R_SecurityPolicyFront.dll</HintPath>
+		</Reference>
+		<Reference Include="R_ProcessAndUploadFront">
+			<HintPath>..\..\LIBRARY\Front\R_BlazorFrontEnd.FileConverter.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 </Project>
