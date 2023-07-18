@@ -83,7 +83,6 @@ namespace GSM04500Front
             {
                 await journalGroupViewModel.GetAllJournalAsync();
                 eventArgs.ListEntityResult = journalGroupViewModel.JournalGroupList;
-                var loTemp = journalGroupViewModel.JournalGroupList.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -208,10 +207,6 @@ namespace GSM04500Front
                 journalGroupViewModel.DropdownGroupType = false;
             }
         }
-        //private void R_TabEventCallback(object poValue)
-        //{
-        //    journalGroupViewModel.DropdownGroupType = false;
-        //}
         #endregion
 
         #region Template
@@ -226,7 +221,7 @@ namespace GSM04500Front
                 {
                     var loByteFile = await journalGroupViewModel.DownloadTemplate();
 
-                    var saveFileName = $"Staff {journalGroupViewModel.PropertyValueContext}.xlsx";
+                    var saveFileName = $"Journal Group.xlsx";
 
                     await JS.downloadFileFromStreamHandler(saveFileName, loByteFile.FileBytes);
                 }
@@ -236,7 +231,43 @@ namespace GSM04500Front
                 throw;
             }
         }
+        #endregion
 
+        #region Upload
+
+        private void Before_Open_Upload(R_BeforeOpenPopupEventArgs eventArgs)
+        {
+            string propertyId = journalGroupViewModel.PropertyValueContext;
+            GSM04500PropertyDTO loparam = (journalGroupViewModel.PropertyList).Find(p => p.CPROPERTY_ID == propertyId);
+           
+            var param = new GSM004500ParamDTO()
+            {
+                CCOMPANY_ID = journalGroupViewModel.JournalGroupCurrent.CCOMPANY_ID,
+                CUSER_ID = journalGroupViewModel.JournalGroupCurrent.CUSER_ID,
+                CJRNGRP_TYPE = journalGroupViewModel.JournalGroupCurrent.CJRNGRP_TYPE,
+                CPROPERTY_ID = loparam.CPROPERTY_ID,
+                CPROPERTY_NAME = loparam.CPROPERTY_NAME
+            };
+
+            eventArgs.Parameter = param;
+            eventArgs.TargetPageType = typeof(GSM04500Upload);
+        }
+
+        private async Task After_Open_Upload(R_AfterOpenPopupEventArgs eventArgs)
+        {
+            var loEx = new R_Exception();
+
+            try
+            {
+                //  await _Staff_gridRef.R_RefreshGrid(null);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            R_DisplayException(loEx);
+        }
 
         #endregion
     }

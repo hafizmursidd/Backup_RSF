@@ -67,7 +67,7 @@
                     <R_Button R_ConductorGridSource="@_conJournalGroupRef" OnClick="@_Staff_TemplateBtn_OnClick">Template</R_Button>
                 </R_ItemLayout>
                 <R_ItemLayout xs="1">
-                    <R_Button> Upload</R_Button>
+                    <R_Popup R_ConductorGridSource="@_conJournalGroupRef" R_Before_Open_Popup="@Before_Open_Upload" R_After_Open_Popup="@After_Open_Upload">Upload</R_Popup>
                 </R_ItemLayout>
             </R_StackLayout>
             <R_ConductorGrid @ref="@_conJournalGroupRef"

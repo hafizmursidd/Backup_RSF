@@ -5,7 +5,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="System.Text.Json" Version="6.0.0" />
+	</ItemGroup>
+
+
+	<ItemGroup>
     <ProjectReference Include="..\..\..\COMMON\GS\GSM04500\GSM04500Common.csproj" />
   </ItemGroup>
 

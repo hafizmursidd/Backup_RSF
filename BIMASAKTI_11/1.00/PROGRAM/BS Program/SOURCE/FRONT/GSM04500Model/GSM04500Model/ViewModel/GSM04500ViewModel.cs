@@ -22,6 +22,7 @@ namespace GSM04500Model
         public GSM04500DTO JournalGroup { get; set; } = new GSM04500DTO();
 
         public GSM04500DTO JournalGroupCurrent  = new GSM04500DTO();
+        public GSM04500PropertyDTO CurrentProperty = new GSM04500PropertyDTO();
 
         public string PropertyValueContext = "";
         public string JournalGroupTypeValue = "";
@@ -41,6 +42,7 @@ namespace GSM04500Model
             {
                 var loResult = await _model.GetPropertyListAsyncModel();
                 PropertyList = loResult.Data;
+                CurrentProperty = PropertyList[0];
                 PropertyValueContext = PropertyList[0].CPROPERTY_ID;
             }
             catch (Exception ex)
@@ -174,10 +176,8 @@ namespace GSM04500Model
             return loResult;
         }
 
+
         #region Template
-
-        
-
         public async Task<GSM04500UploadFileDTO> DownloadTemplate()
         {
             var loEx = new R_Exception();
@@ -196,8 +196,6 @@ namespace GSM04500Model
 
             return loResult;
         }
-
-
         #endregion
     }
 }
