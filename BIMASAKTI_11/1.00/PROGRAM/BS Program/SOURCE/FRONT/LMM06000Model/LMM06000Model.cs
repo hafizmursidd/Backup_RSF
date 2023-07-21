@@ -106,6 +106,8 @@ namespace LMM06000Model
             try
             {
                 R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CPROPERTY_ID, lcPropertyId);
+                R_BlazorFrontEnd.R_FrontContext.R_SetStreamingContext(ContextConstant.CUNIT_TYPE_ID, "");
+
 
                 R_HTTPClientWrapper.httpClientName = _HttpClientName;
                 loResult = await R_HTTPClientWrapper.R_APIRequestObject<LMM06000UnitTypeListDTO>(

@@ -28,6 +28,7 @@ namespace LMM06000Model.ViewModel
 
         public LMM06000ActiveInactiveDTO ActiveInactiveEntity = new LMM06000ActiveInactiveDTO();
 
+        //public LMM06000UnitTypeDTO CurrentUnit = new LMM06000UnitTypeDTO();
         public async Task GetPropertyList()
         {
             var loEx = new R_Exception();
@@ -60,15 +61,15 @@ namespace LMM06000Model.ViewModel
             }
         }
 
-        public async Task GetAllBillingRule(string pcProperty, string pcUnitType)
+        public async Task GetAllBillingRule()
         {
             R_Exception loException = new R_Exception();
             try
             {
-                var loResult = await _model.GetBillingRuleListAsyncModel(pcProperty, pcUnitType);
+                var loResult = await _model.GetBillingRuleListAsyncModel(PropertyValueContext, UnitTypeValueContext);
                 var varTempt = loResult.Data;
 
-                UnitTypeValueContext = pcUnitType;
+                //UnitTypeValueContext = pcUnitType;
                 BillingRuleList = new ObservableCollection<LMM06000BillingRuleDTO>(loResult.Data);
             }
             catch (Exception ex)

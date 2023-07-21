@@ -1,18 +1,11 @@
 ﻿using R_BackEnd;
 using R_Common;
-using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GSM04500Common;
 using System.Data;
 using System.Data.SqlClient;
-using System.Reflection.Metadata;
 using R_CommonFrontBackAPI;
 using System.Transactions;
-using System.Windows.Input;
 using System.Text.Json;
 
 namespace GSM04500Back
@@ -63,12 +56,13 @@ namespace GSM04500Back
             DbConnection loConn = loDb.GetConnection();
             var loCommand = loDb.GetCommand();
             Dictionary<string, string> loMapping = new Dictionary<string, string>();
-            List<GSM04500UploadFromUserDTO> loResult = null;
+            List<GSM04500UploadToDBDTO> loResult = null;
 
             try
             {
-                var loTempObject = R_NetCoreUtility.R_DeserializeObjectFromByte<List<GSM04500UploadFromUserDTO>>(poAttachFile.BigObject);
-                var loObject = R_Utility.R_ConvertCollectionToCollection<GSM04500UploadFromUserDTO, GSM04500UploadFromUserRequestDTO>(loTempObject);
+                var loTempObject = R_NetCoreUtility.R_DeserializeObjectFromByte<List<GSM04500UploadToDBDTO>>(poAttachFile.BigObject);
+
+               // var loObject = R_Utility.R_ConvertCollectionToCollection<GSM04500UploadFromExcelDTO, GSM04500UploadToDBDTO>(loTempObject);
 
                 //get parameter
                 var loVar = poAttachFile.UserParameters.Where((x) => x.Key.Equals(ContextConstant.CPROPERTY_ID)).FirstOrDefault().Value;
@@ -87,7 +81,7 @@ namespace GSM04500Back
 
                     loDb.SqlExecNonQuery(lcQuery, loConn, false);
 
-                    loDb.R_BulkInsert<GSM04500UploadFromUserRequestDTO>((SqlConnection)loConn, "#JRNLGROUP", loObject);
+                    loDb.R_BulkInsert<GSM04500UploadToDBDTO>((SqlConnection)loConn, "#JRNLGROUP", loObject);
 
                     lcQuery = "RSP_LM_VALIDATE_UPLOAD_JOURNAL_GROUP";
                     loCommand.CommandText = lcQuery;
@@ -156,7 +150,7 @@ namespace GSM04500Back
             try
             {
                 var loTempObject = R_NetCoreUtility.R_DeserializeObjectFromByte<List<GSM04500UploadErrorValidateDTO>>(poBatchProcessPar.BigObject);
-                var loObject = loTempObject.Select(loTemp => new GSM04500UploadFromUserRequestDTO
+                var loObject = loTempObject.Select(loTemp => new GSM04500UploadToDBDTO
                 {
                     CJRNGRP_CODE = loTemp.CJRNGRP_CODE,
                     CJRNGRP_NAME = loTemp.CJRNGRP_NAME, 
@@ -184,11 +178,12 @@ namespace GSM04500Back
 
                     loDb.SqlExecNonQuery(lcQuery, loConn, false);
 
-                    loDb.R_BulkInsert<GSM04500UploadFromUserRequestDTO>((SqlConnection)loConn, "#JRNLGROUP", loObject);
+                    loDb.R_BulkInsert<GSM04500UploadToDBDTO>((SqlConnection)loConn, "#JRNLGROUP", loObject);
 
                     lcQuery = "RSP_GS_UPLOAD_JOURNAL_GROUP";
                     loCommand.CommandText = lcQuery;
-
+                    loCommand.CommandType = CommandType.StoredProcedure;
+                    
                     loDb.R_AddCommandParameter(loCommand, "@CCOMPANY_ID", DbType.String, 8, poBatchProcessPar.Key.COMPANY_ID);
                     loDb.R_AddCommandParameter(loCommand, "@CUSER_ID", DbType.String, 20, poBatchProcessPar.Key.USER_ID);
 
@@ -198,11 +193,8 @@ namespace GSM04500Back
                     loDb.R_AddCommandParameter(loCommand, "@LOVERWRITE", DbType.Boolean, 20, lbOverwrite);
 
                     loDb.SqlExecNonQuery(loConn, loCommand, false);
-
                     TransScope.Complete();
                 }
-
-
             }
             catch (Exception ex)
             {

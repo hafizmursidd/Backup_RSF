@@ -1,18 +1,19 @@
-﻿using R_ProcessAndUploadFront;
+﻿using GSM04500Common;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using GSM04500Common;
-using R_APICommonDTO;
-using R_CommonFrontBackAPI;
 using R_BlazorFrontEnd.Exceptions;
-using System.Linq;
-using R_BlazorFrontEnd.Excel;
-using R_BlazorFrontEnd.Helpers;
-using System.Collections.ObjectModel;
-using System.Text.Json;
 using R_BlazorFrontEnd;
+using System.Collections.ObjectModel;
+using R_CommonFrontBackAPI;
+using R_BlazorFrontEnd.Helpers;
+using R_BlazorFrontEnd.Excel;
+using R_ProcessAndUploadFront;
+using R_APICommonDTO;
+using System.Linq;
+using System.IO;
+using System.Globalization;
+using System.Text.Json;
 
 namespace GSM04500Model.ViewModel
 {
@@ -26,29 +27,62 @@ namespace GSM04500Model.ViewModel
         public byte[] fileByte = null;
         public bool BtnSave = true;
         public string SourceFileName = "";
-
+        public bool IsOverWrite = false;
+        public bool IsErrorEmptyFile = false;
         public GSM04500ModelUploadTemplate _modelUpload = new GSM04500ModelUploadTemplate();
         public ObservableCollection<GSM04500UploadErrorValidateDTO> JournalGroupValidateUploadError { get; set; } = new ObservableCollection<GSM04500UploadErrorValidateDTO>();
         public ObservableCollection<GSM04500DTO> DataJournalGroupList { get; set; } = new ObservableCollection<GSM04500DTO>();
-       // public ObservableCollection<GSM04500UploadErrorValidateDTO> JournalGroupValidateUploadError { get; set; } = new ObservableCollection<LMM06501ErrorValidateDTO>();
-
-
-
-
+        // public ObservableCollection<GSM04500UploadErrorValidateDTO> JournalGroupValidateUploadError { get; set; } = new ObservableCollection<LMM06501ErrorValidateDTO>();
+        //public List<GSM04500UploadFromExcelDTO> loUploadJRNLGRPList = new List<GSM04500UploadFromExcelDTO>();
+        public List<GSM04500UploadToDBDTO> loUploadLJournalGroupist = new List<GSM04500UploadToDBDTO>();
         #region MyRegion
 
-        public async Task AttachFile(byte[] poExcelByte, string pcCompanyId, string pcUserId)
+
+        public void ReadExcelFile()
+        {
+            var loEx = new R_Exception();
+            List<GSM04500UploadFromExcelDTO> loExtract = new List<GSM04500UploadFromExcelDTO>();
+            try
+            {
+                //Read From EXCEL
+                var loExcel = new R_Excel();
+
+                var loDataSet = loExcel.R_ReadFromExcel(fileByte, new string[] { "JournalGroup" });
+                var loResult = R_FrontUtility.R_ConvertTo<GSM04500UploadFromExcelDTO>(loDataSet.Tables[0]);
+                loExtract = new List<GSM04500UploadFromExcelDTO>(loResult);
+
+                //Convert to DTO for DB
+                loUploadLJournalGroupist = loExtract.Select(x => new GSM04500UploadToDBDTO()
+                {
+                    CJRNGRP_CODE = x.JournalGroup,
+                    CJRNGRP_NAME = x.JournalGroupName,
+                    LACCRUAL = x.EnableAccrual,
+                    CNOTES = x.Notes
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+                var MatchingError = loEx.ErrorList.FirstOrDefault(x => x.ErrDescp == "SkipNumberOfRowsStart was out of range: 0");
+                IsErrorEmptyFile = MatchingError != null;
+            }
+            loEx.ThrowExceptionIfErrors();
+        }
+
+        // public async Task AttachFile(byte[] poExcelByte, string pcCompanyId, string pcUserId)
+        public async Task AttachFile()
         {
             var loEx = new R_Exception();
             R_UploadPar loUploadPar;
             R_ProcessAndUploadClient loCls;
-            List<GSM04500UploadFromUserDTO> Bigobject;
+            List<GSM04500UploadToDBDTO> Bigobject;
             List<R_KeyValue> loUserParameters;
             try
             {
                 loUserParameters = new List<R_KeyValue>();
                 loUserParameters.Add(new R_KeyValue() { Key = ContextConstant.CPROPERTY_ID, Value = CurrentObjectParam.CPROPERTY_ID });
                 loUserParameters.Add(new R_KeyValue() { Key = ContextConstant.CJRNGRP_TYPE, Value = CurrentObjectParam.CJRNGRP_TYPE });
+                loUserParameters.Add(new R_KeyValue() { Key = ContextConstant.COVERWRITE, Value = IsOverWrite });
 
                 //Instantiate ProcessClient
                 loCls = new R_ProcessAndUploadClient(
@@ -58,26 +92,17 @@ namespace GSM04500Model.ViewModel
                     pcHttpClientName: "R_DefaultServiceUrl",
                     poProcessProgressStatus: this);
 
-                //add filebyte to DTO
-                var loExcel = new R_Excel();
-
-                var loDataSet = loExcel.R_ReadFromExcel(poExcelByte);
-
-                var loResult = R_FrontUtility.R_ConvertTo<GSM04500UploadFromUserDTO>(loDataSet.Tables[0]);
-
-                Bigobject = new List<GSM04500UploadFromUserDTO>(loResult);
-
                 //prepare Batch Parameter
                 loUploadPar = new R_UploadPar();
                 loUploadPar.COMPANY_ID = CurrentObjectParam.CCOMPANY_ID;
                 loUploadPar.USER_ID = CurrentObjectParam.CUSER_ID;
                 loUploadPar.UserParameters = loUserParameters;
                 loUploadPar.ClassName = "GSM04500Back.GSM04500UploadTemplateCls";
-                loUploadPar.BigObject = Bigobject;
+                loUploadPar.BigObject = loUploadLJournalGroupist;
 
-                await loCls.R_AttachFile<List<GSM04500UploadFromUserDTO>>(loUploadPar);
+                await loCls.R_AttachFile<List<GSM04500UploadToDBDTO>>(loUploadPar);
 
-                await ValidateDataList(Bigobject);
+                //   await ValidateDataList(loUploadJRNLGRPList);
 
                 VisibleError = false;
                 BtnSave = true;
@@ -96,33 +121,32 @@ namespace GSM04500Model.ViewModel
                 VisibleError = true;
             }
         }
+        //public async Task ValidateDataList(List<GSM04500UploadFromUserDTO> poEntity)
+        //{
+        //    var loEx = new R_Exception();
 
-        public async Task ValidateDataList(List<GSM04500UploadFromUserDTO> poEntity)
-        {
-            var loEx = new R_Exception();
+        //    try
+        //    {
+        //        await GetJournalGroupfList();
 
-            try
-            {
-                await GetJournalGroupfList();
+        //        var loMasterData = DataJournalGroupList.Where(x => x.CPROPERTY_ID == CurrentObjectParam.CPROPERTY_ID).Select(x => x.CJRNGRP_CODE).ToList();
 
-                //var loMasterData = StaffGrid.Where(x => x.CPROPERTY_ID == PropertyValue).Select(x => x.CSTAFF_ID).ToList();
+        //        var loData = poEntity.Select(item =>
+        //        {
+        //            item.Var_Exists = loMasterData.Contains(item.CJRNGRP_CODE);
+        //            return item;
+        //        }).ToList();
 
-                //var loData = poEntity.Select(item =>
-                //{
-                //    item.Var_Exists = loMasterData.Contains(item.StaffId);
-                //    return item;
-                //}).ToList();
+        //        await ConvertGrid(loData);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        loEx.Add(ex);
+        //    }
 
-                //await ConvertGrid(loData);
-            }
-            catch (Exception ex)
-            {
-                loEx.Add(ex);
-            }
+        //    loEx.ThrowExceptionIfErrors();
 
-            loEx.ThrowExceptionIfErrors();
-
-        }
+        //}
         public async Task GetJournalGroupfList()
         {
             var loEx = new R_Exception();
@@ -135,6 +159,82 @@ namespace GSM04500Model.ViewModel
                 var loResult = await _modelUpload.GetJournalGroupUploadListAsync();
 
                 DataJournalGroupList = new ObservableCollection<GSM04500DTO>(loResult.ListData);
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+        }
+        //public async Task ConvertGrid(List<GSM04500UploadFTO> poEntity)
+        //{
+        //    var loEx = new R_Exception();
+
+        //    try
+        //    {
+        //        var loTempParam = poEntity;
+        //        var loData = loTempParam.Select(loTemp => new GSM04500UploadErrorValidateDTO()
+        //        {
+        //            CJRNGRP_CODE = loTemp.CJRNGRP_CODE,
+        //            CJRNGRP_NAME = loTemp.CJRNGRP_NAME,
+        //            LACCRUAL = loTemp.LACCRUAL,
+        //            CNOTES = loTemp.CNOTES,
+        //            Var_Exists = loTemp.Var_Exists,
+        //            Var_Overwrite = loTemp.Var_Overwrite
+        //        }).ToList();
+
+        //        JournalGroupValidateUploadError = new ObservableCollection<GSM04500UploadErrorValidateDTO>(loData);
+
+        //        await Task.CompletedTask;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        loEx.Add(ex);
+        //    }
+
+        //    loEx.ThrowExceptionIfErrors();
+        //}
+
+        public async Task SaveBulkFile(string pcCompanyId, string pcUserId)
+        {
+            var loEx = new R_Exception();
+            R_BatchParameter loBatchPar;
+            R_ProcessAndUploadClient loCls;
+            List<GSM04500UploadErrorValidateDTO> Bigobject;
+            List<R_KeyValue> loUserParameneters;
+
+            try
+            {
+                // set Param
+                loUserParameneters = new List<R_KeyValue>();
+                loUserParameneters.Add(new R_KeyValue() { Key = ContextConstant.CPROPERTY_ID, Value = CurrentObjectParam.CPROPERTY_ID });
+                loUserParameneters.Add(new R_KeyValue() { Key = ContextConstant.CJRNGRP_TYPE, Value = CurrentObjectParam.CJRNGRP_TYPE });
+                loUserParameneters.Add(new R_KeyValue() { Key = ContextConstant.COVERWRITE, Value = IsOverWrite });
+
+                //Instantiate ProcessClient
+                loCls = new R_ProcessAndUploadClient(
+                    pcModuleName: "GS",
+                    plSendWithContext: true,
+                    plSendWithToken: true,
+                    pcHttpClientName: "R_DefaultServiceUrl",
+                    poProcessProgressStatus: this);
+
+                //Set Data
+                if (JournalGroupValidateUploadError.Count == 0)
+                    return;
+
+                Bigobject = JournalGroupValidateUploadError.ToList<GSM04500UploadErrorValidateDTO>();
+
+                //preapare Batch Parameter
+                loBatchPar = new R_BatchParameter();
+
+                loBatchPar.COMPANY_ID = pcCompanyId;
+                loBatchPar.USER_ID = pcUserId;
+                loBatchPar.UserParameters = loUserParameneters;
+                loBatchPar.ClassName = "GSM04500Back.GSM04500UploadTemplateCls";
+                loBatchPar.BigObject = Bigobject;
+                var lcGuid = await loCls.R_BatchProcess<List<GSM04500UploadErrorValidateDTO>>(loBatchPar, Bigobject.Count);
             }
             catch (Exception ex)
             {

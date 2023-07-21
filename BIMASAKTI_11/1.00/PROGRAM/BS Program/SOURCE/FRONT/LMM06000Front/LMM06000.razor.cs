@@ -25,10 +25,9 @@ namespace LMM06000Front
 
         private R_Conductor _conductorBillingRuleRef;
         private R_Grid<LMM06000BillingRuleDTO> _gridBillingRuleRef;
-
-        public LMM06000BillingRuleDTO loBillingRuleParam = new LMM06000BillingRuleDTO();
         private string loLabel = "Activate";
         [Inject] IClientHelper clientHelper { get; set; }
+
 
         #region PropertyID
 
@@ -66,6 +65,7 @@ namespace LMM06000Front
             var loEx = new R_Exception();
             try
             {
+                BillingRuleViewModel.PropertyValueContext = (string)poParam;
                 await _gridUnitTypeRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
@@ -87,6 +87,7 @@ namespace LMM06000Front
             {
                 await BillingRuleViewModel.GetAllUnitType();
                 eventArgs.ListEntityResult = BillingRuleViewModel.UnitTypeList;
+                await _gridBillingRuleRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {
@@ -102,11 +103,18 @@ namespace LMM06000Front
             {
                 var loParam = (LMM06000UnitTypeDTO)eventArgs.Data;
 
-                loBillingRuleParam.CPROPERTY_ID = loParam.CPROPERTY_ID;
-                loBillingRuleParam.CUNIT_TYPE_ID = loParam.CUNIT_TYPE_ID;
-
-                await _gridBillingRuleRef.R_RefreshGrid(null);
+                if (BillingRuleViewModel.UnitTypeList.Count() < 1)
+                {
+                    BillingRuleViewModel.PropertyValueContext = "";
+                    BillingRuleViewModel.UnitTypeValueContext = "";
+                }
+                else
+                {
+                    BillingRuleViewModel.PropertyValueContext = loParam.CPROPERTY_ID;
+                    BillingRuleViewModel.UnitTypeValueContext = loParam.CUNIT_TYPE_ID;
+                }
             }
+            await _gridBillingRuleRef.R_RefreshGrid(null);
         }
         #endregion
 
@@ -117,9 +125,9 @@ namespace LMM06000Front
             var loEx = new R_Exception();
             try
             {
-                await BillingRuleViewModel.GetAllBillingRule(loBillingRuleParam.CPROPERTY_ID, loBillingRuleParam.CUNIT_TYPE_ID);
+                await BillingRuleViewModel.GetAllBillingRule();
                 eventArgs.ListEntityResult = BillingRuleViewModel.BillingRuleList;
-               // _gridBillingRuleRef.AutoFitAllColumnsAsync();
+                // _gridBillingRuleRef.AutoFitAllColumnsAsync();
             }
             catch (Exception ex)
             {
