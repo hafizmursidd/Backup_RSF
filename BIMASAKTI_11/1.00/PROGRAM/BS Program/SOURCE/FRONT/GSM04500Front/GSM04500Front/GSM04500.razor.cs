@@ -148,14 +148,14 @@ namespace GSM04500Front
 
             loEx.ThrowExceptionIfErrors();
         }
-        private async Task ServiceBeforeAdd(R_AfterAddEventArgs eventArgs)
-        {
-            eventArgs.Data = new GSM04500DTO()
-            {
-                DCREATE_DATE = DateTime.Now,
-                DUPDATE_DATE = DateTime.Now
-            };
-        }
+        //private async Task ServiceBeforeAdd(R_AfterAddEventArgs eventArgs)
+        //{
+        //    eventArgs.Data = new GSM04500DTO()
+        //    {
+        //        DCREATE_DATE = DateTime.Now,
+        //        DUPDATE_DATE = DateTime.Now
+        //    };
+        //}
 
         private async Task Grid_Display(R_DisplayEventArgs eventArgs)
         {
@@ -212,7 +212,7 @@ namespace GSM04500Front
         #region Template
         private async Task _Staff_TemplateBtn_OnClick()
         {
-            var loData = new List<GSM04500DTO>();
+           // var loData = new List<GSM04500DTO>();
             try
             {
                 var loValidate = await R_MessageBox.Show("", "Are you sure download this template?", R_eMessageBoxButtonType.YesNo);
@@ -259,7 +259,7 @@ namespace GSM04500Front
 
             try
             {
-                //  await _Staff_gridRef.R_RefreshGrid(null);
+                  await _gridRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {

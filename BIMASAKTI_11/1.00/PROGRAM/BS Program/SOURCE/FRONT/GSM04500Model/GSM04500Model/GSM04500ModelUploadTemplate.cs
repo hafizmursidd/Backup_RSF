@@ -43,14 +43,14 @@ namespace GSM04500Model
             try
             {
                 R_HTTPClientWrapper.httpClientName = _HttpClientName;
-                var loTempResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM04500UploadFileDTO>(
+                loResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM04500UploadFileDTO>(
                     _RequestServiceEndPoint,
                     nameof(IGSM04500UploadTemplate.DownloadTemplateFile),
                     DEFAULT_MODULE,
                     _SendWithContext,
                     _SendWithToken);
 
-                loResult = loTempResult;
+                //loResult = loTempResult;
             }
             catch (Exception ex)
             {

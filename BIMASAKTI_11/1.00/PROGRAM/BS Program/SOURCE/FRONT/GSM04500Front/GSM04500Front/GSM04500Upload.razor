@@ -44,12 +44,12 @@
             R_RowRender="@((R_GridRowRenderEventArgs args) => R_RowRender(args))"
             R_ServiceGetListRecord="@Upload_ServiceGetListRecord" >
         <R_GridColumns>
-            <R_GridTextColumn FieldName=@nameof(GSM04500UploadToDBDTO.CJRNGRP_CODE)  HeaderText="Journal Group" Width="100px"></R_GridTextColumn>
-            <R_GridTextColumn FieldName=@nameof(GSM04500UploadToDBDTO.CJRNGRP_NAME) HeaderText="Journal Group Name" Width="150px"></R_GridTextColumn>
-            <R_GridTextColumn FieldName=@nameof(GSM04500UploadToDBDTO.LACCRUAL) HeaderText="Enable Accrual" Width="90px"></R_GridTextColumn>
+            <R_GridTextColumn FieldName=@nameof(GSM04500UploadErrorValidateDTO.JournalGroup) HeaderText="Journal Group" Width="100px"></R_GridTextColumn>
+            <R_GridTextColumn FieldName=@nameof(GSM04500UploadErrorValidateDTO.JournalGroupName) HeaderText="Journal Group Name" Width="150px"></R_GridTextColumn>
+            <R_GridTextColumn FieldName=@nameof(GSM04500UploadErrorValidateDTO.EnableAccrual) HeaderText="Enable Accrual" Width="90px"></R_GridTextColumn>
             
-            <R_GridTextColumn FieldName=@nameof(GSM04500UploadToDBDTO.CNOTES) HeaderText="Notes"></R_GridTextColumn>
-            <R_GridTextColumn FieldName="ErrorMessage" HeaderText="ErrorMessage" Visible="@_viewModel.VisibleError"></R_GridTextColumn>
+            <R_GridTextColumn FieldName=@nameof(GSM04500UploadErrorValidateDTO.ErrorMessage) HeaderText="Notes"></R_GridTextColumn>
+           @* <R_GridTextColumn FieldName="ErrorMessage" HeaderText="ErrorMessage" Visible="@_viewModel.VisibleError"></R_GridTextColumn>*@
         </R_GridColumns>
     </R_Grid>
 </R_StackLayout>

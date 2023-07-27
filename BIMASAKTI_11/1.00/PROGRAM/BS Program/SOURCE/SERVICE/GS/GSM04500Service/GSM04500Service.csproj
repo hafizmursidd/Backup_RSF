@@ -11,14 +11,6 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<None Remove="File\Journal Group.xlsx" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="File\Journal Group.xlsx" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\..\..\BACK\GS\GSM04500Back\GSM04500Back.csproj" />
 	  <ProjectReference Include="..\..\..\COMMON\GS\GSM04500\GSM04500Common.csproj" />
 	</ItemGroup>

@@ -4,8 +4,8 @@
 
 <R_StackLayout Class="d-flex justify-content-between col-9" Row>
     <R_StackLayout Row >
-        <R_ItemLayout >
-            <R_Label FontColor="Red" Class="fw-bold">Property</R_Label>
+        <R_ItemLayout xs="4" >
+            <R_Label Class="fw-bold">Property</R_Label>
         </R_ItemLayout>
         <R_ItemLayout xs="8">
             <R_ComboBox Enabled="@journalGroupViewModel.DropdownProperty" 
@@ -18,7 +18,7 @@
         </R_ItemLayout>
     </R_StackLayout>
     <R_StackLayout Row>
-        <R_ItemLayout>
+        <R_ItemLayout xs="6">
             <R_Label Class="fw-bold" >Journal Group Type</R_Label>
         </R_ItemLayout>
         <R_ItemLayout >
@@ -46,12 +46,12 @@
                         AllowDeleteRow="true"
                         AllowAddNewRow="true"
                         AllowEditRow="true"
-                        Width="1100px">
+                        >
 
                     <R_GridColumns >
                         <R_GridTextColumn MaxLength="8" Width="150px" FieldName="CJRNGRP_CODE" HeaderText="Journal Group" R_EnableAdd />
                         <R_GridTextColumn MaxLength="80" Width="200px" FieldName="CJRNGRP_NAME" HeaderText="Juornal Group Name" R_EnableAdd R_EnableEdit />
-                        <R_GridCheckBoxColumn Width="50px" Visible="@journalGroupViewModel.VisibleColumn_LACCRUAL" FieldName="LACCRUAL" HeaderText="Enable Accrual" R_EnableAdd R_EnableEdit />
+                        <R_GridCheckBoxColumn Width="100px" Visible="@journalGroupViewModel.VisibleColumn_LACCRUAL" FieldName="LACCRUAL" HeaderText="Enable Accrual" R_EnableAdd R_EnableEdit />
                         <R_GridTextColumn Width="100px" FieldName="CUPDATE_BY" HeaderText="Updated By" />
                         <R_GridDatePickerColumn FieldName="DUPDATE_DATE" HeaderText="Updated Date" />
                         <R_GridTextColumn Width="100px" FieldName="CCREATE_BY" HeaderText="Created By" />

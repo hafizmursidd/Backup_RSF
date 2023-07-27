@@ -126,7 +126,7 @@ namespace GSM04500Front
 
         #region GOALOOKUP
         //  Button LookUp GOA
-        private void BeforeOpenLookUGOA(R_BeforeOpenGridLookupColumnEventArgs eventArgs)
+        private void BeforeOpenLookUPGOA(R_BeforeOpenGridLookupColumnEventArgs eventArgs)
         {
             var loParam = new GSL00520ParameterDTO();
             loParam.CGOA_CODE = JournalGOAViewModel.CurrentGOA.CGOA_CODE;
@@ -202,6 +202,7 @@ namespace GSM04500Front
 
                 await GOADeptViewModel.SaveGOADept(loParam, eventArgs.ConductorMode);
                 eventArgs.Result = GOADeptViewModel.GOADept;
+               // await _gridGOADeptRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
             {

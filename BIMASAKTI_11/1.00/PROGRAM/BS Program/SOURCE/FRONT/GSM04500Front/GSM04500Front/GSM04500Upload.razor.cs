@@ -25,6 +25,7 @@ namespace GSM04500Front
 
         private R_Grid<GSM04500UploadErrorValidateDTO> JournalGroup_gridRef;
         private bool IsFileExist = false;
+        private bool IsUploadSuccesful = true;
         protected override async Task R_Init_From_Master(object poParameter)
         {
             var loEx = new R_Exception();
@@ -55,8 +56,7 @@ namespace GSM04500Front
                 await eventArgs.File.OpenReadStream().CopyToAsync(loMS);
                 _viewModel.fileByte = loMS.ToArray();
 
-                _viewModel.ReadExcelFile();
-
+                //validate type file
                 if (eventArgs.File.Name.Contains(".xlsx") == false)
                 {
                     await R_MessageBox.Show("", "File Type must Microsoft Excel .xlsx", R_eMessageBoxButtonType.OK);
@@ -69,6 +69,8 @@ namespace GSM04500Front
                 {
                     IsFileExist = false;
                 }
+
+                _viewModel.ReadExcelFile();
                 await JournalGroup_gridRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
@@ -82,7 +84,7 @@ namespace GSM04500Front
                     loEx.Add(ex);
                 }
             }
-            B:
+        B:
             loEx.ThrowExceptionIfErrors();
         }
 
@@ -92,11 +94,9 @@ namespace GSM04500Front
 
             try
             {
-                await _viewModel.AttachFile();
-                _viewModel.fileByte = (byte[])eventArgs.Parameter;
-                //await _viewModel.AttachFile((byte[])eventArgs.Parameter, clientHelper.CompanyId, clientHelper.UserId);
-
-                eventArgs.ListEntityResult = _viewModel.JournalGroupValidateUploadError;
+                await _viewModel.AttachFile(); ;
+                eventArgs.ListEntityResult = _viewModel.DataJournalGroupList;
+                IsUploadSuccesful = !_viewModel.VisibleError;
             }
             catch (Exception ex)
             {
@@ -122,27 +122,23 @@ namespace GSM04500Front
 
         public async Task Button_OnClickOkAsync()
         {
-            //var loEx = new R_Exception();
-            //var loData = new LMM06502DTO();
-            //var loDetailData = new List<LMM06502DetailDTO>();
+            var loEx = new R_Exception();
+            try
+            {
+                var loValidate = await R_MessageBox.Show("", "Are you sure want to import data?", R_eMessageBoxButtonType.YesNo);
 
-            //try
-            //{
-            //    var loValidate = await R_MessageBox.Show("", "Are you sure want to import data?", R_eMessageBoxButtonType.YesNo);
+                if (loValidate == R_eMessageBoxResult.Yes)
+                {
+                    await _viewModel.SaveFileBulkFile(clientHelper.CompanyId, clientHelper.UserId);
+                    await this.Close(true, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
 
-            //    if (loValidate == R_eMessageBoxResult.Yes)
-            //    {
-            //        await _viewModel.SaveBulkFile(clientHelper.CompanyId, clientHelper.UserId);
-
-            //        await this.Close(true, true);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    loEx.Add(ex);
-            //}
-
-            //loEx.ThrowExceptionIfErrors();
+            loEx.ThrowExceptionIfErrors();
         }
         public async Task Button_OnClickCloseAsync()
         {

@@ -4,10 +4,18 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>BIMASAKTI_GS_API</RootNamespace>
+		<AssemblyName>BIMASAKTI_GS_API</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="WeatherForecast.cs" />
+		<None Remove="Template\Journal Group.xlsx" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Template\Journal Group.xlsx">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>

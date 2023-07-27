@@ -6,16 +6,15 @@
 <R_StackLayout>
     <R_StackLayout Row>
         <R_ItemLayout xs="1">
-            <R_Label FontColor="Red" Class="fw-bold" FontSize="15">Property</R_Label>
-        
+            <R_Label Class="fw-bold">Property</R_Label>
         </R_ItemLayout>
         <R_ItemLayout xs="2">
-            <R_DropDownList Data="@PaymentTermViewModel.PropertyList"
+            <R_ComboBox Data="@PaymentTermViewModel.PropertyList"
                             @bind-Value="PaymentTermViewModel.PropertyValueContext"
                             ValueField="@nameof(GSM06500PropertyDTO.CPROPERTY_ID)"
                             TextField="@nameof(GSM06500PropertyDTO.CPROPERTY_NAME)"
                             R_ConductorSource="@_conductorRef" OnChanged="@PropertyDropdown_OnChange">
-            </R_DropDownList>
+            </R_ComboBox>
         </R_ItemLayout>
     </R_StackLayout>
 </R_StackLayout>
@@ -32,16 +31,16 @@
             AllowDeleteRow="true"
             AllowAddNewRow="true"
             AllowEditRow="true"
-           Width="1000px">
+            >
 
         <R_GridColumns>
-            <R_GridTextColumn MaxLength="8" FieldName="CPAY_TERM_CODE" HeaderText="Term of Payment Code" R_EnableAdd />
-            <R_GridTextColumn MaxLength="100" FieldName="CPAY_TERM_NAME" HeaderText="Term of Payment Name" R_EnableAdd R_EnableEdit />
-            <R_GridNumericColumn  Min="0" Max="999999" FieldName="IPAY_TERM_DAYS" HeaderText="TOP Days" R_EnableAdd R_EnableEdit />
-            <R_GridTextColumn FieldName="CUPDATE_BY" HeaderText="Last Updated By" />
-            <R_GridDatePickerColumn FieldName="DUPDATE_DATE" HeaderText="last Updated Date" />
-            <R_GridTextColumn FieldName="CCREATE_BY" HeaderText="Created By" />
-            <R_GridDatePickerColumn FieldName="DCREATE_DATE" HeaderText="Created date" />
+            <R_GridTextColumn Width="100px" MaxLength="8" FieldName="CPAY_TERM_CODE" HeaderText="Term of Payment Code" R_EnableAdd />
+            <R_GridTextColumn Width="350px"  MaxLength="100" FieldName="CPAY_TERM_NAME" HeaderText="Term of Payment Name" R_EnableAdd R_EnableEdit />
+            <R_GridNumericColumn Width="100px" Min="0" Max="999999" FieldName="IPAY_TERM_DAYS" HeaderText="TOP Days" R_EnableAdd R_EnableEdit />
+            <R_GridTextColumn Width="100px"FieldName="CUPDATE_BY" HeaderText="Last Updated By" />
+            <R_GridDatePickerColumn Width="250px"FieldName="DUPDATE_DATE" HeaderText="last Updated Date" />
+            <R_GridTextColumn Width="100px" FieldName="CCREATE_BY" HeaderText="Created By" />
+            <R_GridDatePickerColumn Width="250px"  FieldName="DCREATE_DATE" HeaderText="Created date" />
         </R_GridColumns>
     </R_Grid>
 </R_StackLayout>

@@ -1,5 +1,5 @@
 --Password: CD-r5fdbsvr1#
-delete from SAT_LOCKING where CUSER_ID='admin'
+delete from SAT_LOCKING where CUSER_ID='hmc'
 
 EXEC RSP_GS_GET_JOURNAL_GRP_LIST 'RCD', 'JBMPC', '10', 'hmc'
 
@@ -52,7 +52,9 @@ EXEC RSP_GS_GET_JOURNAL_GRP_GOA_DEPT_LIST 'RCD','JBMPC', '10', 'Z' , 'ARDEP', 'h
 ---GOA DEPT Detail ===> for one record
 		---RSP_GS_GET_JOURNAL_GRP_GOA_DEPT_DT @CCOMPANY_ID	, @CPROPERTY_ID	, @CJOURNAL_GROUP_TYPE	, @CJOURNAL_GROUP_CODE	, @CGOA_CODE	, @CDEPT_CODE	, @CUSER_LOGIN_ID
 EXEC RSP_GS_GET_JOURNAL_GRP_GOA_DEPT_DT 'RCD','JBMPC', '10', 'Z' , 'ARDEP','ACC', 'hmc'
-EXEC RSP_GS_GET_JOURNAL_GRP_GOA_DEPT_DT 'RCD','JBMPC', '10', 'Z' , 'ARDEP','RSF', 'hmc'
+
+
+EXEC RSP_GS_GET_JOURNAL_GRP_GOA_DEPT_DT 'RCD','JBMPC', '11', 'A' , 'ARDEP','ACC', 'hmc'
 EXEC RSP_GS_GET_JOURNAL_GRP_GOA_DEPT_DT 'RCD','JBMPC', '10', 'Z' , 'ARDEP','ACC', 'hmc'
 
 
@@ -178,3 +180,103 @@ EXEC RSP_GS_GET_JOURNAL_GRP_LIST 'RCD', 'JBMPC', '10', 'hmc'
 exec RSP_GS_GET_PROPERTY_LIST 'rcd', 'hmc'
 
 exec RSP_GS_GET_UNIT_TYPE_LIST 'rcd','jbmpc', 'hmc'
+
+exec RSP_GS_VALIDATE_UPLOAD_JOURNAL_GROUP ''
+
+SELECT * FROM GSM_JRNGRP (NOLOCK) WHERE CCOMPANY_ID ='RCD' AND CPROPERTY_ID = 'ashmd'
+                    AND CJRNGRP_TYPE ='10' 
+
+
+begin transaction
+CREATE TABLE #UNIT_PROMOTION_TYPE(NO		INT
+				, UnitPromotionTypeCode	VARCHAR(20)
+				, UnitPromotionTypeName	NVARCHAR(100)
+				, GrossAreaSize		NUMERIC(5,2)
+				, NetAreaSize		NUMERIC(5,2)
+				, CommonArea		NUMERIC(5,2)
+				, Active			BIT
+				, NonActiveDate		VARCHAR(8)
+				)
+
+INSERT INTO #UNIT_PROMOTION_TYPE (NO, UnitPromotionTypeCode, UnitPromotionTypeName, GrossAreaSize, NetAreaSize, CommonArea, Active, NonActiveDate)
+VALUES
+    (1, 'PROMO1', 'Promotion Type 1', 150, 120, 10, 1, '20210101'),
+    (2, 'ADVERS', 'Promotion Type 2', 200, 180, 20, 0, '20111212'),
+    (3, 'PROMO1', 'Promotion Type 3', 100, 85, 30, 1, '20230715'),
+    (4, 'PROMO4', 'Promotion Type 4', 180, 160, 40, 0, '20230202'),
+    (5, 'PROMO5', 'Promotion Type 5', 120, 95, 50, 1, '20230202');
+
+
+EXEC RSP_GS_VALIDATE_UPLOAD_UNIT_PROMOTION_TYPE 'rcd', 'JBMPC', 'ERC', 'njesfnf243bkjkdfs4u4b5', 1
+
+SELECT CCOMPANY_ID FROM GST_XML_RESULT WHERE CCOMPANY_ID = 'RCD' AND CUSER_ID = 'ERC' AND CKEY_GUID = 'njesfnf243bkjkdfs4u4b5'
+
+EXECUTE RSP_ConvertXMLToTable 'RCD', 'ERC', 'njesfnf243bkjkdfs4u4b5'
+
+rollback
+
+
+--LIST TAB SUPPLIER
+EXEC RSP_GS_GET_JOURNAL_GRP_LIST 'RCD', 'JBMPC', '50', 'hmc'
+
+--TRANSACTION
+begin transaction
+ CREATE TABLE #JRNLGROUP  (No INT, 
+                              JournalGroup VARCHAR(8), 
+                              JournalGroupName VARCHAR(80), 
+                              EnableAccrual BIT,
+                              ValidFlag BIT );
+
+INSERT INTO #JRNLGROUP (NO, JournalGroup, JournalGroupName, EnableAccrual, ValidFlag)
+VALUES
+    (1, 'BGDF126', 'Dummy1', 0, 0),
+    (2, 'BGDF124', 'Dummy 2', 1, 0);
+
+exec RSP_GS_VALIDATE_UPLOAD_JOURNAL_GROUP 'RCD', 'JBMPC','hmc', '143b60c44c5843ce952a66887f02a500',0, '50'
+
+SELECT CCOMPANY_ID FROM GST_XML_RESULT WHERE CCOMPANY_ID = 'RCD' AND CUSER_ID = 'hmc' AND CKEY_GUID = '143b60c44c5843ce952a66887f02a500'
+
+EXEC RSP_ConvertXMLToTable 'RCD', 'hmc', '143b60c44c5843ce952a66887f02a500';
+
+rollback
+
+
+
+
+exec RSP_GS_UPLOAD_JOURNAL_GROUP 'rcd','jbmpc', 'hmc', '34dfc53210bf47ae84c360e81bb37a2d',1,'10'
+
+EXEC RSP_GS_GET_JOURNAL_GRP_LIST 'RCD', 'ASHMD', '10', 'hmc'
+
+
+---EDIT GOA DEPT
+
+
+
+--exec RSP_GS_MAINTAIN_JOURNAL_GROUP_ACCOUNT_DEPT
+
+--Query LookUP GOACOA
+EXEC RSP_GS_GET_GOA_COA_LIST 'RCD','ARDEP'
+--Query LookUP DEPT
+exec RSP_GS_GET_DEPT_LOOKUP_LIST 'RCD','hmc'
+
+--LIST GOA DEPT
+exec RSP_GS_GET_JOURNAL_GRP_GOA_DEPT_LIST 'RCD', 'JBMPC', '11', 'A','ARDEP','hmc'
+
+--EDIT GOA DEPT
+USE [BIMASAKTI_11]
+GO
+DECLARE	@return_value int
+
+EXEC	@return_value = [dbo].[RSP_GS_MAINTAIN_JOURNAL_GROUP_ACCOUNT_DEPT]
+		@CCOMPANY_ID = N'rcd',
+		@CPROPERTY_ID = N'jbpmc',
+		@CJRNGRP_TYPE = N'11',
+		@CJRNGRP_CODE = N'A',
+		@CGOA_CODE = N'ARDEP',
+		@CDEPT_CODE = N'ACC',
+		@CGLACCOUNT_NO = N'12.30.0000',
+		@CACTION = N'EDIT',
+		@CUSER_ID = N'hmc'
+
+SELECT	'Return Value' = @return_value
+GO

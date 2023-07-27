@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using GST00500Common;
 using GST00500Model.ViewModel;
-using LMM06000Common;
 using R_BlazorFrontEnd.Controls;
 using R_BlazorFrontEnd.Controls.DataControls;
 using R_BlazorFrontEnd.Controls.Events;
@@ -111,12 +110,12 @@ namespace GST00500Front
             try
             {
 
-                var loTemp = await R_MessageBox.Show("", "Are You sure want process these records? ", R_eMessageBoxButtonType.OKCancel);
 
+                var loTemp = await R_MessageBox.Show("", "Are You sure want process these records? ", R_eMessageBoxButtonType.OKCancel);
                 if (loTemp == R_eMessageBoxResult.OK)
                 {
-                    Approve = false;
                     await _conductorInboxTrans.R_SaveBatch();
+                    Approve = false;
 
                     eventArgs.Parameter = _viewModelGST00500Inbox.loInboxApprovaltBatchList;
                     eventArgs.TargetPageType = typeof(GST00500RejectPopUp);
@@ -152,9 +151,9 @@ namespace GST00500Front
         {
             var loData = (List<GST00500DTO>)events.Data;
 
-            if (loData.Count == 0)
+            if (loData.Count < 1)
             {
-                R_MessageBox.Show("", "Please select at least one record", R_eMessageBoxButtonType.OK);
+                var loTemp = R_MessageBox.Show("", "Please select at least one record", R_eMessageBoxButtonType.OK);
                 events.Cancel = true;
             }
         }

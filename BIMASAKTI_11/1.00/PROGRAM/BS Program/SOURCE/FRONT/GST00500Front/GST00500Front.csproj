@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\COMMON\GS\GST00500Common\GST00500Common.csproj" />
-    <ProjectReference Include="..\..\COMMON\LM\LMM06000Common\LMM06000Common.csproj" />
     <ProjectReference Include="..\GST00500Model\GST00500Model.csproj" />
   </ItemGroup>
 	

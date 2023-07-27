@@ -1,21 +1,21 @@
 ﻿@inherits R_Page
 
 
-<R_StackLayout Row="true">
-    <R_ItemLayout xs="1">
-        <R_Label>Journal Group</R_Label>
+<R_StackLayout Row Class="mt-2">
+    <R_ItemLayout xs="2">
+        <R_Label Class="ms-6">Journal Group</R_Label>
     </R_ItemLayout>
-    <R_ItemLayout xs="1">
+    <R_ItemLayout xs="1" Class="me-3">
         <R_TextBox @bind-Value="@JournalGOAViewModel.CurrentJournalGroup.CJRNGRP_CODE" Enabled="false">
             </R_TextBox>
     </R_ItemLayout>
-    <R_itemLayout xs="1">
+    <R_ItemLayout xs="2">
            <R_TextBox @bind-Value="@JournalGOAViewModel.CurrentJournalGroup.CJRNGRP_NAME" Enabled="false">
             </R_TextBox>
     </R_ItemLayout>
 </R_StackLayout>
 
-<R_StackLayout>
+<R_StackLayout Class="mt-3">
     <R_Grid @ref="@_gridRef"
             DataSource="JournalGOAViewModel.GOAList"
             R_ConductorGridSource="@_conJournalGOARef"
@@ -26,7 +26,7 @@
             AllowAddNewRow="false"
             AllowEditRow="true" 
             Width="1100px"
-            R_Before_Open_Grid_Lookup="BeforeOpenLookUGOA"
+            R_Before_Open_Grid_Lookup="BeforeOpenLookUPGOA"
             R_After_Open_Grid_Lookup="AfterOpenLookGOA">
         <R_GridColumns>
             <R_GridTextColumn FieldName="GROUPOFACCOUNT" HeaderText="Group of Account"/>
@@ -42,20 +42,18 @@
     </R_Grid>
 </R_StackLayout>
 
-<R_StackLayout Row Class="mt-3">
+<R_StackLayout Row Class="mt-4">
     <R_ItemLayout xs="2">
-        <R_Label>GROUP OF ACCOUNT</R_Label>
+        <R_Label Class="ms-6">Group of Account</R_Label>
     </R_ItemLayout>
-    <R_ItemLayout xs="2" Class="col-lg-2">
-        <h5>
+    <R_ItemLayout xs="3">
             <R_TextBox @bind-Value="@GOADeptViewModel.GroupOfAccount"
                        R_ConductorGridSource="@_conGOADeptRef" Enabled="false">
             </R_TextBox>
-        </h5>
     </R_ItemLayout>
 </R_StackLayout>
 
-<R_StackLayout>
+<R_StackLayout Class="mt-3">
     <R_Grid @ref="@_gridGOADeptRef"
             DataSource="GOADeptViewModel.GOADeptList"
             R_ConductorGridSource="@_conGOADeptRef"
@@ -73,7 +71,7 @@
         <R_GridColumns >
             <R_GroupBox Enabled="@JournalGOAViewModel.Data.LDEPARTMENT_MODE" ShowBorder="false">
                 <R_StackLayout>
-                    <R_GridLookupColumn FieldName="@nameof(GSM04510GOADeptDTO.CDEPT_CODE)" Name="CDEPT_CODE" HeaderText="Department Code" R_EnableAdd R_EnableEdit/>
+                    <R_GridLookupColumn FieldName="@nameof(GSM04510GOADeptDTO.CDEPT_CODE)" Name="CDEPT_CODE" HeaderText="Department Code" R_EnableAdd/>
                     <R_GridTextColumn FieldName="CDEPT_NAME" HeaderText="Department Name" />
                     <R_GridLookupColumn FieldName="CGLACCOUNT_NO" Name="GLAccount_No" HeaderText="GL Account No" R_EnableAdd R_EnableEdit/>
                     <R_GridTextColumn FieldName="CGLACCOUNT_NAME" HeaderText="GL Account Name" />

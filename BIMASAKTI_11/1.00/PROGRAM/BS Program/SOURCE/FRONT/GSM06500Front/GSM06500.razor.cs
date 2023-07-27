@@ -21,7 +21,6 @@ namespace GSM06500Front
             try
             {
                 await PropertyDropdown_ServiceGetListRecord(null);
-                _gridRef.AutoFitAllColumnsAsync();
             }
             catch (Exception ex)
             {

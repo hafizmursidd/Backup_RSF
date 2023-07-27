@@ -24,8 +24,9 @@ namespace GSM04500Service
 
             try
             {
-                var loAsm = Assembly.GetExecutingAssembly();
-                var lcResourceFile = "GSM04500Service.File.Journal Group.xlsx";
+                Assembly loAsm = Assembly.Load("BIMASAKTI_GS_API");
+                var lcResourceFile = "BIMASAKTI_GS_API.Template.Journal Group.xlsx";
+
                 using (Stream resFilestream = loAsm.GetManifestResourceStream(lcResourceFile))
                 {
                     var ms = new MemoryStream();
@@ -58,6 +59,7 @@ namespace GSM04500Service
                 loRtn = new GSM04500ListDTO();
 
                 loParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
+                loParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
                 loParameter.CPROPERTY_ID = R_Utility.R_GetContext<string>(ContextConstant.CPROPERTY_ID);
                 loParameter.CJRNGRP_TYPE = R_Utility.R_GetContext<string>(ContextConstant.CJRNGRP_TYPE);
 

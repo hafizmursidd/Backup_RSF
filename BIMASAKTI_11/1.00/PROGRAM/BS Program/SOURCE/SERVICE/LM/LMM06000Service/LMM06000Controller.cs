@@ -22,9 +22,6 @@ namespace LMM06000Service
                 var loCls = new LMM06000Cls();
                 poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
                 poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
-                poParameter.Entity.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
-                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
-                poParameter.Entity.CUSER_ID = R_BackGlobalVar.USER_ID;
 
                 loRtn.data = loCls.R_GetRecord(poParameter.Entity);
             }
@@ -161,12 +158,6 @@ namespace LMM06000Service
                 loParameter.CUSER_ID = R_BackGlobalVar.USER_ID;
                 loParameter.CPROPERTY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CPROPERTY_ID);
                 loParameter.CUNIT_TYPE_CATEGORY_ID = R_Utility.R_GetStreamingContext<string>(ContextConstant.CUNIT_TYPE_ID);
-
-                //loParameter.CCOMPANY_ID = "RCD";
-                //loParameter.CUSER_ID = "hmc";
-                //loParameter.CPROPERTY_ID = "JBMPC";
-                //loParameter.CUNIT_TYPE_CATEGORY_ID = "";
-
                 var loResult = loCls.GetAllUnitTypeList(loParameter);
                 loRtn.Data = loResult;
 
