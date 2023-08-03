@@ -42,7 +42,7 @@ namespace GSM04500Back
                 loDb.R_AddCommandParameter(loCmd, "@CGOA_CODE", DbType.String, 30, poEntity.CGOA_CODE);
                 loDb.R_AddCommandParameter(loCmd, "@CUSER_LOGIN_ID", DbType.String, 20, poEntity.CUSER_ID);
 
-                var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, false);
+                var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
                 loReturn = R_Utility.R_ConvertTo<GSM04510GOADTO>(loReturnTemp).ToList().FirstOrDefault();
 
             }

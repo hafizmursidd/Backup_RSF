@@ -55,7 +55,7 @@ namespace GSM04500Service
 
             try
             {
-                var loCls = new GSM04500UploadTemplateCls();
+                var loCls = new GSM04500ValidateUploadTemplateCls();
                 loRtn = new GSM04500ListDTO();
 
                 loParameter.CCOMPANY_ID = R_BackGlobalVar.COMPANY_ID;
@@ -64,7 +64,32 @@ namespace GSM04500Service
                 loParameter.CJRNGRP_TYPE = R_Utility.R_GetContext<string>(ContextConstant.CJRNGRP_TYPE);
 
                 loRtn = loCls.GetUploadJournalGroupList(loParameter);
-               // loRtn.ListData = loResult;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loRtn;
+        }
+
+        [HttpPost]
+        public GSM04500ListUploadErrorValidateDTO GetErrorProcess()
+        {
+            var loEx = new R_Exception();
+            GSM04500ListUploadErrorValidateDTO loRtn = null;
+
+            try
+            {
+                var lcKeyGuid = R_Utility.R_GetContext<string>("UploadStaffKeyGuid");
+
+                var loCls = new GSM04500ValidateUploadTemplateCls();
+                loRtn = new GSM04500ListUploadErrorValidateDTO();
+
+                var loResult = loCls.GetErrorProcess(R_BackGlobalVar.COMPANY_ID, R_BackGlobalVar.USER_ID, lcKeyGuid);
+                     loRtn.Data = loResult;
             }
             catch (Exception ex)
             {

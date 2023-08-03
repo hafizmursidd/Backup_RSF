@@ -4,8 +4,10 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 using GLB00200Common;
+using R_APICommonDTO;
 using R_BlazorFrontEnd;
 using R_BlazorFrontEnd.Exceptions;
+using R_CommonFrontBackAPI;
 
 namespace GLB00200Model.ViewModel
 {
@@ -35,6 +37,9 @@ namespace GLB00200Model.ViewModel
         public string ResultFailedProcessList = null;
         public bool ButtonEnable = false;
 
+        public string Message = "";
+        public int Percentage = 0;
+        public Action StateChangeAction { get; set; }
         public async Task GetInitialprocess()
         {
             R_Exception loException = new R_Exception();
@@ -159,5 +164,58 @@ namespace GLB00200Model.ViewModel
             }
 
         }
+
+        #region ProgressBar
+
+        public async Task ProcessComplete(string pcKeyGuid, eProcessResultMode poProcessResultMode)
+        {
+            if (poProcessResultMode == eProcessResultMode.Success)
+            {
+                Message = string.Format("Process Complete and success with GUID {0}", pcKeyGuid);
+
+                //VisibleError = false;
+                //
+                // = true;
+
+               // await ValidateDataList(StaffValidateUpload.ToList());
+            }
+
+            if (poProcessResultMode == eProcessResultMode.Fail)
+            {
+                Message = string.Format("Process Complete but fail with GUID {0}", pcKeyGuid);
+               // await GetError(pcKeyGuid);
+            }
+
+            StateChangeAction();
+        }
+
+        public async Task ProcessError(string pcKeyGuid, R_APIException ex)
+        {
+            Message = string.Format("Process Error with GUID {0}", pcKeyGuid);
+
+            foreach (R_APICommonDTO.R_Error item in ex.ErrorList)
+            {
+                Message = string.Format($"{item.ErrDescp}");
+            }
+
+            StateChangeAction();
+
+            await Task.CompletedTask;
+        }
+
+        public async Task ReportProgress(int pnProgress, string pcStatus)
+        {
+            Message = string.Format("Process Progress {0} with status {1}", pnProgress, pcStatus);
+
+            Percentage = pnProgress;
+            Message = string.Format("Process Progress {0} with status {1}", pnProgress, pcStatus);
+
+            StateChangeAction();
+
+            await Task.CompletedTask;
+        }
+
+
+        #endregion
     }
 }

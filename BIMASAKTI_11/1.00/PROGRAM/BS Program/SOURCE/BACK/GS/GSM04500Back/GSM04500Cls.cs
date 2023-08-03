@@ -77,7 +77,7 @@ namespace GSM04500Back
                 loDb.R_AddCommandParameter(loCmd, "@CJRNGRP_CODE ", DbType.String, 20, poEntity.CJRNGRP_CODE);
                 loDb.R_AddCommandParameter(loCmd, "@CUSER_LOGIN_ID", DbType.String, 8, poEntity.CUSER_ID);
 
-                var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, false);
+                var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
 
                 loReturn = R_Utility.R_ConvertTo<GSM04500DTO>(loReturnTemp).ToList().FirstOrDefault();
 
@@ -137,7 +137,7 @@ namespace GSM04500Back
                 loDb.R_AddCommandParameter(loCommand, "@CUSER_ID", DbType.String, 10, poNewEntity.CUSER_ID);
                 try
                 {
-                    loDb.SqlExecNonQuery(loConn, loCommand, false);
+                    loDb.SqlExecNonQuery(loConn, loCommand, true);
                 }
                 catch (Exception ex)
                 {

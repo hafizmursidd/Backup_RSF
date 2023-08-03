@@ -88,7 +88,7 @@ namespace LMM06000Back
                 loDb.R_AddCommandParameter(loCmd, "@IDP_PERCENTAGE", DbType.Int32, 25, poNewEntity.IDP_PERCENTAGE);
                 loDb.R_AddCommandParameter(loCmd, "@IDP_INTERVAL", DbType.Int32, 25, poNewEntity.IDP_INTERVAL);
                 loDb.R_AddCommandParameter(loCmd, "@CDP_PERIOD_MODE", DbType.String, 50, poNewEntity.CDP_PERIOD_MODE);
-                loDb.R_AddCommandParameter(loCmd, "@CDP_CHARGE_ID", DbType.String, 50, poNewEntity.CDP_PERIOD_MODE);
+                loDb.R_AddCommandParameter(loCmd, "@CDP_CHARGE_ID", DbType.String, 50, poNewEntity.CDP_CHARGE_ID);
 
                 loDb.R_AddCommandParameter(loCmd, "@LINSTALLMENT", DbType.Boolean, 2, poNewEntity.LINSTALLMENT);
                 loDb.R_AddCommandParameter(loCmd, "@IINSTALLMENT_PERCENTAGE", DbType.Int32, 50, poNewEntity.IINSTALLMENT_PERCENTAGE);

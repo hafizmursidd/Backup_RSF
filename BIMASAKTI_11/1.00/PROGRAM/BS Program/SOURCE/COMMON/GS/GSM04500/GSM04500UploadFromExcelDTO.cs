@@ -1,4 +1,5 @@
-﻿using System;
+﻿using R_APICommonDTO;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,17 +11,16 @@ namespace GSM04500Common
         public string JournalGroup { get; set; }
         public string JournalGroupName { get; set; }
         public bool EnableAccrual { get; set; }
-    //    public string Notes { get; set; }
         public bool ValidFlag { get; set; }
 
     }
 
     public class GSM04500UploadToDBDTO
     {
-        public string CJRNGRP_CODE { get; set; }
-        public string CJRNGRP_NAME { get; set; }
-        public bool LACCRUAL { get; set; }
-        public string CNOTES { get; set; }
+        public string JournalGroup { get; set; }
+        public string JournalGroupName { get; set; }
+        public bool EnableAccrual { get; set; }
+        public string CNotes { get; set; }
         public bool Var_Exists { get; set; }
 
     }
@@ -34,5 +34,9 @@ namespace GSM04500Common
         public bool Var_Selected { get; set; } = true;
         public bool Var_Overwrite { get; set; } = false;
         public string ErrorMessage { get; set; }
+    }
+    public class GSM04500ListUploadErrorValidateDTO : R_APIResultBaseDTO
+    {
+        public List<GSM04500UploadErrorValidateDTO> Data { get; set; }
     }
 }

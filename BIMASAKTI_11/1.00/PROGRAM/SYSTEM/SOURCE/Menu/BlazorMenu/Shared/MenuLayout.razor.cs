@@ -61,7 +61,6 @@ namespace BlazorMenu.Shared
         {
             if (firstRender)
             {
-                //await JSRuntime.InvokeVoidAsync("tooltipInit");
                 await JSRuntime.InvokeVoidAsync("tooltipInit");
 
                 await JSRuntime.InvokeVoidAsync("setFluid");

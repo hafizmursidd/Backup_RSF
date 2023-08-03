@@ -16,12 +16,12 @@
         </R_ItemLayout>
         <R_ItemLayout xs="1">
             <R_ComboBox 
-                            Data="@_viewModelGLB00200.GetMonthList"
-                            @bind-Value="_viewModelGLB00200.PeriodMonth"
-                            ValueField="@nameof(GetMonthDTO.Id)"
-                            TextField="@nameof(GetMonthDTO.Id)"
-                            R_ConductorSource="@_conductorPeriod"
-                            OnChanged="@OnChangedMonth">
+                Data="@_viewModelGLB00200.GetMonthList"
+                @bind-Value="_viewModelGLB00200.PeriodMonth"
+                ValueField="@nameof(GetMonthDTO.Id)"
+                TextField="@nameof(GetMonthDTO.Id)"
+                R_ConductorSource="@_conductorPeriod"
+                OnChanged="@OnChangedMonth">
             </R_ComboBox>
         </R_ItemLayout>
         <R_ItemLayout xs="2" Class="me-3">
@@ -31,18 +31,23 @@
         </R_ItemLayout>
         <R_ItemLayout xs="1">
             <R_Button 
-                      OnClick="@GetList_ReversingJournalWithSearch"
-                      Text="Search">
+                OnClick="@GetList_ReversingJournalWithSearch"
+                Text="Search">
             </R_Button>
         </R_ItemLayout>
         <R_ItemLayout xs="1"> 
             <R_Button 
-                      OnClick="@GetList_ReversingJournalWithCustomPeriod"
-                      Text="Show All">
+                OnClick="@GetList_ReversingJournalWithCustomPeriod"
+                Text="Show All">
             </R_Button>
         </R_ItemLayout>
 
     </R_StackLayout>
+</R_StackLayout>
+<R_StackLayout Row>
+    <R_ItemLayout xs="12">
+        <R_ProgressBar Label="@_viewModelGLB00200.Message" MaxValue="100" Value="@_viewModelGLB00200.Percentage"></R_ProgressBar>
+    </R_ItemLayout>
 </R_StackLayout>
 
 <R_StackLayout>

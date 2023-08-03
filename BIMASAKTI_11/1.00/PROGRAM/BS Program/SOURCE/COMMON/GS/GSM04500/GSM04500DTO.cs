@@ -18,6 +18,7 @@ namespace GSM04500Common
         public DateTime DUPDATE_DATE { get; set; }
         public string CCREATE_BY { get; set; }
         public DateTime DCREATE_DATE { get; set; }
+        public string ErrorMessage { get; set; }
 
     }
     public class GSM04500ListDTO : R_APIResultBaseDTO

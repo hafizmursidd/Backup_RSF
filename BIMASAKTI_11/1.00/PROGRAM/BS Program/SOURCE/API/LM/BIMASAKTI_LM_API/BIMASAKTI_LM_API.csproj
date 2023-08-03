@@ -13,9 +13,6 @@
   </ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\..\BS Shared Form\SOURCE\SERVICES\Lookup_LMSERVICES\Lookup_LMSERVICES.csproj" />
-		<ProjectReference Include="..\..\..\SERVICE\GS\BlazorMenuService\BlazorMenuService.csproj" />
-		<ProjectReference Include="..\..\..\SERVICE\GS\R_SecurityPolicyService\R_SecurityPolicyService.csproj" />
-		<ProjectReference Include="..\..\..\SERVICE\GS\R_SecurityTokenService\R_SecurityTokenService.csproj" />
 		<ProjectReference Include="..\..\..\SERVICE\LM\LMM06000Service\LMM06000Service.csproj" />
   </ItemGroup>
 

@@ -23,8 +23,6 @@ namespace GSM04500Model.ViewModel
         public GSM004500ParamDTO CurrentObjectParam = new GSM004500ParamDTO();
         public string Message = "";
         public int Percentage = 0;
-        public bool VisibleError = false;
-        public byte[] fileByte = null;
         public bool BtnSave = true;
         public string SourceFileName = "";
         public bool IsOverWrite = false;
@@ -32,53 +30,21 @@ namespace GSM04500Model.ViewModel
         public GSM04500ModelUploadTemplate _modelUpload = new GSM04500ModelUploadTemplate();
         public ObservableCollection<GSM04500UploadErrorValidateDTO> JournalGroupValidateUploadError { get; set; } = new ObservableCollection<GSM04500UploadErrorValidateDTO>();
         public ObservableCollection<GSM04500DTO> DataJournalGroupList { get; set; } = new ObservableCollection<GSM04500DTO>();
-        // public ObservableCollection<GSM04500UploadErrorValidateDTO> JournalGroupValidateUploadError { get; set; } = new ObservableCollection<LMM06501ErrorValidateDTO>();
-        //public List<GSM04500UploadFromExcelDTO> loUploadJRNLGRPList = new List<GSM04500UploadFromExcelDTO>();
         public List<GSM04500UploadToDBDTO> loUploadLJournalGroupList = new List<GSM04500UploadToDBDTO>();
+      
         
-        #region ReadExcel
+        public Action StateChangeAction { get; set; }
 
-        public void ReadExcelFile()
-        {
-            var loEx = new R_Exception();
-            List<GSM04500UploadFromExcelDTO> loExtract = new List<GSM04500UploadFromExcelDTO>();
-            try
-            {
-                //Read From EXCEL
-                var loExcel = new R_Excel();
 
-                var loDataSet = loExcel.R_ReadFromExcel(fileByte, new string[] { "JournalGroup" });
-                var loResult = R_FrontUtility.R_ConvertTo<GSM04500UploadFromExcelDTO>(loDataSet.Tables[0]);
-                loExtract = new List<GSM04500UploadFromExcelDTO>(loResult);
-
-                //Convert to DTO for DB
-                loUploadLJournalGroupList = loExtract.Select(x => new GSM04500UploadToDBDTO()
-                {
-                    CJRNGRP_CODE = x.JournalGroup,
-                    CJRNGRP_NAME = x.JournalGroupName,
-                    LACCRUAL = x.EnableAccrual
-                }).ToList();
-            }
-            catch (Exception ex)
-            {
-                loEx.Add(ex);
-                var MatchingError = loEx.ErrorList.FirstOrDefault(x => x.ErrDescp == "SkipNumberOfRowsStart was out of range: 0");
-                IsErrorEmptyFile = MatchingError != null;
-            }
-            loEx.ThrowExceptionIfErrors();
-        }
-
-        #endregion
 
         #region Attach
-        // public async Task AttachFile(byte[] poExcelByte, string pcCompanyId, string pcUserId)
-        public async Task AttachFile()
+        public async Task ValidateFile()
         {
             var loEx = new R_Exception();
-            R_UploadPar loUploadPar;
+            R_BatchParameter loUploadPar;
             R_ProcessAndUploadClient loCls;
-            List<GSM04500UploadToDBDTO> Bigobject;
             List<R_KeyValue> loUserParameters;
+
             try
             {
                 loUserParameters = new List<R_KeyValue>();
@@ -95,32 +61,20 @@ namespace GSM04500Model.ViewModel
                     poProcessProgressStatus: this);
 
                 //prepare Batch Parameter
-                loUploadPar = new R_UploadPar();
+                loUploadPar = new R_BatchParameter();
                 loUploadPar.COMPANY_ID = CurrentObjectParam.CCOMPANY_ID;
                 loUploadPar.USER_ID = CurrentObjectParam.CUSER_ID;
                 loUploadPar.UserParameters = loUserParameters;
-                loUploadPar.ClassName = "GSM04500Back.GSM04500UploadTemplateCls";
+                loUploadPar.ClassName = "GSM04500Back.GSM04500ValidateUploadTemplateCls";
                 loUploadPar.BigObject = loUploadLJournalGroupList;
 
-                await loCls.R_AttachFile<List<GSM04500UploadToDBDTO>>(loUploadPar);
+                await loCls.R_BatchProcess<List<GSM04500UploadToDBDTO>>(loUploadPar,2);
 
-                 await ValidateDataList(loUploadLJournalGroupList);
-
-                VisibleError = false;
-                BtnSave = true;
-
+                await ValidateDataList(loUploadLJournalGroupList);
             }
             catch (Exception ex)
             {
                 loEx.Add(ex);
-
-                var DeserializeList = JsonSerializer.Deserialize<List<GSM04500UploadErrorValidateDTO>>(loEx.ErrorList[0].ErrDescp);
-
-                if (DeserializeList.Count > 0)
-                    JournalGroupValidateUploadError = new ObservableCollection<GSM04500UploadErrorValidateDTO>(DeserializeList);
-
-                BtnSave = false;
-                VisibleError = true;
             }
         }
         public async Task ValidateDataList(List<GSM04500UploadToDBDTO> poEntity)
@@ -136,7 +90,7 @@ namespace GSM04500Model.ViewModel
 
                 var loData = poEntity.Select(item =>
                 {
-                    item.Var_Exists = loMasterData.Contains(item.CJRNGRP_CODE);
+                    item.Var_Exists = loMasterData.Contains(item.JournalGroup);
                     return item;
                 }).ToList();
 
@@ -177,12 +131,14 @@ namespace GSM04500Model.ViewModel
             try
             {
                 var loTempParam = poEntity;
+                //get data from excel
                 var loData = loTempParam.Select(loTemp => new GSM04500UploadErrorValidateDTO()
                 {
-                    JournalGroup = loTemp.CJRNGRP_CODE,
-                    JournalGroupName = loTemp.CJRNGRP_NAME,
-                    EnableAccrual = loTemp.LACCRUAL,
-                    ErrorMessage = loTemp.CNOTES,
+                    JournalGroup = loTemp.JournalGroup,
+                    JournalGroupName = loTemp.JournalGroupName,
+                    EnableAccrual = loTemp.EnableAccrual,
+                    Var_Exists = loTemp.Var_Exists,
+                    ErrorMessage = loTemp.CNotes,
                 }).ToList();
 
                 JournalGroupValidateUploadError = new ObservableCollection<GSM04500UploadErrorValidateDTO>(loData);
@@ -195,6 +151,25 @@ namespace GSM04500Model.ViewModel
             }
 
             loEx.ThrowExceptionIfErrors();
+        }
+        private async Task GetError(string pcKeyGuid)
+        {
+            R_APIException loException;
+
+
+            try
+            {
+                var loError = await _modelUpload.GetErrorProcessAsync(pcKeyGuid);
+
+                foreach (var item in JournalGroupValidateUploadError)
+                {
+                   item.ErrorMessage = loError.Where(x => x.JournalGroup == item.JournalGroup).Select(x => x.ErrorMessage).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         public async Task SaveFileBulkFile(string pcCompanyId, string pcUserId)
@@ -225,7 +200,7 @@ namespace GSM04500Model.ViewModel
                 if (JournalGroupValidateUploadError.Count == 0)
                     return;
 
-                ListFromExcel = JournalGroupValidateUploadError.ToList<GSM04500UploadErrorValidateDTO>();
+                ListFromExcel = JournalGroupValidateUploadError.ToList();
 
                 //preapare Batch Parameter
                 loBatchPar = new R_BatchParameter();
@@ -233,7 +208,7 @@ namespace GSM04500Model.ViewModel
                 loBatchPar.COMPANY_ID = pcCompanyId;
                 loBatchPar.USER_ID = pcUserId;
                 loBatchPar.UserParameters = loUserParameneters;
-                loBatchPar.ClassName = "GSM04500Back.GSM04500UploadTemplateCls";
+                loBatchPar.ClassName = "GSM04500Back.GSM04500UploadJournalGroupCls";
                 loBatchPar.BigObject = ListFromExcel;
                 await loCls.R_BatchProcess<List<GSM04500UploadErrorValidateDTO>>(loBatchPar, ListFromExcel.Count);
             }
@@ -248,17 +223,24 @@ namespace GSM04500Model.ViewModel
         #endregion
 
 
-        #region Status
+        #region Progress Bar
+
         public async Task ProcessComplete(string pcKeyGuid, eProcessResultMode poProcessResultMode)
         {
             if (poProcessResultMode == eProcessResultMode.Success)
             {
                 Message = string.Format("Process Complete and success with GUID {0}", pcKeyGuid);
+                //VisibleError = false;
+                //BtnSave = true;
+
+                await ValidateDataList(loUploadLJournalGroupList.ToList());
             }
 
             if (poProcessResultMode == eProcessResultMode.Fail)
             {
+                BtnSave = false;
                 Message = string.Format("Process Complete but fail with GUID {0}", pcKeyGuid);
+                await GetError(pcKeyGuid);
             }
 
             await Task.CompletedTask;
@@ -266,7 +248,13 @@ namespace GSM04500Model.ViewModel
 
         public async Task ProcessError(string pcKeyGuid, R_APIException ex)
         {
-            Message = string.Format("Process Error with GUID {0}", pcKeyGuid);
+            foreach (R_APICommonDTO.R_Error item in ex.ErrorList)
+            {
+                Message = string.Format($"{item.ErrDescp}");
+            }
+
+            StateChangeAction();
+
             await Task.CompletedTask;
         }
 
@@ -276,6 +264,8 @@ namespace GSM04500Model.ViewModel
 
             Percentage = pnProgress;
             Message = string.Format("Process Progress {0} with status {1}", pnProgress, pcStatus);
+
+            StateChangeAction();
 
             await Task.CompletedTask;
         }

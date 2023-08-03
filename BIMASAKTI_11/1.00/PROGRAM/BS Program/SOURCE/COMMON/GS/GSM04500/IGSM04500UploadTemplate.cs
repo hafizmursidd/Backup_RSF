@@ -8,5 +8,6 @@ namespace GSM04500Common
     {
         GSM04500UploadFileDTO DownloadTemplateFile();
         GSM04500ListDTO GetJournalGroupUploadList();
+        GSM04500ListUploadErrorValidateDTO GetErrorProcess();
     }
 }

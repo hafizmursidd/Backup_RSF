@@ -213,7 +213,7 @@ SELECT CCOMPANY_ID FROM GST_XML_RESULT WHERE CCOMPANY_ID = 'RCD' AND CUSER_ID = 
 
 EXECUTE RSP_ConvertXMLToTable 'RCD', 'ERC', 'njesfnf243bkjkdfs4u4b5'
 
-rollback
+rollback 
 
 
 --LIST TAB SUPPLIER
@@ -229,10 +229,10 @@ begin transaction
 
 INSERT INTO #JRNLGROUP (NO, JournalGroup, JournalGroupName, EnableAccrual, ValidFlag)
 VALUES
-    (1, 'BGDF126', 'Dummy1', 0, 0),
-    (2, 'BGDF124', 'Dummy 2', 1, 0);
+    (1, 'BGDF356', 'Dummy1', 0, 0),
+    (2, 'BGDF357', 'Dummy 2', 1, 0);
 
-exec RSP_GS_VALIDATE_UPLOAD_JOURNAL_GROUP 'RCD', 'JBMPC','hmc', '143b60c44c5843ce952a66887f02a500',0, '50'
+exec RSP_GS_VALIDATE_UPLOAD_JOURNAL_GROUP 'RCD', 'ASHMD','hmc', '143b60c44c5843ce952a66887f02a500',0, '10'
 
 SELECT CCOMPANY_ID FROM GST_XML_RESULT WHERE CCOMPANY_ID = 'RCD' AND CUSER_ID = 'hmc' AND CKEY_GUID = '143b60c44c5843ce952a66887f02a500'
 
@@ -245,9 +245,23 @@ rollback
 
 exec RSP_GS_UPLOAD_JOURNAL_GROUP 'rcd','jbmpc', 'hmc', '34dfc53210bf47ae84c360e81bb37a2d',1,'10'
 
+
 EXEC RSP_GS_GET_JOURNAL_GRP_LIST 'RCD', 'ASHMD', '10', 'hmc'
 
-
+USE [BIMASAKTI_11]
+GO
+DECLARE	@return_value int
+EXEC	@return_value = [dbo].[RSP_GS_MAINTAIN_JOURNAL_GROUP]
+		@CCOMPANY_ID = N'RCD',
+		@CPROPERTY_ID = N'ASHMD',
+		@CJRNGRP_TYPE = N'10',
+		@CJRNGRP_CODE = N'AAA12',
+		@CJRNGRP_NAME = N'The Panturas',
+		@LACCRUAL = 0,
+		@CACTION = N'DELETE',
+		@CUSER_ID = N'hmc'
+SELECT	'Return Value' = @return_value
+GO
 ---EDIT GOA DEPT
 
 
@@ -260,7 +274,7 @@ EXEC RSP_GS_GET_GOA_COA_LIST 'RCD','ARDEP'
 exec RSP_GS_GET_DEPT_LOOKUP_LIST 'RCD','hmc'
 
 --LIST GOA DEPT
-exec RSP_GS_GET_JOURNAL_GRP_GOA_DEPT_LIST 'RCD', 'JBMPC', '11', 'A','ARDEP','hmc'
+exec RSP_GS_GET_JOURNAL_GRP_GOA_DEPT_LIST 'RCD', 'JBMPC', '10', 'A','ARDEP','hmc'
 
 --EDIT GOA DEPT
 USE [BIMASAKTI_11]
@@ -280,3 +294,7 @@ EXEC	@return_value = [dbo].[RSP_GS_MAINTAIN_JOURNAL_GROUP_ACCOUNT_DEPT]
 
 SELECT	'Return Value' = @return_value
 GO
+
+exec RSP_GL_GENERATE_ACCOUNT_BUDGET
+
+select * from GST_UPLOAD_PROCESS_STATUS

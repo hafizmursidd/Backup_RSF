@@ -85,7 +85,7 @@ namespace GSM04500Back
                 loDb.R_AddCommandParameter(loCmd, "@CDEPT_CODE", DbType.String, 20, poEntity.CDEPT_CODE);
                 loDb.R_AddCommandParameter(loCmd, "@CUSER_LOGIN_ID", DbType.String, 25, poEntity.CUSER_ID);
 
-                var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, false);
+                var loReturnTemp = loDb.SqlExecQuery(loConn, loCmd, true);
 
                 loReturn = R_Utility.R_ConvertTo<GSM04510GOADeptDTO>(loReturnTemp).ToList().FirstOrDefault();
             }

@@ -279,6 +279,8 @@ namespace LMM06000Front
                 CBOOKING_FEE_CHARGE_ID = "",
                 CDP_PERIOD_MODE = "",
                 LWITH_DP = false,
+                
+                CDP_CHARGE_ID = "",
                 LINSTALLMENT = false,
                 CINSTALLMENT_CHARGE_ID = "",
                 CINSTALLMENT_PERIOD_MODE = "",
@@ -325,13 +327,15 @@ namespace LMM06000Front
                 {
                     if (string.IsNullOrEmpty(loParam.CDP_PERIOD_MODE))
                         loEx.Add(new Exception("Periode Mode With Dp is required."));
+                    if (string.IsNullOrEmpty(loParam.CDP_CHARGE_ID))
+                        loEx.Add(new Exception("Charge Id With DP is required."));
                 }
                 if (loParam.LINSTALLMENT)
                 {
                     if (string.IsNullOrEmpty(loParam.CINSTALLMENT_PERIOD_MODE))
                         loEx.Add(new Exception("Periode Mode Installment is required."));
                     if (string.IsNullOrEmpty(loParam.CINSTALLMENT_CHARGE_ID))
-                        loEx.Add(new Exception("Charge Id Booking Fee is required."));
+                        loEx.Add(new Exception("Charge Id Installment is required."));
                 }
             }
             catch (Exception ex)

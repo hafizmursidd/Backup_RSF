@@ -75,7 +75,7 @@ namespace R_SecurityTokenService
 
                 SetRefreshToken(loParamToken);
 
-                loResult = new R_RefreshTokenResultDTO { data = new R_RefreshTokenResultData { token = lcToken } };
+                loResult = new R_RefreshTokenResultDTO { data = new R_TokenResultData /*R_RefreshTokenResultData*/ { token = lcToken } };
             }
             catch (Exception ex)
             {

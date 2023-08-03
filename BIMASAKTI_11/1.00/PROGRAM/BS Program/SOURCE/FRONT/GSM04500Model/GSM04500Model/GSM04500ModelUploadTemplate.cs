@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using R_BlazorFrontEnd;
 
 namespace GSM04500Model
 {
@@ -34,6 +35,12 @@ namespace GSM04500Model
         {
             throw new NotImplementedException();
         }
+
+        public GSM04500ListUploadErrorValidateDTO GetErrorProcess()
+        {
+            throw new NotImplementedException();
+        }
+
 
         public async Task<GSM04500UploadFileDTO> DownloadTemplateFileAsync()
         {
@@ -78,6 +85,35 @@ namespace GSM04500Model
                     _SendWithToken);
 
                 loResult = loTempResult;
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+            }
+
+            loEx.ThrowExceptionIfErrors();
+
+            return loResult;
+        }
+
+        public async Task<List<GSM04500UploadErrorValidateDTO>> GetErrorProcessAsync(string pcKeyGuid)
+        {
+            var loEx = new R_Exception();
+            List<GSM04500UploadErrorValidateDTO> loResult = new List<GSM04500UploadErrorValidateDTO>();
+
+            try
+            {
+                //UploadSJournalGroupGuid //UploadStaffKeyGuid
+                R_FrontContext.R_SetContext("UploadSJournalGroupGuid", pcKeyGuid); //key change to constant
+
+                R_HTTPClientWrapper.httpClientName = _HttpClientName;
+                var temploResult = await R_HTTPClientWrapper.R_APIRequestObject<GSM04500ListUploadErrorValidateDTO>(
+                    _RequestServiceEndPoint,
+                    nameof(IGSM04500UploadTemplate.GetErrorProcess),
+                    DEFAULT_MODULE,
+                    _SendWithContext,
+                    _SendWithToken);
+                loResult = temploResult.Data;
             }
             catch (Exception ex)
             {

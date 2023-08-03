@@ -13,11 +13,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BACK\GS\R_SecurityPolicyBack\R_SecurityPolicyBack.vbproj" />
     <ProjectReference Include="..\..\..\SERVICE\GL\GLB00200Service\GLB00200Service.csproj" />
-    <ProjectReference Include="..\..\..\SERVICE\GS\BlazorMenuService\BlazorMenuService.csproj" />
-    <ProjectReference Include="..\..\..\SERVICE\GS\R_SecurityPolicyService\R_SecurityPolicyService.csproj" />
-    <ProjectReference Include="..\..\..\SERVICE\GS\R_SecurityTokenService\R_SecurityTokenService.csproj" />
   </ItemGroup>
 
   <ItemGroup>

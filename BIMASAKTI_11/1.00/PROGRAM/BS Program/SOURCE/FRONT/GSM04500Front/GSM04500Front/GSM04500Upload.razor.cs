@@ -13,7 +13,9 @@ using R_BlazorFrontEnd.Controls.Enums;
 using R_BlazorFrontEnd.Controls.Events;
 using R_BlazorFrontEnd.Controls.Grid;
 using R_BlazorFrontEnd.Controls.MessageBox;
+using R_BlazorFrontEnd.Excel;
 using R_BlazorFrontEnd.Exceptions;
+using R_BlazorFrontEnd.Helpers;
 
 namespace GSM04500Front
 {
@@ -26,6 +28,13 @@ namespace GSM04500Front
         private R_Grid<GSM04500UploadErrorValidateDTO> JournalGroup_gridRef;
         private bool IsFileExist = false;
         private bool IsUploadSuccesful = true;
+
+        public byte[] fileByte = null;
+
+        private void StateChangeInvoke()
+        {
+            StateHasChanged();
+        }
         protected override async Task R_Init_From_Master(object poParameter)
         {
             var loEx = new R_Exception();
@@ -35,8 +44,8 @@ namespace GSM04500Front
                 var Param = (GSM004500ParamDTO)poParameter;
                 _viewModel.CurrentObjectParam = Param;
                 _viewModel.CurrentObjectParam.CUSER_ID = clientHelper.UserId;
-
-                await Task.CompletedTask;
+                _viewModel.StateChangeAction = StateChangeInvoke;
+               // await Task.CompletedTask;
             }
             catch (Exception ex)
             {
@@ -51,10 +60,13 @@ namespace GSM04500Front
 
             try
             {
+                //get file name
+                _viewModel.SourceFileName = eventArgs.File.Name;
+
                 //import excel from user
                 var loMS = new MemoryStream();
                 await eventArgs.File.OpenReadStream().CopyToAsync(loMS);
-                _viewModel.fileByte = loMS.ToArray();
+                fileByte = loMS.ToArray();
 
                 //validate type file
                 if (eventArgs.File.Name.Contains(".xlsx") == false)
@@ -70,7 +82,7 @@ namespace GSM04500Front
                     IsFileExist = false;
                 }
 
-                _viewModel.ReadExcelFile();
+                ReadExcelFile();
                 await JournalGroup_gridRef.R_RefreshGrid(null);
             }
             catch (Exception ex)
@@ -87,16 +99,14 @@ namespace GSM04500Front
         B:
             loEx.ThrowExceptionIfErrors();
         }
-
         private async Task Upload_ServiceGetListRecord(R_ServiceGetListRecordEventArgs eventArgs)
         {
             var loEx = new R_Exception();
 
             try
             {
-                await _viewModel.AttachFile(); ;
-                eventArgs.ListEntityResult = _viewModel.DataJournalGroupList;
-                IsUploadSuccesful = !_viewModel.VisibleError;
+                await _viewModel.ValidateFile(); ;
+                eventArgs.ListEntityResult = _viewModel.JournalGroupValidateUploadError;
             }
             catch (Exception ex)
             {
@@ -106,6 +116,40 @@ namespace GSM04500Front
             R_DisplayException(loEx);
 
         }
+
+        #region ReadExcel
+
+        public void ReadExcelFile()
+        {
+            var loEx = new R_Exception();
+            List<GSM04500UploadFromExcelDTO> loExtract = new List<GSM04500UploadFromExcelDTO>();
+            try
+            {
+                //Read From EXCEL
+                var loExcel = new R_Excel();
+
+                var loDataSet = loExcel.R_ReadFromExcel(fileByte, new string[] { "JournalGroup" });
+                var loResult = R_FrontUtility.R_ConvertTo<GSM04500UploadFromExcelDTO>(loDataSet.Tables[0]);
+                loExtract = new List<GSM04500UploadFromExcelDTO>(loResult);
+
+                ////Convert to DTO for DB
+                _viewModel.loUploadLJournalGroupList = loExtract.Select(x => new GSM04500UploadToDBDTO()
+                {
+                    JournalGroup = x.JournalGroup,
+                    JournalGroupName = x.JournalGroupName,
+                    EnableAccrual = x.EnableAccrual
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                loEx.Add(ex);
+                var loMatchingError = loEx.ErrorList.FirstOrDefault(x => x.ErrDescp == "SkipNumberOfRowsStart was out of range: 0");
+               _viewModel.IsErrorEmptyFile = loMatchingError != null;
+            }
+            loEx.ThrowExceptionIfErrors();
+        }
+
+        #endregion
         private void R_RowRender(R_GridRowRenderEventArgs eventArgs)
         {
             var loData = (GSM04500UploadErrorValidateDTO)eventArgs.Data;

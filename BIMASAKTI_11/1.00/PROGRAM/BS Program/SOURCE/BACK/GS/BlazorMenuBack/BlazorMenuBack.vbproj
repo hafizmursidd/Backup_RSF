@@ -1,7 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>BlazorMenuBack</RootNamespace>
+    <RootNamespace>
+	    Blazor
+
+    </RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
